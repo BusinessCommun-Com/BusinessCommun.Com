@@ -12,12 +12,16 @@ function App() {
     <Routes>
       <Route
         path='/'
-        element = {<Login/>}
+        element={<Login />}
       />
       <Route
         path='/home'
-        element = {<Home/>}
+        element={<Home />}
       />
+      <Route path="/partner-connect"
+        element={<PartnerConnect />}
+      />
+
     </Routes>
   )
 }
