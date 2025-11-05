@@ -8,8 +8,6 @@ import {FaApple, FaFacebook} from 'react-icons/fa';
 function Login() {
 
   const [email, setEmail] = useState('')
-
-
   return (
     <div className="root">
       <div id="main-wrapper" className="container">
