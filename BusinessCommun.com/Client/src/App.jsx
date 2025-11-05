@@ -25,7 +25,7 @@ function App() {
         element={<Home />}
       />
       <Route path="/partner-connect"
-        element={<PartnerConnect />}
+        element={<PartnerConnect/>}
       />
     </Routes>
   )
