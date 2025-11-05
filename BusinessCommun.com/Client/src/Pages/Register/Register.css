@@ -1,0 +1,213 @@
+/* ===== Base Styling ===== */
+.root {
+  background: linear-gradient(135deg, #001f3f, #3a7bd5);
+  font-family: "Poppins", sans-serif;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Centering Container */
+.container {
+  margin-top: 80px;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+/* ===== Card ===== */
+.card {
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  transform: translateY(20px);
+  animation: slideUp 1.2s ease forwards;
+}
+
+.card-body {
+  border-radius: 20px;
+}
+
+/* ===== Login Form Section ===== */
+h3.h4 {
+  color: #001f3f;
+  font-weight: 700;
+  font-size: 35px;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.btn-theme {
+  background: linear-gradient(135deg, #0056b3, #007bff);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.btn-theme:hover {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  transform: scale(1.05);
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+}
+
+/* ===== Account Block (Right Side) ===== */
+.account-block {
+  background: linear-gradient(135deg, #011a64 0%, #b2d5ee 100%);
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1.8s ease-in-out;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+/* Optional overlay for smoother contrast */
+.account-block .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(1, 43, 85, 0.45);
+  border-radius: inherit;
+}
+
+.account-testimonial {
+  text-align: center;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  bottom: 3rem;
+  padding: 0 1.75rem;
+  animation: fadeIn 2s ease-in-out;
+}
+
+/* Restoring image size + alignment */
+.logo1 {
+  height: 320px;
+  animation: float 4s ease-in-out infinite;
+  margin-bottom: 0rem;
+}
+
+/* Floating animation for logo */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.account-testimonial h4 {
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.account-testimonial p {
+  color: #e8f0fe;
+  margin-top: 1rem;
+  font-style: italic;
+  font-size: 1.3rem;
+}
+
+/* ===== Social Buttons ===== */
+.option {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.option button {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.option button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Separator ===== */
+.separator {
+  text-align: center;
+  font-weight: 500;
+  color: #555;
+  margin: 15px 0;
+}
+
+/* ===== Last Line (Register Text) ===== */
+.text-muted.text-center {
+  color: #fff !important;
+  font-weight: 500;
+  font-size: 1.05rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.text-muted.text-center a.text-primary {
+  color: #ffd700 !important;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.text-muted.text-center a.text-primary:hover {
+  color: #fff700 !important;
+  text-decoration: none;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .account-block {
+    display: none;
+  }
+}
