@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form"; // For managing form state and validation
 import { yupResolver } from "@hookform/resolvers/yup"; // To connect Yup validation with React Hook Form
 import * as yup from "yup"; // For form validation rules
-import "./Partner_Form.css"; // CSS styling
+import './Partner_Form.css';
 
 // -------------------------
 // Create a Validation Schema using Yup
