@@ -1,0 +1,134 @@
+/* Card container */
+.pc-card {
+    background: #0b1a3b;
+    /* dark blue background */
+    color: #e6f2ff;
+    /* light text */
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 50, 150, 0.3);
+    max-width: 700px;
+    margin: 40px auto;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Title */
+.pc-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #dff3ff;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* Form */
+.pc-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Label */
+.pc-label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #bcd8ff;
+    font-size: 15px;
+}
+
+/* Input and Textarea */
+.pc-input {
+    background: #0e234a;
+    border: 1px solid rgba(130, 170, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px 35px !important; 
+    font-size: 15px;
+    color: #eaf3ff;
+    margin-top: 6px;
+    transition: border 0.2s, background 0.2s;
+    width: 100%;
+}
+
+.pc-input:focus {
+    outline: none;
+    border-color: #339cff;
+    background: #112d60;
+}
+
+/* For rows having two inputs side by side */
+.pc-row {
+    display: flex;
+    gap: 16px;
+}
+
+.pc-half {
+    flex: 1;
+}
+
+/* Error styling */
+.pc-error {
+    color: #ffb3b3;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.pc-error-field {
+    border-color: #ff6666 !important;
+    background: #1c2438;
+}
+
+/* Buttons */
+.pc-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.pc-btn {
+    padding: 10px 28px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.15s;
+}
+
+/* Primary Save Button */
+.pc-btn-primary {
+    background: linear-gradient(135deg, #2675ff, #00b4ff);
+    color: white;
+    border: none;
+}
+
+.pc-btn-primary:hover {
+    background: linear-gradient(135deg, #0052cc, #0091ea);
+    transform: translateY(-2px);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .pc-card {
+        padding: 24px;
+    }
+
+    .pc-row {
+        flex-direction: column;
+    }
+
+    .pc-btn {
+        width: 100%;
+    }
+}
+
+/* Hide default date picker icon (Chrome, Edge, Safari) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Optional: remove clear and spin buttons */
+input[type="date"]::-webkit-clear-button,
+input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
