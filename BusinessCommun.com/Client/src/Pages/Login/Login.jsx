@@ -1,13 +1,63 @@
-import React, { useState } from "react";
-import "./Login.css"; // Optional: if you want to add styles separately
+import React, { useState } from "react"
+import "./Login.css"
 import img1 from '../../assets/UI_Images/_0013.png'
-import { useSearchParams } from "react-router-dom";
-import { FcGoogle }  from "react-icons/fc";
-import {FaApple, FaFacebook} from 'react-icons/fa';
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { FcGoogle }  from "react-icons/fc"
+import {FaApple, FaFacebook} from 'react-icons/fa'
 
 function Login() {
-
+  // add the state members for inputs
   const [email, setEmail] = useState('')
+  const [password , setPassword] = useState('')
+
+  //const navigate function reference 
+  const navigate = useNavigate()
+
+ // const {setUser} = useAuth()
+
+  const onLogin = async () => { 
+    if(email.length == 0) { 
+      toast.warning('Please enter Email')
+    }else if(password.length == 0) { 
+      toast.warning('Please enter Password')
+    }else { 
+      const response = await Login(email,password)
+      if(response['status'] == 'success'){
+        toast.success('Login Successful')
+
+        // get the token from response and cache it in local storage
+        localStorage.setItem('token' , response['data']['token'])
+        localStorage.setItem('firstName' , response['data']['firstName'])
+        localStorage.setItem('lastName' , response['data']['lastName'])
+
+        // if login successful then add the user's details
+        // setUser( { 
+        //   firstName : response['data']['firstName'],
+        //   lastName : response['data']['lastName']
+        // })
+
+        //Navigate to the Landing page 
+        navigate('')
+
+      }else { 
+        toast.error(response['error'])
+      }
+    }
+
+    // const onGoogle = () => { 
+      
+    // }
+
+    // const onFacebook = () => { 
+
+    // }
+
+    // const onApple = () => { 
+
+    // }
+
+  }
+
   return (
     <div className="root">
       <div id="main-wrapper" className="container">
@@ -32,6 +82,9 @@ function Login() {
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail1">Email address</label>
                           <input
+                            onChange={(e) => { 
+                              setEmail(e.target.value)
+                            }}
                             type="email"
                             className="form-control"
                             id="exampleInputEmail1"
@@ -41,13 +94,16 @@ function Login() {
                         <div className="form-group mb-4">
                           <label htmlFor="exampleInputPassword1">Password</label>
                           <input
+                            onChange={(e) => { 
+                              setPassword(e.target.value)
+                            }}
                             type="password"
                             className="form-control"
                             id="exampleInputPassword1"
                             required
                           />
                         </div>
-                        <button type="submit" className="btn btn-theme">
+                        <button onClick={onLogin} type="submit" className="btn btn-theme">
                           Login
                         </button>
                         <a
