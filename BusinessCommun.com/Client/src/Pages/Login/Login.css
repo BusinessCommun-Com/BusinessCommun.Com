@@ -4,7 +4,7 @@
   font-family: "Poppins", sans-serif;
   height: 100vh;
   overflow-x: hidden;
-}
+} 
 
 /* Centering Container */
 .container {
@@ -40,7 +40,7 @@ h3.h4 {
 }
 
 .btn-theme {
-  background: linear-gradient(135deg, #0056b3, #007bff);
+ /* background: linear-gradient(135deg, #0056b3, #007bff); */
   color: #fff;
   border: none;
   border-radius: 8px;

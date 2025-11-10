@@ -118,8 +118,8 @@ function CompanyDetail() {
 
 
     return (
-        <>
-            <div className="pc-card">
+        <div className="root">
+            <div className="pc-card ">
                 <h2 className="pc-title">Register your firm</h2>
 
                 {/* Form Section */}
@@ -555,7 +555,7 @@ function CompanyDetail() {
                     </div>
                 </form>
             </div>
-        </>
+        </div>
     );
 }
 

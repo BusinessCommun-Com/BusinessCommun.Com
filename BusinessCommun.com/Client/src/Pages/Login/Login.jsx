@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Login.css"; // Optional: if you want to add styles separately
+import "./Login.css"; 
 import img1 from '../../assets/UI_Images/_0013.png'
 import { useSearchParams } from "react-router-dom";
 import { FcGoogle }  from "react-icons/fc";
