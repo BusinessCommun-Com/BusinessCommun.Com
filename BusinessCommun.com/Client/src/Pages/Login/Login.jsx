@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./Login.css"; // Optional: if you want to add styles separately
 import img1 from '../../assets/UI_Images/_0013.png'
 import { useSearchParams } from "react-router-dom";
-import { FcGoogle }  from "react-icons/fc";
-import {FaApple, FaFacebook} from 'react-icons/fa';
+import { FcGoogle } from "react-icons/fc";
+import { FaApple, FaFacebook } from 'react-icons/fa';
 
 function Login() {
 
@@ -56,17 +56,17 @@ function Login() {
                         >
                           Forgot password?
                         </a>
-                          <hr/>
+                        <hr />
                         <div className="option">
                           <button id="google" className="btn btn-sm"> <FcGoogle size={22} /> <span>
                             Google</span>
-                            </button>
+                          </button>
                           <button id="facebook" className="btn btn btn-sm"> <FaFacebook size={22} /> <span>
                             Facebook</span>
-                            </button>
+                          </button>
                           <button id="apple" className="btn btn btn-sm"> <FaApple size={22} /> <span>
                             Apple</span>
-                            </button>
+                          </button>
 
                         </div>
                       </form>
