@@ -1,34 +1,37 @@
 import React, { useState } from "react"
 import "./Login.css"
 import img1 from '../../assets/UI_Images/_0013.png'
+import { useSearchParams } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { FaApple, FaFacebook } from 'react-icons/fa';
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { FcGoogle }  from "react-icons/fc"
-import {FaApple, FaFacebook} from 'react-icons/fa'
+import { FcGoogle } from "react-icons/fc"
+import { FaApple, FaFacebook } from 'react-icons/fa'
 
 function Login() {
   // add the state members for inputs
   const [email, setEmail] = useState('')
-  const [password , setPassword] = useState('')
+  const [password, setPassword] = useState('')
 
   //const navigate function reference 
   const navigate = useNavigate()
 
- // const {setUser} = useAuth()
+  // const {setUser} = useAuth()
 
-  const onLogin = async () => { 
-    if(email.length == 0) { 
+  const onLogin = async () => {
+    if (email.length == 0) {
       toast.warning('Please enter Email')
-    }else if(password.length == 0) { 
+    } else if (password.length == 0) {
       toast.warning('Please enter Password')
-    }else { 
-      const response = await Login(email,password)
-      if(response['status'] == 'success'){
+    } else {
+      const response = await Login(email, password)
+      if (response['status'] == 'success') {
         toast.success('Login Successful')
 
         // get the token from response and cache it in local storage
-        localStorage.setItem('token' , response['data']['token'])
-        localStorage.setItem('firstName' , response['data']['firstName'])
-        localStorage.setItem('lastName' , response['data']['lastName'])
+        localStorage.setItem('token', response['data']['token'])
+        localStorage.setItem('firstName', response['data']['firstName'])
+        localStorage.setItem('lastName', response['data']['lastName'])
 
         // if login successful then add the user's details
         // setUser( { 
@@ -39,13 +42,13 @@ function Login() {
         //Navigate to the Landing page 
         navigate('')
 
-      }else { 
+      } else {
         toast.error(response['error'])
       }
     }
 
     // const onGoogle = () => { 
-      
+
     // }
 
     // const onFacebook = () => { 
@@ -82,7 +85,7 @@ function Login() {
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail1">Email address</label>
                           <input
-                            onChange={(e) => { 
+                            onChange={(e) => {
                               setEmail(e.target.value)
                             }}
                             type="email"
@@ -94,7 +97,7 @@ function Login() {
                         <div className="form-group mb-4">
                           <label htmlFor="exampleInputPassword1">Password</label>
                           <input
-                            onChange={(e) => { 
+                            onChange={(e) => {
                               setPassword(e.target.value)
                             }}
                             type="password"
@@ -112,17 +115,17 @@ function Login() {
                         >
                           Forgot password?
                         </a>
-                          <hr/>
+                        <hr />
                         <div className="option">
                           <button id="google" className="btn btn-sm"> <FcGoogle size={22} /> <span>
                             Google</span>
-                            </button>
+                          </button>
                           <button id="facebook" className="btn btn btn-sm"> <FaFacebook size={22} /> <span>
                             Facebook</span>
-                            </button>
+                          </button>
                           <button id="apple" className="btn btn btn-sm"> <FaApple size={22} /> <span>
                             Apple</span>
-                            </button>
+                          </button>
 
                         </div>
                       </form>
