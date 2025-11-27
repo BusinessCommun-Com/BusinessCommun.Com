@@ -1,8 +1,20 @@
-.navbar-style{
-
-    background:linear-gradient(135deg, #001f3f, #3a7bd5);
+.navbar-style {
+  background: linear-gradient(135deg, #001f3f, #3a7bd5);
+  height: 75px;
 }
 
-.navText{
-    color:white
+.navText {
+  color: white !important;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.navText:hover {
+  color: #dcdcdc !important;
+}
+
+.navbar-brand {
+  color: white !important;
+  font-size: 22px;
+  font-weight: 700;
 }
