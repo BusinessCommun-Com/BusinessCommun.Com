@@ -1,65 +1,60 @@
-import React, { useState } from "react"
-import "./Login.css"
-import img1 from '../../assets/UI_Images/_0013.png'
-import { useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
+import "./Login.css";
+import img1 from "../../assets/UI_Images/_0013.png";
+import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { FaApple, FaFacebook } from 'react-icons/fa';
-import { useNavigate, useSearchParams } from "react-router-dom"
-import { FcGoogle } from "react-icons/fc"
-import { FaApple, FaFacebook } from 'react-icons/fa'
+import { FaApple, FaFacebook } from "react-icons/fa";
 
 function Login() {
   // add the state members for inputs
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  //const navigate function reference 
-  const navigate = useNavigate()
+  //const navigate function reference
+  const navigate = useNavigate();
 
   // const {setUser} = useAuth()
-
+  
   const onLogin = async () => {
+    navigate("/home");
     if (email.length == 0) {
-      toast.warning('Please enter Email')
+      toast.warning("Please enter Email");
     } else if (password.length == 0) {
-      toast.warning('Please enter Password')
+      toast.warning("Please enter Password");
     } else {
-      const response = await Login(email, password)
-      if (response['status'] == 'success') {
-        toast.success('Login Successful')
+      const response = await Login(email, password);
+      if (response["status"] == "success") {
+        toast.success("Login Successful");
 
         // get the token from response and cache it in local storage
-        localStorage.setItem('token', response['data']['token'])
-        localStorage.setItem('firstName', response['data']['firstName'])
-        localStorage.setItem('lastName', response['data']['lastName'])
+        localStorage.setItem("token", response["data"]["token"]);
+        localStorage.setItem("firstName", response["data"]["firstName"]);
+        localStorage.setItem("lastName", response["data"]["lastName"]);
 
         // if login successful then add the user's details
-        // setUser( { 
+        // setUser( {
         //   firstName : response['data']['firstName'],
         //   lastName : response['data']['lastName']
         // })
 
-        //Navigate to the Landing page 
-        navigate('')
-
+        //Navigate to the Landing page
       } else {
-        toast.error(response['error'])
+        toast.error(response["error"]);
       }
     }
 
-    // const onGoogle = () => { 
+    // const onGoogle = () => {
 
     // }
 
-    // const onFacebook = () => { 
+    // const onFacebook = () => {
 
     // }
 
-    // const onApple = () => { 
+    // const onApple = () => {
 
     // }
-
-  }
+  };
 
   return (
     <div className="root">
@@ -73,7 +68,9 @@ function Login() {
                   <div className="col-lg-6">
                     <div className="p-5">
                       <div className="mb-5">
-                        <h3 className="h4 font-weight-bold text-theme">Login</h3>
+                        <h3 className="h4 font-weight-bold text-theme">
+                          Login
+                        </h3>
                       </div>
 
                       <h6 className="h5 mb-0">Welcome back!</h6>
@@ -83,10 +80,12 @@ function Login() {
 
                       <form>
                         <div className="form-group">
-                          <label htmlFor="exampleInputEmail1">Email address</label>
+                          <label htmlFor="exampleInputEmail1">
+                            Email address
+                          </label>
                           <input
                             onChange={(e) => {
-                              setEmail(e.target.value)
+                              setEmail(e.target.value);
                             }}
                             type="email"
                             className="form-control"
@@ -95,10 +94,12 @@ function Login() {
                           />
                         </div>
                         <div className="form-group mb-4">
-                          <label htmlFor="exampleInputPassword1">Password</label>
+                          <label htmlFor="exampleInputPassword1">
+                            Password
+                          </label>
                           <input
                             onChange={(e) => {
-                              setPassword(e.target.value)
+                              setPassword(e.target.value);
                             }}
                             type="password"
                             className="form-control"
@@ -106,7 +107,11 @@ function Login() {
                             required
                           />
                         </div>
-                        <button onClick={onLogin} type="submit" className="btn btn-theme">
+                        <button
+                          onClick={onLogin}
+                          type="submit"
+                          className="btn btn-theme"
+                        >
                           Login
                         </button>
                         <a
@@ -117,16 +122,18 @@ function Login() {
                         </a>
                         <hr />
                         <div className="option">
-                          <button id="google" className="btn btn-sm"> <FcGoogle size={22} /> <span>
-                            Google</span>
+                          <button id="google" className="btn btn-sm">
+                            {" "}
+                            <FcGoogle size={22} /> <span>Google</span>
                           </button>
-                          <button id="facebook" className="btn btn btn-sm"> <FaFacebook size={22} /> <span>
-                            Facebook</span>
+                          <button id="facebook" className="btn btn btn-sm">
+                            {" "}
+                            <FaFacebook size={22} /> <span>Facebook</span>
                           </button>
-                          <button id="apple" className="btn btn btn-sm"> <FaApple size={22} /> <span>
-                            Apple</span>
+                          <button id="apple" className="btn btn btn-sm">
+                            {" "}
+                            <FaApple size={22} /> <span>Apple</span>
                           </button>
-
                         </div>
                       </form>
                     </div>
@@ -140,7 +147,10 @@ function Login() {
                         <img className="logo1" src={img1} alt="" />
                         <h4 className=" mb-3">WELCOME TO</h4>
                         <h4 className=" mb-4">BusinessCommun.com</h4>
-                        <p className="lead text-white" style={{ fontSize: "1.3rem" }}>
+                        <p
+                          className="lead text-white"
+                          style={{ fontSize: "1.3rem" }}
+                        >
                           "BusinessCommun — where vision meets opportunity."
                         </p>
                       </div>
@@ -154,7 +164,7 @@ function Login() {
 
             <p className="text-muted text-center mt-3 mt-2">
               Don't have an account?{" "}
-              <a href="#" className="text-primary ml-1">
+              <a href="/register" className="text-primary ml-1">
                 Register Here
               </a>
             </p>
@@ -165,6 +175,6 @@ function Login() {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

@@ -29,6 +29,10 @@ function App() {
       <Route path="/investor-connect"
         element={<InvestorConnect />}
       />
+      <Route
+        path='/company-register'
+        element = {<CompanyDetail/>}
+      />
     </Routes>
   )
 }
