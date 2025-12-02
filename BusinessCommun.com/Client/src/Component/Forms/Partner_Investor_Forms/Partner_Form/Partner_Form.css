@@ -1,4 +1,9 @@
 /* Card container */
+
+.root{
+      background: linear-gradient(135deg, #001f3f, #3a7bd5);
+
+}
 .pc-card {
     background: #0b1a3b;
     /* dark blue background */

@@ -4,7 +4,7 @@
   font-family: "Poppins", sans-serif;
   height: 100vh;
   overflow-x: hidden;
-}
+} 
 
 /* Centering Container */
 .container {
@@ -40,7 +40,7 @@ h3.h4 {
 }
 
 .btn-theme {
-  background: linear-gradient(135deg, #0056b3, #007bff);
+ /* background: linear-gradient(135deg, #0056b3, #007bff); */
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -109,9 +109,11 @@ h3.h4 {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -190,6 +192,7 @@ h3.h4 {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -200,6 +203,7 @@ h3.h4 {
     opacity: 0;
     transform: translateY(40px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
