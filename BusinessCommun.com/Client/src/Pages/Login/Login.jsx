@@ -4,6 +4,7 @@ import img1 from '../../assets/UI_Images/_0013.png'
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { FcGoogle }  from "react-icons/fc"
 import {FaApple, FaFacebook} from 'react-icons/fa'
+import { login } from "../../Services/users"
 
 function Login() {
   // add the state members for inputs
@@ -21,7 +22,7 @@ function Login() {
     }else if(password.length == 0) { 
       toast.warning('Please enter Password')
     }else { 
-      const response = await Login(email,password)
+      const response = await login(email,password)
       if(response['status'] == 'success'){
         toast.success('Login Successful')
 

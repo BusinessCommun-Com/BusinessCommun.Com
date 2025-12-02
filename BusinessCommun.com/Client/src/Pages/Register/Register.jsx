@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import './Register.css';
 import img2 from '../../assets/UI_Images/logo2.png'
+import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
+import { register } from '../../Services/users';
 
 export function Register() {
 
@@ -16,9 +18,30 @@ export function Register() {
   const navigate = useNavigate()
 
   const onRegister = async () => { 
-
+    try { 
+      if(firstName.length == 0) { 
+        toast.warning("Please enter first name");
+      }else if(lastName.length == 0){ 
+        toast.warning("Please enter last name");
+      }else if(email.length == 0){
+        toast.warning("Please enter email");
+      }else if(password.length == 0){
+        toast.warning("Please enter password");
+      }else if(confirmPassword != password){ 
+        toast.warning("Please enter correct password")
+      }else { 
+        const respone = await register(firstName, lastName, email, password);
+        if(respone['status'] == 'success'){ 
+          toast.success('Registered successfully');
+          navigate('/login')
+        }else { 
+          console.log(response['error']);
+        } 
+      }
+    }catch(error){ 
+      console.log('Error')
+    }
   }
-
       return (
           <div className="root">
             <div id="main-wrapper" className="container">
