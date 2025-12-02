@@ -1,30 +1,30 @@
-import React, { useState } from "react";
-import "./Login.css";
-import img1 from "../../assets/UI_Images/_0013.png";
-import { useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { FaApple, FaFacebook } from "react-icons/fa";
+import React, { useState } from "react"
+import "./Login.css"
+import img1 from '../../assets/UI_Images/_0013.png'
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { FcGoogle }  from "react-icons/fc"
+import {FaApple, FaFacebook} from 'react-icons/fa'
+import { login } from "../../Services/users"
 
 function Login() {
   // add the state members for inputs
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('')
+  const [password , setPassword] = useState('')
 
-  //const navigate function reference
-  const navigate = useNavigate();
+  //const navigate function reference 
+  const navigate = useNavigate()
 
-  // const {setUser} = useAuth()
-  
-  const onLogin = async () => {
-    navigate("/home");
-    if (email.length == 0) {
-      toast.warning("Please enter Email");
-    } else if (password.length == 0) {
-      toast.warning("Please enter Password");
-    } else {
-      const response = await Login(email, password);
-      if (response["status"] == "success") {
-        toast.success("Login Successful");
+ // const {setUser} = useAuth()
+
+  const onLogin = async () => { 
+    if(email.length == 0) { 
+      toast.warning('Please enter Email')
+    }else if(password.length == 0) { 
+      toast.warning('Please enter Password')
+    }else { 
+      const response = await login(email,password)
+      if(response['status'] == 'success'){
+        toast.success('Login Successful')
 
         // get the token from response and cache it in local storage
         localStorage.setItem("token", response["data"]["token"]);
