@@ -1,0 +1,87 @@
+.content-root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('/src/assets/UI_Images/DottedWorldMap.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Dark overlay */
+.content-root::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4); 
+  z-index: 1;
+}
+
+.content-root .content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+}
+
+
+.content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  top:50px;
+  gap:15px;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  margin: 8px 0;
+  gap: 10px;
+}
+
+.icon {
+  font-size: 22px;
+}
+
+.faq {
+  width: 100%;
+  max-width: 700px;
+}
+
+.faq-item {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  color:black;
+}
+
+.faq-answer {
+  margin: 0;               
+  padding: 10px 0 0 0;     
+  text-align: left;        
+  width: 100%;  
+  font-size: 16px;
+  color: black;         
+}
+
+.faq-answer p {
+  margin: 0;               
+  padding: 0;              
+}
