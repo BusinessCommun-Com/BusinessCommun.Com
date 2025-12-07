@@ -1,10 +1,12 @@
 .content-root {
   position: relative;
   width: 100%;
+  /* Use min-height to ensure container expands with content; background extends full height */
   min-height: 100vh;
-  background-image: url('/src/assets/UI_Images/DottedWorldMap.jpg');
+  background-image: url("/src/assets/UI_Images/DottedWorldMap.jpg");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed; /* keeps background fixed while content scrolls */
 }
 
 /* Dark overlay */
@@ -14,26 +16,34 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4); 
+  /* Use 100% of content-root which expands as content grows */
+  min-height: 100vh;
+  /* background: rgba(0,0,0,0.4);  */
   z-index: 1;
+  pointer-events: none; /* allow clicks to pass through to content */
 }
 
 .content-root .content {
+  background: rgba(0, 0, 0, 0.4);
+
   position: relative;
   z-index: 2;
   text-align: center;
   color: white;
-}
-
-
-.content{
+  padding: 40px 20px; /* add padding so content doesn't touch edges */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  top:50px;
-  gap:15px;
+  gap: 15px;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .contact-item {
@@ -52,6 +62,7 @@
 .faq {
   width: 100%;
   max-width: 700px;
+  margin-bottom: 20px; /* space below FAQs before page ends */
 }
 
 .faq-item {
@@ -59,7 +70,7 @@
   padding: 15px 20px;
   border-radius: 8px;
   margin-bottom: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .faq-question {
@@ -69,19 +80,43 @@
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  color:black;
+  color: black;
 }
 
 .faq-answer {
-  margin: 0;               
-  padding: 10px 0 0 0;     
-  text-align: left;        
-  width: 100%;  
+  margin: 0;
+  padding: 10px 0 0 0;
+  text-align: left;
+  width: 100%;
   font-size: 16px;
-  color: black;         
+  color: black;
 }
 
 .faq-answer p {
-  margin: 0;               
-  padding: 0;              
+  margin: 0;
+  padding: 0;
+}
+
+/* View More FAQs button */
+.view-more-btn {
+  background: #1756c5;
+  color: #ffffff;
+  padding: 11px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(23, 86, 197, 0.2);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.view-more-btn:hover {
+  background: #1347a0;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(23, 86, 197, 0.3);
+}
+
+.view-more-btn:active {
+  transform: translateY(0);
 }
