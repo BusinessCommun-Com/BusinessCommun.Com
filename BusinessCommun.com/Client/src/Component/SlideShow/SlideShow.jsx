@@ -33,7 +33,7 @@ export default function SlideShow() {
   }, []);
 
   const handleGetStarted = () => {
-    navigate("/company-register");
+    navigate("/company-registration");
   };
 
   return (
@@ -41,7 +41,7 @@ export default function SlideShow() {
       {/* NAVBAR OVER SLIDESHOW */}
       <nav className="navbar navbar-expand-lg navbar-style navbar-dark">
         <div className="container-fluid">
-          <a style={{fontSize : "26px"}} className="navbar-brand" href="#">
+          <a style={{ fontSize: "26px" }} className="navbar-brand" href="#">
             BusinessCommun
           </a>
 
@@ -115,7 +115,7 @@ export default function SlideShow() {
             <p className="slideshow-subtitle">
               Register your firm to connect with potential partner or investor
             </p>
-            
+
             <button className="slideshow-button" onClick={handleGetStarted}>
               Get Started
             </button>
