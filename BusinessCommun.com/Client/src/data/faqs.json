@@ -1,0 +1,50 @@
+[
+  {
+    "question": "How do I use the Partner Connect feature?",
+    "answer": "Navigate to the Partner Connect section from the main menu, and explore partnerships that align with your business goals."
+  },
+  {
+    "question": "How can I find investors?",
+    "answer": "Use the Investor Search functionality to view potential investors interested in your business sector."
+  },
+  {
+    "question": "Where can I access government schemes?",
+    "answer": "Visit the Government Schemes section in the app for the latest programs tailored for businesses like yours."
+  },
+  {
+    "question": "How do I register my company on BusinessCommun?",
+    "answer": "Go to 'Company Register' from the menu and complete the Company Details form. Provide accurate information and a logo to create a company profile that others can discover."
+  },
+  {
+    "question": "Can I edit my company details after registration?",
+    "answer": "Yes. Open your company profile and click 'Edit company details' to update the information. Changes will be reflected on the company profile page."
+  },
+  {
+    "question": "What information appears on a company's profile?",
+    "answer": "A company profile shows the company name, pitch description, logo, basic details (founded, industry, employee count, website), partners and investor information if provided."
+  },
+  {
+    "question": "How do I connect with a company?",
+    "answer": "From a company's profile click the 'Connect' button. This opens the contact flow (or contact page) where you can send a message or request introduction."
+  },
+  {
+    "question": "How are partner and investor submissions handled?",
+    "answer": "Partners and investors can submit interest via the Partner and Investor forms. Submissions are recorded and can be reviewed by the company owner or the platform administrators depending on your setup."
+  },
+  {
+    "question": "What file types and size are allowed for company logos?",
+    "answer": "We recommend PNG or JPEG images under 2MB. Large images will be resized for display; keep logos clear and square for best results."
+  },
+  {
+    "question": "Is my data private?",
+    "answer": "Company contact details and sensitive information are only shown as you choose when filling forms. For additional privacy controls, contact the site administrator to understand visibility settings."
+  },
+  {
+    "question": "I can't find a company I registered — what should I do?",
+    "answer": "Check that you completed the registration and saved the form. If the profile is missing, try logging out/in and verify the company appears in your dashboard. Contact support if the problem persists."
+  },
+  {
+    "question": "How do I report inappropriate or fraudulent listings?",
+    "answer": "Use the 'Contact Us' page to report listings. Provide the company name and a brief reason. The admin team will review and take appropriate action."
+  }
+]

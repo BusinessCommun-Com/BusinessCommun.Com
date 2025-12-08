@@ -1,5 +1,5 @@
 /* ===== Base Styling ===== */
-body {
+.root {
   background: linear-gradient(135deg, #001f3f, #3a7bd5);
   font-family: "Poppins", sans-serif;
   height: 100vh;
@@ -10,6 +10,7 @@ body {
 .container {
   margin-top: 80px;
   animation: fadeIn 1.2s ease-in-out;
+  width: 3000px;
 }
 
 /* ===== Card ===== */
@@ -39,7 +40,7 @@ h3.h4 {
 }
 
 .btn-theme {
-  background: linear-gradient(135deg, #0056b3, #007bff);
+  /* background: linear-gradient(135deg, #0056b3, #007bff); */
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -108,9 +109,11 @@ h3.h4 {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -189,6 +192,7 @@ h3.h4 {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -199,6 +203,7 @@ h3.h4 {
     opacity: 0;
     transform: translateY(40px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);

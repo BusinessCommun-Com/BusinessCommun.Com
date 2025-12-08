@@ -1,0 +1,29 @@
+.navbar-style {
+  background: linear-gradient(135deg, #001f3f, #3a7bd5);
+  height: 75px;
+}
+
+.navText {
+  color: white !important;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.navText:hover {
+  color: #dcdcdc !important;
+}
+
+.navbar-brand {
+  color: white !important;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Logo image placed left of the brand text */
+.navbar-logo {
+  height: 38px;
+  width: auto;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 4px; /* optional */
+}

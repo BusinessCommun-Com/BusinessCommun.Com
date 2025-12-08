@@ -1,9 +1,12 @@
 /* Card container */
+
+.root{
+      background: linear-gradient(135deg, #001f3f, #3a7bd5);
+
+}
 .pc-card {
     background: #0b1a3b;
-    /* dark blue background */
     color: #e6f2ff;
-    /* light text */
     padding: 32px;
     border-radius: 20px;
     box-shadow: 0 8px 25px rgba(0, 50, 150, 0.3);
@@ -39,21 +42,78 @@
 
 /* Input and Textarea */
 .pc-input {
-    background: #0e234a;
+    background: #0e234a !important;
     border: 1px solid rgba(130, 170, 255, 0.3);
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 12px 16px;
+    padding-left: 45px !important;
     font-size: 15px;
-    color: #eaf3ff;
+    color: #ffffff !important;
     margin-top: 6px;
     transition: border 0.2s, background 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.5;
+    font-family: inherit;
+    caret-color: #339cff;
+}
+
+.pc-input::placeholder {
+    color: rgba(234, 243, 255, 0.6) !important;
 }
 
 .pc-input:focus {
-    outline: none;
-    border-color: #339cff;
-    background: #112d60;
+    outline: none !important;
+    border-color: #339cff !important;
+    background: #112d60 !important;
+    color: #ffffff !important;
 }
+
+.pc-input:focus::placeholder {
+    color: rgba(234, 243, 255, 0.4) !important;
+}
+
+/* Ensure autofill doesn't hide text */
+.pc-input:-webkit-autofill,
+.pc-input:-webkit-autofill:hover,
+.pc-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #0e234a inset !important;
+    box-shadow: 0 0 0px 1000px #0e234a inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.pc-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #112d60 inset !important;
+    box-shadow: 0 0 0px 1000px #112d60 inset !important;
+}
+
+/* Textarea specific styling */
+textarea.pc-input {
+    min-height: 100px;
+    resize: vertical;
+    overflow-y: auto;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: #ffffff !important;
+}
+
+textarea.pc-input:focus {
+    color: #ffffff !important;
+}
+
+/* Ensure text selection is visible */
+.pc-input::selection {
+    background: rgba(51, 156, 255, 0.3);
+    color: #ffffff;
+}
+
+.pc-input::-moz-selection {
+    background: rgba(51, 156, 255, 0.3);
+    color: #ffffff;
+}
+
 
 /* For rows having two inputs side by side */
 .pc-row {
@@ -74,33 +134,43 @@
 
 .pc-error-field {
     border-color: #ff6666 !important;
-    background: #1c2438;
+    background: #1c2438 !important;
+    color: #ffffff !important;
 }
 
 /* Buttons */
-.pc-actions {
+.partner-form-container .pc-actions {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 10px;
 }
 
-.pc-btn {
+.partner-form-container .pc-btn {
     padding: 10px 28px;
     border-radius: 10px;
     border: none;
     font-weight: 600;
     cursor: pointer;
+    color: white;
+    background-color: #888888;
     transition: background 0.25s, transform 0.15s;
+    /* width: 150px; removed fixed width to allow flex/content sizing if needed, or keep? Original had no width, user added it? No, CompDetail had width. Partner form had flex space-between. */
 }
 
 /* Primary Save Button */
-.pc-btn-primary {
+.partner-form-container .pc-btn:hover {
+    background: #666666;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.partner-form-container .pc-btn-primary {
     background: linear-gradient(135deg, #2675ff, #00b4ff);
     color: white;
     border: none;
 }
 
-.pc-btn-primary:hover {
+.partner-form-container .pc-btn-primary:hover {
     background: linear-gradient(135deg, #0052cc, #0091ea);
     transform: translateY(-2px);
 }

@@ -1,0 +1,12 @@
+.root {
+    background: linear-gradient(135deg, #001f3f, #3a7bd5);
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Centering Container */
+.container {
+    margin-top: 80px;
+    animation: fadeIn 1.2s ease-in-out;
+}
