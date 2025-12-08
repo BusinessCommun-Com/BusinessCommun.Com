@@ -57,9 +57,6 @@ function InvestorConnect() {
         navigate('/home');
     };
 
-
-
-
     return (
         <div className="pc-card investor-form-container">
             <h2 className="pc-title">Investor Connect</h2>
