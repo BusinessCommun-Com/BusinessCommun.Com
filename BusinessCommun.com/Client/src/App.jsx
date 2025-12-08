@@ -1,3 +1,10 @@
+
+import ContactUs from "./Pages/ContactUs/ContactUs.jsx";
+import CompanyProfile from "./Pages/Company/CompanyProfile";
+import CompanyPitch from "./Component/Forms/Partner_Investor_Forms/Pitch_Details_Form/Pitch_Detail_Form.jsx";
+import useMultiStepForm from "./store/useMultiStepForm.js";
+import ProgressIndicator from "./Component/Multipage_Form__Stepper/Form_Progress_Indicator.jsx";
+import PremiumService from "./Pages/PremiumService/PremiumService.jsx";
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Login from './Pages/Login/Login.jsx'
@@ -10,7 +17,6 @@ import About from './Pages/About/About.jsx'
 
 
 function App() {
-
   const { step } = useMultiStepForm();
 
   // Multi-step pages
@@ -18,7 +24,7 @@ function App() {
     <CompanyDetail />,
     <CompanyPitch />,
     <PartnerConnect />,
-    <InvestorConnect />
+    <InvestorConnect />,
   ];
 
   return (
@@ -54,20 +60,11 @@ function App() {
           </div>
         }
       />
-      <Route
-        path="/companies/:id"
-        element={<CompanyProfile />}
-      />
-      <Route
-        path="/contact-us/"
-        element={<ContactUs />}
-      />
-      <Route
-        path='/premium-service'
-        element = {<PremiumService/>}
-      />
+      <Route path="/companies/:id" element={<CompanyProfile />} />
+      <Route path="/contact-us/" element={<ContactUs />} />
+      <Route path="/premium-service" element={<PremiumService />} />
     </Routes>
-  )
+  );
 }
 
 export default App;

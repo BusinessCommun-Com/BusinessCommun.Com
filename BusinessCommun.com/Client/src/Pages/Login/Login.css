@@ -8,7 +8,7 @@
 
 /* Centering Container */
 .container {
-  margin-top: 80px;
+  margin-top: 80px !important;
   animation: fadeIn 1.2s ease-in-out;
   width: 3000px;
 }
