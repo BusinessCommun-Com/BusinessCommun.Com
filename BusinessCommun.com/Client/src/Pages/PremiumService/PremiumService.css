@@ -1,0 +1,240 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+link:hover{ text-decoration: none !important;}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #eef0f2;
+    color: #222;
+    line-height: 1.5;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Header */
+.header {
+    background: #ffffff;
+    border-bottom: 1px solid #e1e4ea;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Logo image shown left of the text in header */
+.logo-img {
+    height: 38px;
+    width: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+    border-radius: 4px; /* optional */
+}
+
+.header nav a {
+    margin-left: 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.header nav a:hover {
+    text-decoration: underline;
+}
+
+/* Hero section */
+.hero {
+    padding: 40px 0 20px;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.hero p {
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto 20px;
+}
+
+/* Billing toggle */
+.billing-toggle {
+    display: inline-flex;
+    border-radius: 999px;
+    background: #e7ecf4;
+    padding: 4px;
+}
+
+.billing-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.billing-btn.active {
+    background: #1a73e8;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Pricing section */
+.pricing-section {
+    padding: 20px 0 50px;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* Pricing cards */
+.pricing-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px 20px 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pricing-card.popular {
+    border: 2px solid #1a73e8;
+    transform: translateY(-5px);
+}
+
+.badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #1a73e8;
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.pricing-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+}
+
+.pricing-card .tagline {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.price .currency {
+    font-size: 1rem;
+    vertical-align: top;
+}
+
+.price .duration {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #777;
+    margin-left: 4px;
+}
+
+.features {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.features li {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+/* Button */
+.cta-btn {
+    border: none;
+    background: #1a73e8;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    width: 100%;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.cta-btn:hover {
+    background: #1557b0;
+    box-shadow: 0 8px 16px rgba(21, 87, 176, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Footer */
+.footer {
+    padding: 16px 0 24px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #777;
+    border-top: 1px solid #e1e4ea;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .pricing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .header .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .hero {
+        padding-top: 24px;
+    }
+
+    .pricing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pricing-card.popular {
+        transform: none;
+    }
+}
