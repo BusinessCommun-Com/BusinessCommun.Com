@@ -1,0 +1,96 @@
+.company-profile {
+  padding: 40px 16px;
+  background: #f7f9fc;
+}
+.company-card-panel {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  padding: 28px;
+}
+.profile-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.profile-logo {
+  width: 120px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex: 0 0 120px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+.profile-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0f1724;
+}
+.profile-pitch {
+  margin: 6px 0 0 0;
+  color: #556075;
+}
+.profile-actions {
+  margin-top: 10px;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 28px;
+  margin-top: 20px;
+}
+.detail-item {
+  background: #fbfdff;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 23, 42, 0.03);
+}
+.detail-key {
+  display: block;
+  font-weight: 600;
+  color: #243048;
+  margin-bottom: 6px;
+}
+.section-block {
+  margin-top: 20px;
+}
+.section-block h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.05rem;
+  color: #122033;
+}
+.connect-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+.connect-btn {
+  display: inline-block;
+  background: #1756c5;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(23, 86, 197, 0.12);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.connect-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(23, 86, 197, 0.18);
+}
+
+@media (max-width: 720px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .connect-row {
+    justify-content: center;
+  }
+}

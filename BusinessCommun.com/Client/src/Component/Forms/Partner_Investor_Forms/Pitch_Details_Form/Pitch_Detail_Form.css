@@ -1,0 +1,194 @@
+/* Card container */
+.pc-card {
+    background: #f3f5f7;
+    color: #001f3f;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 50, 150, 0.35);
+    backdrop-filter: blur(8px);
+    max-width: 700px;
+    margin: 40px auto;
+    font-family: "Inter", sans-serif;
+    animation: fadeInUp 0.8s ease both;
+}
+
+/* Title */
+.pc-title {
+    font-size: 28px;
+    /* changed: slightly larger */
+    font-weight: 700;
+    color: #001f3f;
+    text-align: center;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Form */
+.pc-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* Label */
+.pc-label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #001f3f;
+    font-size: 15px;
+}
+
+/* Input and Textarea */
+.pc-input {
+    background: #fff;
+    border: 1px solid rgba(130, 170, 255, 0.25);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 15px;
+    color: #eaf3ff;
+    margin-top: 6px;
+    transition: all 0.3s ease;
+}
+
+.pc-input:focus {
+    outline: none;
+    border-color: #339cff;
+    background: #fff;
+}
+
+/* For rows having two inputs side by side */
+.pc-row {
+    display: flex;
+    gap: 16px;
+}
+
+.pc-half {
+    flex: 1;
+}
+
+/* Error styling */
+.pc-error {
+    color: #ffb3b3;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.pc-error-field {
+    border-color: #ff6666 !important;
+    background: rgba(255, 50, 50, 0.1);
+}
+
+/* Buttons */
+.pc-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.pc-btn {
+    padding: 12px 30px;
+    background: #888888;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 120px;
+    width: 150px;
+
+}
+
+.pc-btn:hover {
+    background: #666666;
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Primary Save Button */
+.pc-btn-primary {
+    background: linear-gradient(135deg, #2675ff, #00b4ff);
+    color: white;
+    border: none;
+}
+
+.pc-btn-primary:hover {
+    background: linear-gradient(135deg, #0052cc, #0091ea);
+    transform: translateY(-2px);
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 30px;
+    gap: 16px;
+    width: 100%;
+}
+
+.selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.selection-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #001f3f;
+}
+
+.forward-buttons {
+    display: flex;
+    gap: 14px;
+}
+
+/* CSS margin override to fix alignment */
+.nav-buttons .pc-btn {
+    margin: 0 !important;
+    align-self: flex-end;
+}
+
+.pc-btn.back {
+    background: #888888;
+    color: white;
+}
+
+.pc-btn.back:hover {
+    background: #666666;
+    transform: translateY(-2px);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .pc-card {
+        padding: 26px;
+        /* changed: slightly reduced for mobile */
+    }
+
+    .pc-row {
+        flex-direction: column;
+    }
+
+    .pc-btn {
+        width: 100%;
+    }
+}
+
+/* ===============================
+   Animations
+   =============================== */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

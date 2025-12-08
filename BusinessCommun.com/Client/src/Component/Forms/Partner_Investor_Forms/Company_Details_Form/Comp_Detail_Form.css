@@ -13,23 +13,26 @@
     border: 1px solid rgba(31, 41, 55, 0.06);
     max-width: 700px;
     margin: 40px auto;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
+    animation: fadeInUp 0.8s ease both;
 }
 
 /* Title */
 .pc-title {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 700;
     color: #0f1724;
     text-align: center;
     margin-bottom: 24px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* Form */
 .pc-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 /* Label */
@@ -41,7 +44,7 @@
     font-size: 15px;
 }
 
-/* Input and Textarea */
+/* Input and select */
 .pc-input {
     background: #ffffff;
     border: 1px solid #d1d5db;
@@ -52,6 +55,10 @@
     margin-top: 6px;
     transition: border 0.15s ease, box-shadow 0.15s ease;
     width: 100%;
+    box-sizing: border-box;
+    line-height: 1.5;
+    font-family: inherit;
+    padding-left: 45px !important;
 }
 
 .pc-input:focus {
@@ -61,14 +68,40 @@
     background: #ffffff;
 }
 
-/* For rows having two inputs side by side */
-.pc-row {
-    display: flex;
-    gap: 16px;
+.pc-input:focus {
+    outline: none !important;
+    border-color: #3a7bd5 !important;
+    background: #ffffff !important;
+    color: #001f3f !important;
+    box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.1);
 }
 
-.pc-half {
-    flex: 1;
+.pc-input:-webkit-autofill,
+.pc-input:-webkit-autofill:hover,
+.pc-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #001f3f !important;
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Select Dropdown */
+select.pc-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23001f3f' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+select.pc-input option {
+    background: #ffffff !important;
+    color: #001f3f !important;
+    padding: 10px;
 }
 
 /* Error styling */
@@ -84,31 +117,52 @@
 }
 
 /* Buttons */
-.pc-actions {
+.comp-form-container .pc-actions {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
-.pc-btn {
-    padding: 10px 28px;
+.comp-form-container .pc-btn {
+    padding: 12px 30px;
+    background: #888888;
+    color: white;
     border-radius: 10px;
     border: none;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.25s, transform 0.15s;
+    transition: all 0.25s ease;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 150px;
 }
 
-/* Primary Save Button */
-.pc-btn-primary {
-    background: linear-gradient(135deg, #2675ff, #00b4ff);
-    color: white;
-    border: none;
-}
-
-.pc-btn-primary:hover {
-    background: linear-gradient(135deg, #0052cc, #0091ea);
+.comp-form-container .pc-btn:hover {
+    background: #666666;
     transform: translateY(-2px);
+}
+
+/* Phone Input specific override */
+.phone-input-wrapper input {
+    width: 100% !important;
+    height: 45px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(130, 170, 255, 0.3) !important;
+    padding-left: 48px !important;
+    /* Adjust based on flag icon */
+    background: #ffffff !important;
+    color: #001f3f !important;
+}
+
+.phone-input-wrapper .flag-dropdown {
+    border-color: rgba(130, 170, 255, 0.3) !important;
+    background: transparent !important;
+    border-radius: 10px 0 0 10px !important;
+}
+
+.phone-input-wrapper .selected-flag {
+    background: transparent !important;
 }
 
 /* Responsive design */
@@ -117,23 +171,22 @@
         padding: 24px;
     }
 
-    .pc-row {
-        flex-direction: column;
-    }
-
     .pc-btn {
         width: 100%;
     }
 }
 
-/* Hide default date picker icon (Chrome, Edge, Safari) */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  display: none;
-  -webkit-appearance: none;
-}
+/* ===============================
+   Animations
+   =============================== */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
 
-/* Optional: remove clear and spin buttons */
-input[type="date"]::-webkit-clear-button,
-input[type="date"]::-webkit-inner-spin-button {
-  display: none;
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

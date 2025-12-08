@@ -1,0 +1,73 @@
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 30px auto;
+    position: relative;
+}
+
+/* Line stays BETWEEN dots, not over them */
+.progress-line {
+    position: absolute;
+    top: 38%;
+    left: 35px;
+    right: 35px;
+    height: 4px;
+    background: #b8bdb5;
+    transform: translateY(-50%);
+    border-radius: 50px;
+}
+
+/* Only fills between circles */
+.progress-fill {
+    position: absolute;
+    top: 38%;
+    left: 35px;
+    height: 4px;
+    background: #3a7bd5;
+    transform: translateY(-50%);
+    border-radius: 50px;
+    transition: width .35s ease;
+}
+
+.step-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step-circle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #3a7bd5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: .25s;
+    z-index: 1;
+}
+
+.step-circle.active {
+    background: #3a7bd5;
+    border-color: #3a7bd5;
+    color: white;
+    transition: width .35s ease;
+}
+
+.step-circle.disabled {
+    background: #fff;
+    border: 3px solid #b8bdb5;
+    cursor: not-allowed;
+}
+
+.step-label {
+    margin-top: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    color: #d2d4c8;
+}
