@@ -90,7 +90,7 @@ export default function SlideShow() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link navText" href="#">
+                <a className="nav-link navText" href="about-us">
                   About Us
                 </a>
               </li>
