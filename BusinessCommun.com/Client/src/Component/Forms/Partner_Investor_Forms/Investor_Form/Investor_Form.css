@@ -1,38 +1,26 @@
-/* ===============================
-   Investor Form (Improved Styling)
-   =============================== */
-
 /* Card container */
 .pc-card {
-    background: linear-gradient(135deg, #0a193a, #102a5c);
-    /* changed: gradient background */
-    color: #e6f2ff;
+    background: #f3f5f8;
+    color: #001f3f;
     padding: 40px;
-    /* changed: increased padding */
     border-radius: 20px;
     box-shadow: 0 8px 25px rgba(0, 50, 150, 0.35);
-    /* changed: slightly stronger shadow */
     backdrop-filter: blur(8px);
-    /* new: subtle glassy effect */
     max-width: 700px;
     margin: 40px auto;
     font-family: "Inter", sans-serif;
     animation: fadeInUp 0.8s ease both;
-    /* new: entry animation */
 }
 
 /* Title */
 .pc-title {
     font-size: 28px;
-    /* changed: slightly larger */
     font-weight: 700;
-    color: #dff3ff;
+    color: #001f3f;
     text-align: center;
     margin-bottom: 24px;
     letter-spacing: 0.5px;
-    /* new: improves readability */
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    /* new: subtle depth */
 }
 
 /* Form */
@@ -40,7 +28,6 @@
     display: flex;
     flex-direction: column;
     gap: 22px;
-    /* changed: slightly larger gap for balance */
 }
 
 /* Label */
@@ -48,31 +35,77 @@
     display: flex;
     flex-direction: column;
     font-weight: 600;
-    color: #bcd8ff;
+    color: #001f3f;
     font-size: 15px;
 }
 
 /* Input and Textarea */
 .pc-input {
-    background: rgba(10, 25, 70, 0.85);
-    /* changed: semi-transparent input bg */
-    border: 1px solid rgba(130, 170, 255, 0.25);
-    /* changed: softer border tone */
+    background: #ffffff !important;
+    border: 2px solid #e0e4e8;
     border-radius: 10px;
-    padding: 10px 12px;
+    padding: 12px 16px;
+    padding-left: 45px !important;
     font-size: 15px;
-    color: #eaf3ff;
+    color: #001f3f !important;
     margin-top: 6px;
     transition: all 0.3s ease;
-    /* changed: smoother transition */
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.5;
+    font-family: inherit;
+    caret-color: #3a7bd5;
+}
+
+.pc-input::placeholder {
+    color: #8a9ba8 !important;
 }
 
 .pc-input:focus {
-    outline: none;
-    border-color: #339cff;
-    background: #112d60;
-    /* box-shadow: 0 0 8px rgba(51, 156, 255, 0.4); */
-    /* new: glow effect */
+    outline: none !important;
+    border-color: #3a7bd5 !important;
+    background: #ffffff !important;
+    color: #001f3f !important;
+    box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.1);
+}
+
+.pc-input:focus::placeholder {
+    color: #8a9ba8 !important;
+}
+
+/* Ensure autofill doesn't hide text */
+.pc-input:-webkit-autofill,
+.pc-input:-webkit-autofill:hover,
+.pc-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #001f3f !important;
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Textarea specific styling */
+textarea.pc-input {
+    min-height: 100px;
+    resize: vertical;
+    overflow-y: auto;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: #001f3f !important;
+}
+
+textarea.pc-input:focus {
+    color: #001f3f !important;
+}
+
+.pc-input::selection {
+    background: rgba(58, 123, 213, 0.3);
+    color: #001f3f;
+}
+
+.pc-input::-moz-selection {
+    background: rgba(58, 123, 213, 0.3);
+    color: #001f3f;
 }
 
 /* For rows having two inputs side by side */
@@ -93,50 +126,52 @@
 }
 
 .pc-error-field {
-    border-color: #ff6666 !important;
-    background: rgba(255, 50, 50, 0.1);
-    /* changed: softer red overlay instead of dark bg */
+    border-color: #e53e3e !important;
+    background: #fff5f5 !important;
+    color: #001f3f !important;
 }
 
 /* Buttons */
-.pc-actions {
+.investor-form-container .pc-actions {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 10px;
 }
 
-.pc-btn {
+.investor-form-container .pc-btn {
     padding: 12px 30px;
+    color: white;
+    background-color: #888888;
     /* changed: increased size */
     border-radius: 10px;
     border: none;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s ease;
-    /* changed: smoother hover */
 }
 
 /* Primary Save Button */
-.pc-btn-primary {
+.investor-form-container .pc-btn:hover {
+    background: #666666;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.investor-form-container .pc-btn-primary {
     background: linear-gradient(135deg, #2675ff, #00b4ff);
     color: white;
     border: none;
-    /* box-shadow: 0 4px 15px rgba(0, 150, 255, 0.2); */
-    /* new: button glow */
 }
 
-.pc-btn-primary:hover {
+.investor-form-container .pc-btn-primary:hover {
     background: linear-gradient(135deg, #0052cc, #0091ea);
     transform: translateY(-2px);
-    /* box-shadow: 0 6px 18px rgba(0, 150, 255, 0.3); */
-    /* new: hover lift effect */
 }
 
 /* Responsive design */
 @media (max-width: 600px) {
     .pc-card {
         padding: 26px;
-        /* changed: slightly reduced for mobile */
     }
 
     .pc-row {

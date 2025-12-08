@@ -8,20 +8,59 @@ import Register from "./Pages/Register/Register.jsx";
 import InvestorConnect from "./Component/Forms/Partner_Investor_Forms/Investor_Form/Investor_Form.jsx";
 import ContactUs from "./Pages/ContactUs/ContactUs.jsx";
 import CompanyProfile from "./Pages/Company/CompanyProfile";
+import CompanyPitch from './Component/Forms/Partner_Investor_Forms/Pitch_Details_Form/Pitch_Detail_Form.jsx'
+import useMultiStepForm from './store/useMultiStepForm.js';
+import ProgressIndicator from './Component/Multipage_Form__Stepper/Form_Progress_Indicator.jsx'
+
 
 function App() {
+
+  const { step } = useMultiStepForm();
+
+  // Multi-step pages
+  const pages = [
+    <CompanyDetail />,
+    <CompanyPitch />,
+    <PartnerConnect />,
+    <InvestorConnect />
+  ];
+
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/partner-connect" element={<PartnerConnect />} />
-      <Route path="/companies/:id" element={<CompanyProfile />} />
-      <Route path="/investor-connect" element={<InvestorConnect />} />
-      <Route path="/company-register" element={<CompanyDetail />} />
-      <Route path="/contact-us/" element={<ContactUs />} />
+      <Route
+        path='/'
+        element={<Login />}
+      />
+      <Route
+        path='/register'
+        element={<Register />}
+      />
+      <Route
+        path='/home'
+        element={<Home />}
+      />
+
+      <Route
+        path="/company-registration/*"
+        element={
+          <div className="root">
+            <div id="main-wrapper" className="container">
+              <ProgressIndicator />
+              {pages[step]}
+            </div>
+          </div>
+        }
+      />
+      <Route
+        path="/companies/:id"
+        element={<CompanyProfile />}
+      />
+      <Route
+        path="/contact-us/"
+        element={<ContactUs />}
+      />
     </Routes>
-  );
+  )
 }
 
 export default App;
