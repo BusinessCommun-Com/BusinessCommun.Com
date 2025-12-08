@@ -1,6 +1,7 @@
 import React from "react";
 import "./Home.css";
 import SlideShow from "../../Component/SlideShow/SlideShow";
+import icon2 from "../../assets/UI_Images/icon2.jpg";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
     <nav className="navbar navbar-expand-lg navbar-style">
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
+          <img src={icon2} alt="BusinessCommun logo" className="navbar-logo" />
           BussinessCommun
         </a>
 

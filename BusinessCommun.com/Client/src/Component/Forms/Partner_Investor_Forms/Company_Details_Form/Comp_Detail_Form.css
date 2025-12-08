@@ -5,13 +5,12 @@
 
 }
 .pc-card {
-    background: #0b1a3b;
-    /* dark blue background */
-    color: #e6f2ff;
-    /* light text */
+    background: #f6f7f9; /* greyish-white */
+    color: #1f2937; /* dark text for contrast */
     padding: 32px;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 50, 150, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(31, 41, 55, 0.06);
+    border: 1px solid rgba(31, 41, 55, 0.06);
     max-width: 700px;
     margin: 40px auto;
     font-family: 'Inter', sans-serif;
@@ -21,7 +20,7 @@
 .pc-title {
     font-size: 26px;
     font-weight: 700;
-    color: #dff3ff;
+    color: #0f1724;
     text-align: center;
     margin-bottom: 24px;
 }
@@ -38,27 +37,28 @@
     display: flex;
     flex-direction: column;
     font-weight: 600;
-    color: #bcd8ff;
+    color: #374151; /* muted dark for labels */
     font-size: 15px;
 }
 
 /* Input and Textarea */
 .pc-input {
-    background: #0e234a;
-    border: 1px solid rgba(130, 170, 255, 0.3);
+    background: #ffffff;
+    border: 1px solid #d1d5db;
     border-radius: 10px;
-    padding: 10px 35px !important; 
+    padding: 10px 14px !important; 
     font-size: 15px;
-    color: #eaf3ff;
+    color: #0f1724;
     margin-top: 6px;
-    transition: border 0.2s, background 0.2s;
+    transition: border 0.15s ease, box-shadow 0.15s ease;
     width: 100%;
 }
 
 .pc-input:focus {
     outline: none;
-    border-color: #339cff;
-    background: #112d60;
+    border-color: #4f9cff;
+    box-shadow: 0 0 0 4px rgba(79,156,255,0.08);
+    background: #ffffff;
 }
 
 /* For rows having two inputs side by side */
@@ -73,14 +73,14 @@
 
 /* Error styling */
 .pc-error {
-    color: #ffb3b3;
+    color: #b91c1c;
     font-size: 13px;
     margin-top: 4px;
 }
 
 .pc-error-field {
-    border-color: #ff6666 !important;
-    background: #1c2438;
+    border-color: #f87171 !important;
+    background: #fff5f5;
 }
 
 /* Buttons */
