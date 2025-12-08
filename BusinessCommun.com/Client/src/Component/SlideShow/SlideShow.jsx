@@ -85,7 +85,7 @@ export default function SlideShow() {
             {/* RIGHT SIDE */}
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link navText" href="#">
+                <a className="nav-link navText" href="/contact-us">
                   Contact Us
                 </a>
               </li>
