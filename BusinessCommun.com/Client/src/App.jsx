@@ -13,7 +13,8 @@ import CompanyDetail from './Component/Forms/Partner_Investor_Forms/Company_Deta
 import PartnerConnect from './Component/Forms/Partner_Investor_Forms/Partner_Form/Partner_Form.jsx'
 import Register from './Pages/Register/Register.jsx'
 import InvestorConnect from './Component/Forms/Partner_Investor_Forms/Investor_Form/Investor_Form.jsx'
-import About from './Pages/About/About.jsx' 
+import About from './Pages/About/About.jsx'
+import NewsPage from "./Pages/News_page/NewsPage.jsx";
 
 
 function App() {
@@ -42,12 +43,8 @@ function App() {
         element={<Home />}
       />
       <Route path="/about-us"
-        element={<About />} 
+        element={<About />}
       />
-      <Route path="/partner-connect"
-        element={<PartnerConnect />}
-      />
-
 
       <Route
         path="/company-registration/*"
@@ -61,6 +58,7 @@ function App() {
         }
       />
       <Route path="/companies/:id" element={<CompanyProfile />} />
+      <Route path="/news/" element={<NewsPage />} />
       <Route path="/contact-us/" element={<ContactUs />} />
       <Route path="/premium-service" element={<PremiumService />} />
     </Routes>

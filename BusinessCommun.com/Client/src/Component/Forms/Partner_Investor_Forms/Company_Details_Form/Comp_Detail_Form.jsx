@@ -32,28 +32,69 @@ function CompanyDetail() {
   const schema = yup.object({
     organization_name: yup
       .string()
-      .required("Organization is required")
-      .min(10, "Add more details (min 10 chars)")
+      .required("Organization name is required")
       .max(2000),
-    owner_name: yup.string().required("Qualification is required").max(255),
-    mob_no: yup.number().required("Mobile Number is required"),
-    domain_name: yup.string().required("Domain Name must be selected").max(100),
+    owner_name: yup
+      .string()
+      .required("Owner name is required")
+      .max(255),
+    mob_no: yup
+      .string()
+      .required("Mobile Number is required")
+      .test(
+        "is-valid-phone",
+        "Enter a valid mobile number (7 to 15 digits)",
+        (value) => {
+          if (!value) return false;
+          const digits = value.replace(/\D/g, "");
+          return digits.length >= 7 && digits.length <= 15;
+        }
+      ),
+    domain_name: yup
+      .string()
+      .required("Domain Name must be selected")
+      .max(100),
     org_type: yup
       .string()
       .required("Organization type must be selected")
       .max(100),
-    gst_no: yup.string().required("Gst no. is required").max(100),
-    revenue: yup.number().required("Revenue is required").max(100),
-    address: yup.string().required("Address is required").max(200),
-    city: yup.string().required("City is required").max(100),
-    state: yup.string().required("State is required").max(100),
-    comp_logo_url: yup.string().required("file is required").max(100),
-    establishment_year: yup.string().required("Date is required").max(100),
-
-    // contact_phone: yup
-    //     .string()
-    //     .required("Contact phone required")
-    //     .matches(phoneRegex, "Enter valid phone digits (10 - 15 digits)"),
+    gst_no: yup
+      .string()
+      .required("GSTIN is required")
+    // .matches(
+    //   /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
+    //   "Invalid GST number"
+    // ),
+    ,
+    revenue: yup
+      .number()
+      .transform((value, originalValue) =>
+        originalValue === "" ? undefined : Number(originalValue)
+      )
+      .typeError("Revenue must be a valid number")
+      .required("Revenue is required")
+      .min(0, "Revenue cannot be negative")
+      .max(1000000000, "Revenue seems too high"),
+    address: yup
+      .string()
+      .required("Address is required")
+      .max(200),
+    city: yup
+      .string()
+      .required("City is required")
+      .max(100),
+    state: yup
+      .string()
+      .required("State is required")
+      .max(100),
+    comp_logo_url: yup
+      .mixed()
+      .required("Logo is required"),
+    establishment_year: yup
+      .date()
+      .typeError("Invalid date")
+      .max(new Date(), "Date cannot be in future")
+      .required("Establishment year is required"),
   });
 
   const {
@@ -147,13 +188,15 @@ function CompanyDetail() {
               )}
             </div>
 
-            {/* Hidden Input */}
             <input
               id="orgLogoInput"
-              {...register("comp_logo_url")}
               type="file"
               accept="image/*"
-              onChange={handleFileChange}
+              {...register("comp_logo_url")}
+              onChange={(e) => {
+                handleFileChange(e);
+                setValue("comp_logo_url", e.target.files);
+              }}
               style={{ display: "none" }}
             />
 
@@ -185,9 +228,8 @@ function CompanyDetail() {
             <input
               {...register("organization_name")}
               type="text"
-              className={`pc-input ${
-                errors.organization_name ? "pc-error-field" : ""
-              }`}
+              className={`pc-input ${errors.organization_name ? "pc-error-field" : ""
+                }`}
               placeholder="Enter Organization Name..."
             />
           </div>
@@ -217,9 +259,8 @@ function CompanyDetail() {
             <input
               {...register("owner_name")}
               type="text"
-              className={`pc-input ${
-                errors.owner_name ? "pc-error-field" : ""
-              }`}
+              className={`pc-input ${errors.owner_name ? "pc-error-field" : ""
+                }`}
               placeholder="Enter Organization Name..."
             />
           </div>
@@ -284,9 +325,8 @@ function CompanyDetail() {
 
             <select
               {...register("domain_name", { required: "Domain is required" })}
-              className={`pc-input ${
-                errors.domain_name ? "pc-error-field" : ""
-              }`}
+              className={`pc-input ${errors.domain_name ? "pc-error-field" : ""
+                }`}
               style={{
                 paddingLeft: "40px",
                 width: "100%",
@@ -379,9 +419,8 @@ function CompanyDetail() {
               ref={dateInputRef}
               type="date"
               onChange={handleDateChange}
-              className={`pc-input ${
-                errors.establishment_year ? "pc-error-field" : ""
-              }`}
+              className={`pc-input ${errors.establishment_year ? "pc-error-field" : ""
+                }`}
               style={{
                 paddingLeft: "35px", // space for icon
               }}
