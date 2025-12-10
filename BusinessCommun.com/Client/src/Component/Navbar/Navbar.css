@@ -1,0 +1,105 @@
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.8s ease-in-out;
+    margin-top: 0;
+}
+
+.slideshow-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.55),
+            rgba(0, 0, 0, 0.75));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slideshow-content {
+    text-align: center;
+    color: #ffffff;
+    max-width: 600px;
+    padding: 0 16px;
+}
+
+.slideshow-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.slideshow-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 24px;
+}
+
+.slideshow-button {
+    padding: 10px 26px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    background: #2980b9;
+    color: #ffffff;
+    transition: 0.2s ease;
+}
+
+.slideshow-button:hover {
+    background: #2f64ac;
+    transform: translateY(-2px);
+}
+
+
+.hero-wrapper {
+    position: relative;
+}
+
+.navbar-style {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: transparent;
+    padding: 0.35rem 1.25rem;
+    border: none;
+}
+
+@media (max-width: 576px) {
+    .navbar-style {
+        top: 8px;
+        padding: 0.25rem 0.9rem;
+    }
+}
+
+.navbar-brand {
+    font-size: 0px;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.navText {
+    font-size: 19px;
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
