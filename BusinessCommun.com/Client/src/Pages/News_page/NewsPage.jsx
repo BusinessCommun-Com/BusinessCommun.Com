@@ -46,92 +46,99 @@ export default function NewsPage() {
     };
 
     return (
+     
         <div className="news-page-container">
-            <Navbar />
-            <div className="container">
-                <header className="news-header">
-                    <h1>
-                        <Newspaper className="header-icon" /> Latest Insights
-                    </h1>
-                    <p>Stay updated with the most recent news and developments.</p>
-                </header>
+          <div className="container">
+            <header className="news-header">
+              <h1>
+                <Newspaper className="header-icon" /> Latest Insights
+              </h1>
+              <p>Stay updated with the most recent news and developments.</p>
+            </header>
 
-                {loading ? (
-                    <div className="loader-container">
-                        <div className="spinner"></div>
-                    </div>
-                ) : (
-                    <div className="row g-4">
-                        {newsData?.results?.map((article, index) => (
-                            <div key={article.article_id || index} className="col-12 col-md-6 col-lg-4">
-                                <motion.div
-                                    className="news-card h-100"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1, duration: 0.4 }}
-                                    whileHover={{ y: -5 }}
-                                >
-                                    <div className="card-image-wrapper">
-                                        {article.image_url ? (
-                                            <img
-                                                src={article.image_url}
-                                                alt={article.title}
-                                                className="card-image"
-                                                onError={(e) => {
-                                                    e.target.style.display = 'none'; // Hide if broken
-                                                }}
-                                            />
-                                        ) : (
-                                            <div className="placeholder-image">
-                                                <Globe size={48} />
-                                            </div>
-                                        )}
-                                        <div className="category-badge">
-                                            {article.category?.[0]?.toUpperCase() || "NEWS"}
-                                        </div>
-                                    </div>
+            {loading ? (
+              <div className="loader-container">
+                <div className="spinner"></div>
+              </div>
+            ) : (
+              <div className="row g-4">
+                {newsData?.results?.map((article, index) => (
+                  <div
+                    key={article.article_id || index}
+                    className="col-12 col-md-6 col-lg-4"
+                  >
+                    <motion.div
+                      className="news-card h-100"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                      whileHover={{ y: -5 }}
+                    >
+                      <div className="card-image-wrapper">
+                        {article.image_url ? (
+                          <img
+                            src={article.image_url}
+                            alt={article.title}
+                            className="card-image"
+                            onError={(e) => {
+                              e.target.style.display = "none"; // Hide if broken
+                            }}
+                          />
+                        ) : (
+                          <div className="placeholder-image">
+                            <Globe size={48} />
+                          </div>
+                        )}
+                        <div className="category-badge">
+                          {article.category?.[0]?.toUpperCase() || "NEWS"}
+                        </div>
+                      </div>
 
-                                    <div className="card-content d-flex flex-column">
-                                        <div className="card-meta">
-                                            <span className="source-info">
-                                                {article.source_icon && (
-                                                    <img src={article.source_icon} alt="" className="source-icon" />
-                                                )}
-                                                {article.source_name || "Unknown Source"}
-                                            </span>
-                                            <span className="date-info">
-                                                <Calendar size={14} />
-                                                {formatDate(article.pubDate)}
-                                            </span>
-                                        </div>
+                      <div className="card-content d-flex flex-column">
+                        <div className="card-meta">
+                          <span className="source-info">
+                            {article.source_icon && (
+                              <img
+                                src={article.source_icon}
+                                alt=""
+                                className="source-icon"
+                              />
+                            )}
+                            {article.source_name || "Unknown Source"}
+                          </span>
+                          <span className="date-info">
+                            <Calendar size={14} />
+                            {formatDate(article.pubDate)}
+                          </span>
+                        </div>
 
-                                        <h3 className="card-title">{article.title}</h3>
+                        <h3 className="card-title">{article.title}</h3>
 
-                                        <p className="card-description flex-grow-1">
-                                            {article.description
-                                                ? article.description.length > 120
-                                                    ? `${article.description.substring(0, 120)}...`
-                                                    : article.description
-                                                : "No description available."}
-                                        </p>
+                        <p className="card-description flex-grow-1">
+                          {article.description
+                            ? article.description.length > 120
+                              ? `${article.description.substring(0, 120)}...`
+                              : article.description
+                            : "No description available."}
+                        </p>
 
-                                        <a
-                                            href={article.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="card-button mt-auto"
-                                        >
-                                            Read Full Article <ExternalLink size={16} />
-                                        </a>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        ))}
-                    </div>
-                )
-                }
-            </div >
-            <Footer />
-        </div >
+                        <a
+                          href={article.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="card-button mt-auto"
+                        >
+                          Read Full Article <ExternalLink size={16} />
+                        </a>
+                      </div>
+                    </motion.div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <Footer />
+        </div>
+    
     );
 }
