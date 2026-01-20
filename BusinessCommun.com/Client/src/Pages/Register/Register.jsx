@@ -13,33 +13,51 @@ export function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // create an instance of useNavigate
   const navigate = useNavigate()
 
-  const onRegister = async () => {
+  const onRegister = async (e) => {
+    e.preventDefault()
+    
     try {
-      if (firstName.length == 0) {
+      if (firstName.trim().length == 0) {
         toast.warning("Please enter first name");
-      } else if (lastName.length == 0) {
+        return
+      } else if (lastName.trim().length == 0) {
         toast.warning("Please enter last name");
-      } else if (email.length == 0) {
+        return
+      } else if (email.trim().length == 0) {
         toast.warning("Please enter email");
+        return
       } else if (password.length == 0) {
         toast.warning("Please enter password");
+        return
       } else if (confirmPassword != password) {
-        toast.warning("Please enter correct password")
+        toast.warning("Passwords do not match")
+        return
+      }
+      
+      setLoading(true)
+      const response = await register(firstName, lastName, email, password);
+      if (response && response['status'] == 'success') {
+        toast.success('Registered successfully');
+        // Clear form fields
+        setFirstName('')
+        setLastName('')
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+        navigate('/login')
       } else {
-        const respone = await register(firstName, lastName, email, password);
-        if (respone['status'] == 'success') {
-          toast.success('Registered successfully');
-          navigate('/login')
-        } else {
-          console.log(response['error']);
-        }
+        toast.error(response && response['error'] ? response['error'] : 'Registration failed');
       }
     } catch (error) {
-      console.log('Error')
+      toast.error('An error occurred during registration')
+      console.error('Registration error:', error)
+    } finally {
+      setLoading(false)
     }
   }
   return (
@@ -62,13 +80,14 @@ export function Register() {
                         Enter your details to create your account
                       </p>
 
-                      <form>
+                      <form onSubmit={onRegister}>
                         <div className="form-group">
                           <label htmlFor="exampleInputFirstName">First Name</label>
                           <input
                             onChange={(e) => {
                               setFirstName(e.target.value)
                             }}
+                            value={firstName}
                             type="text"
                             className="form-control"
                             id="exampleInputFirstName"
@@ -81,6 +100,7 @@ export function Register() {
                             onChange={(e) => {
                               setLastName(e.target.value)
                             }}
+                            value={lastName}
                             type="text"
                             className="form-control"
                             id="exampleInputLastName"
@@ -93,6 +113,7 @@ export function Register() {
                             onChange={(e) => {
                               setEmail(e.target.value)
                             }}
+                            value={email}
                             type="email"
                             className="form-control"
                             id="exampleInputEmail1"
@@ -105,6 +126,7 @@ export function Register() {
                             onChange={(e) => {
                               setPassword(e.target.value)
                             }}
+                            value={password}
                             type="password"
                             className="form-control"
                             id="exampleInputPassword1"
@@ -116,6 +138,7 @@ export function Register() {
                               onChange={(e) => {
                                 setConfirmPassword(e.target.value)
                               }}
+                              value={confirmPassword}
                               type="password"
                               className="form-control"
                               id="exampleInputConfirmPassword"
@@ -123,8 +146,12 @@ export function Register() {
                             />
                           </div>
                         </div>
-                        <button onClick={onRegister} type="submit" className="btn btn-theme">
-                          Register
+                        <button 
+                          type="submit" 
+                          className="btn btn-theme"
+                          disabled={loading}
+                        >
+                          {loading ? 'Registering...' : 'Register'}
                         </button>
                       </form>
                     </div>
@@ -152,7 +179,7 @@ export function Register() {
 
             <p className="text-muted text-center mt-3 mt-2">
               Already Have an Account?{" "}
-              <a href="#" className="text-primary ml-1">
+              <a href="/login" className="text-primary ml-1">
                 Login Here
               </a>
             </p>

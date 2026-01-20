@@ -6,7 +6,9 @@ import useMultiStepForm from "./store/useMultiStepForm.js";
 import ProgressIndicator from "./Component/Multipage_Form__Stepper/Form_Progress_Indicator.jsx";
 import PremiumService from "./Pages/PremiumService/PremiumService.jsx";
 import './App.css'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import Login from './Pages/Login/Login.jsx'
 import Home from './Pages/Home/Home.jsx'
 import CompanyDetail from './Component/Forms/Partner_Investor_Forms/Company_Details_Form/Comp_Detail_Form.jsx'
@@ -29,39 +31,56 @@ function App() {
   ];
 
   return (
-    <Routes>
-      <Route
-        path='/'
-        element={<Login />}
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
-      <Route
-        path='/register'
-        element={<Register />}
-      />
-      <Route
-        path='/home'
-        element={<Home />}
-      />
-      <Route path="/about-us"
-        element={<About />}
-      />
+      <Routes>
+        <Route
+          path='/'
+          element={<Navigate to="/login" replace />}
+        />
+        <Route
+          path='/login'
+          element={<Login />}
+        />
+        <Route
+          path='/register'
+          element={<Register />}
+        />
+        <Route
+          path='/home'
+          element={<Home />}
+        />
+        <Route path="/about-us"
+          element={<About />}
+        />
 
-      <Route
-        path="/company-registration/*"
-        element={
-          <div className="root">
-            <div id="main-wrapper" className="container">
-              <ProgressIndicator />
-              {pages[step]}
+        <Route
+          path="/company-registration/*"
+          element={
+            <div className="root">
+              <div id="main-wrapper" className="container">
+                <ProgressIndicator />
+                {pages[step]}
+              </div>
             </div>
-          </div>
-        }
-      />
-      <Route path="/companies/:id" element={<CompanyProfile />} />
-      <Route path="/news/" element={<NewsPage />} />
-      <Route path="/contact-us/" element={<ContactUs />} />
-      <Route path="/premium-service" element={<PremiumService />} />
-    </Routes>
+          }
+        />
+        <Route path="/companies/:id" element={<CompanyProfile />} />
+        <Route path="/news/" element={<NewsPage />} />
+        <Route path="/contact-us/" element={<ContactUs />} />
+        <Route path="/premium-service" element={<PremiumService />} />
+      </Routes>
+    </>
   );
 }
 
