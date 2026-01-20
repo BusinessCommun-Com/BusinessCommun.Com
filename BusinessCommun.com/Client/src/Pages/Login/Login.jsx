@@ -32,11 +32,12 @@ function Login() {
     setLoading(true)
     try {
       const response = await login(email, password)
-      if (response && response['status'] == 'success') {
+      console.log('Login Response:', response.status);
+      if (response && response.status == 'success') {
         toast.success('Login Successful')
 
         // get the token from response and cache it in local storage
-        localStorage.setItem("token", response["data"]["token"]);
+        //localStorage.setItem("token", response["data"]["token"]);
         localStorage.setItem("firstName", response["data"]["firstName"]);
         localStorage.setItem("lastName", response["data"]["lastName"]);
 
