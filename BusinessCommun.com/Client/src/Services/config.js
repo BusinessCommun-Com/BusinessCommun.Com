@@ -1,4 +1,4 @@
-const config = { 
-    server : 'https://localhost:4000'
-}
-export default config
+const config = {
+  server: "http://localhost:8080",
+};
+export default config;

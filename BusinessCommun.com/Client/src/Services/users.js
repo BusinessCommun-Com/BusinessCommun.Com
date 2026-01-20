@@ -3,7 +3,7 @@ import axios from  'axios'
 
 export async function login(email, password) { 
     try{ 
-        const url = `${config.server}/user/`
+        const url = `${config.server}/users/login`
         const body = {email , password}
         const response = await axios.post(url , body)
         return response.data
@@ -14,9 +14,9 @@ export async function login(email, password) {
 
 export async function register(firstName, lastName, email, password) {
     try{ 
-        
-        const url = `${config.server}/user/register`
-        const body = { firstName, lastName, email, password }
+        const role = "ROLE_USER"
+        const url = `${config.server}/users/register`
+        const body = { firstName, lastName, email, password, role}
         const response = await axios.post(url, body)
         return response.data
 

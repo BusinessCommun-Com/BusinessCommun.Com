@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.dtos.ApiResponseWrapper;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResponse;
 import com.backend.dtos.UserRegistration;
@@ -21,22 +22,21 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @RequiredArgsConstructor
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@RequestBody @Valid AuthRequest dto ){
-		
+	public ResponseEntity<ApiResponseWrapper<AuthResponse>> authenticateUser(@RequestBody @Valid AuthRequest dto) {
+
 		System.out.println("in login " + dto);
 		return ResponseEntity.ok(userService.authenticateUser(dto));
 	}
-	
+
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody @Valid UserRegistration dto){
+	public ResponseEntity<?> registerUser(@RequestBody @Valid UserRegistration dto) {
 		System.out.println("in register" + dto);
 		return ResponseEntity.ok(userService.registerUser(dto));
 	}
-	
 
 }

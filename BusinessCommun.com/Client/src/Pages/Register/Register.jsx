@@ -41,7 +41,8 @@ export function Register() {
       
       setLoading(true)
       const response = await register(firstName, lastName, email, password);
-      if (response && response['status'] == 'success') {
+      console.log('Registration Response:', response.status);
+      if ( response.status == 'success') {
         toast.success('Registered successfully');
         // Clear form fields
         setFirstName('')
