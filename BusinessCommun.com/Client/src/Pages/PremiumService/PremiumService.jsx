@@ -61,7 +61,7 @@ const PremiumService = () => {
     return (
         <div>
             {/* Header */}
-            <header className="header">
+            {/* <header className="header">
                 <div className="container">
                     <h1 className="logo">
                         <img src={icon2} alt="BusinessCommun logo" className="logo-img" />
@@ -73,7 +73,7 @@ const PremiumService = () => {
                         <Link to='/contact-us' className="link"> Contact </Link>
                     </nav>
                 </div>
-            </header>
+            </header> */}
 
             {/* Hero */}
             <main>

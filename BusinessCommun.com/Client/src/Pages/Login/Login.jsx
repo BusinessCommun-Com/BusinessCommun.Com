@@ -5,29 +5,39 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { FcGoogle } from "react-icons/fc"
 import { FaApple, FaFacebook } from 'react-icons/fa'
 import { login } from "../../Services/users"
+import { toast } from "react-toastify"
 
 function Login() {
   // add the state members for inputs
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   //const navigate function reference 
   const navigate = useNavigate()
 
   // const {setUser} = useAuth()
 
-  const onLogin = async () => {
+  const onLogin = async (e) => {
+    e.preventDefault()
+    
     if (email.length == 0) {
       toast.warning('Please enter Email')
+      return
     } else if (password.length == 0) {
       toast.warning('Please enter Password')
-    } else {
+      return
+    } 
+    
+    setLoading(true)
+    try {
       const response = await login(email, password)
-      if (response['status'] == 'success') {
+      console.log('Login Response:', response.status);
+      if (response && response.status == 'success') {
         toast.success('Login Successful')
 
         // get the token from response and cache it in local storage
-        localStorage.setItem("token", response["data"]["token"]);
+        //localStorage.setItem("token", response["data"]["token"]);
         localStorage.setItem("firstName", response["data"]["firstName"]);
         localStorage.setItem("lastName", response["data"]["lastName"]);
 
@@ -37,10 +47,16 @@ function Login() {
         //   lastName : response['data']['lastName']
         // })
 
-        //Navigate to the Landing page
+        // Navigate to the Home page
+        navigate('/home')
       } else {
-        toast.error(response["error"]);
+        toast.error(response && response["error"] ? response["error"] : 'Login failed')
       }
+    } catch (error) {
+      toast.error('An error occurred during login')
+      console.error('Login error:', error)
+    } finally {
+      setLoading(false)
     }
 
     // const onGoogle = () => {
@@ -78,7 +94,7 @@ function Login() {
                         Enter your email address and password to login
                       </p>
 
-                      <form>
+                      <form onSubmit={onLogin}>
                         <div className="form-group">
                           <label htmlFor="exampleInputEmail1">
                             Email address
@@ -90,6 +106,7 @@ function Login() {
                             type="email"
                             className="form-control"
                             id="exampleInputEmail1"
+                            value={email}
                             required
                           />
                         </div>
@@ -104,15 +121,16 @@ function Login() {
                             type="password"
                             className="form-control"
                             id="exampleInputPassword1"
+                            value={password}
                             required
                           />
                         </div>
                         <button
-                          onClick={onLogin}
                           type="submit"
                           className="btn btn-theme"
+                          disabled={loading}
                         >
-                          Login
+                          {loading ? 'Logging in...' : 'Login'}
                         </button>
                         <a
                           href="#"
@@ -122,15 +140,15 @@ function Login() {
                         </a>
                         <hr />
                         <div className="option">
-                          <button id="google" className="btn btn-sm">
+                          <button type="button" id="google" className="btn btn-sm">
                             {" "}
                             <FcGoogle size={22} /> <span>Google</span>
                           </button>
-                          <button id="facebook" className="btn btn btn-sm">
+                          <button type="button" id="facebook" className="btn btn btn-sm">
                             {" "}
                             <FaFacebook size={22} /> <span>Facebook</span>
                           </button>
-                          <button id="apple" className="btn btn btn-sm">
+                          <button type="button" id="apple" className="btn btn btn-sm">
                             {" "}
                             <FaApple size={22} /> <span>Apple</span>
                           </button>

@@ -1,11 +1,7 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import "./Investor_Form.css";
 
 // Zod Schema
 const phoneRegex = /^[0-9]{10}$/;
-const stakesRegex = /^(\d{1,3}%|\d+(\.\d+)?%?)$/;
+// const stakesRegex = /^(\d{1,3}%|\d+(\.\d+)?%?)$/;
 
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -65,9 +61,6 @@ function InvestorConnect() {
         alert("Investor details submitted successfully!");
         navigate('/home');
     };
-
-
-
 
     return (
         <div className="pc-card investor-form-container">

@@ -1,0 +1,48 @@
+.navbar-style {
+  /* margin-top: 10px; */
+  position: absolute;
+  top: 12px; /* slide navbar slightly lower on the hero */
+  left: 0;
+  right: 0;
+  z-index: 10;
+  /* make navbar transparent to avoid a visible dark strip at the top
+      keep a slight backdrop blur so white text remains legible over hero */
+  background: transparent;
+  /* -webkit-backdrop-filter: blur(6px); */
+  /* backdrop-filter: blur(6px); */
+  padding: 0.35rem 1.25rem;
+  border: none;
+}
+
+/* Slightly smaller offset on very small screens */
+@media (max-width: 576px) {
+  .navbar-style {
+    top: 8px;
+    padding: 0.25rem 0.9rem;
+  }
+}
+
+/* text colors on dark background */
+.navbar-brand {
+  font-size: 0px;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+.navText {
+  font-size: 19px;
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+}
+
+/* optional: make toggler visible on dark bg */
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.navbar-toggler-icon {
+  filter: invert(1);
+}
