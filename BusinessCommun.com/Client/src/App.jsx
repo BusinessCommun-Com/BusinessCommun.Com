@@ -19,6 +19,14 @@ import About from './Pages/About/About.jsx'
 import NewsPage from "./Pages/News_page/NewsPage.jsx";
 
 
+import AdminLayout from "./Admin/Layout/AdminLayout";
+import Dashboard from "./Admin/Pages/Dashboard";
+import Companies from "./Admin/Pages/Companies";
+import AdminCompanyProfile from "./Admin/Pages/CompanyProfile";
+import PendingRequests from "./Admin/Pages/PendingRequests";
+import ApprovedCompanies from "./Admin/Pages/ApprovedCompanies";
+import AdminManagement from "./Admin/Pages/AdminManagement";
+
 function App() {
   const { step } = useMultiStepForm();
 
@@ -43,6 +51,49 @@ function App() {
         draggable
         pauseOnHover
       />
+      <Route
+        path="/company-registration/*"
+        element={
+          <div className="root">
+            <div id="main-wrapper" className="container">
+              <ProgressIndicator />
+              {pages[step]}
+            </div>
+          </div>
+        }
+      />
+      <Route
+        path="/companies/:id"
+        element={<CompanyProfile />}
+      />
+
+      <Route
+        path="/contact-us/"
+        element={<ContactUs />}
+      />
+
+      <Route
+        path='/premium-service'
+        element = {<PremiumService/>}
+      />
+
+      <Route path="/companies/:id" element={<CompanyProfile />} />
+      <Route path="/news/" element={<NewsPage />} />
+      <Route path="/contact-us/" element={<ContactUs />} />
+      <Route path="
+      " element={<PremiumService />} />
+
+       <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />   {/* /admin */}
+          <Route path="companies" element={<Companies />} />  {/* /admin/companies */}
+          <Route path="company/:id" element={<AdminCompanyProfile />} /> {/* /admin/company/1 */}
+          <Route path="pending" element={<PendingRequests />} />  {/* /admin/pending */}
+          <Route path="approved" element={<ApprovedCompanies />} /> {/* /admin/approved */}
+          <Route path="admins" element={<AdminManagement />} /> {/* /admin/admins */}
+        </Route>
+
+    </Routes>
+  )
       <Routes>
         <Route
           path='/'

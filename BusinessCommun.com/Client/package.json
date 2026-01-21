@@ -10,6 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< Updated upstream
+=======
+    "@hookform/resolvers": "^5.2.2",
+    "@syncfusion/ej2-react-buttons": "^32.1.23",
+    "@syncfusion/ej2-react-dropdowns": "^32.1.23",
+    "@syncfusion/ej2-react-grids": "^32.1.23",
+    "@syncfusion/ej2-react-inputs": "^32.1.22",
+    "@syncfusion/ej2-react-layouts": "^32.1.19",
+    "@syncfusion/ej2-react-navigations": "^32.1.19",
+    "@syncfusion/ej2-react-popups": "^32.1.19",
+    "axios": "^1.13.2",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.555.0",
+>>>>>>> Stashed changes
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.13.2",
     "framer-motion": "^12.23.24",
