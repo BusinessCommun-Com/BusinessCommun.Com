@@ -54,7 +54,7 @@ public class JWTUtils {
 
     public Claims validateToken(String token) {
     	return Jwts.parser()
-    			.verifyWith(secretKey)
+    			.verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

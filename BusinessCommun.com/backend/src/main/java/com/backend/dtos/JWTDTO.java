@@ -7,10 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
+@NoArgsConstructor
+public class JWTDTO {
+	private Long userId;
+	private String email;
+	private String role;
 
-	private String message;
-	private String jwt;
 }
