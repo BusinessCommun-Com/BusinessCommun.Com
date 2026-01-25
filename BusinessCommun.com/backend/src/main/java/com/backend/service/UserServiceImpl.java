@@ -11,6 +11,7 @@ import com.backend.dtos.AuthResponse;
 import com.backend.dtos.UserRegistration;
 import com.backend.entities.UserEntity;
 import com.backend.entities.UserRole;
+import com.backend.logger.KafkaLogger;
 import com.backend.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
 		entity.setRole(UserRole.ROLE_USER);
 		System.out.println("mapped entity " + entity);
 		UserEntity persistentEntity = userRepository.save(entity);
+		
+		KafkaLogger.log("User created: " + persistentEntity.getEmail());
 
 		return new ApiResponse("New User Registered with id: " + persistentEntity.getId(), "success");
 	}

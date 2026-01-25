@@ -1,0 +1,62 @@
+.scheme-cards {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    background: white;
+}
+
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.read-more {
+    text-align: right;
+}
+
+.read-more button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
+
+/* In your CSS file */
+.application-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.application-label {
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
+}
+
+.application-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FF5F00;
+    color: white;
+    padding: 8px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    border: 2px solid white;
+    outline: 2px solid #FF5F00;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.application-tag:hover {
+    transform: scale(1.05);
+    background-color: #e65600;
+}
