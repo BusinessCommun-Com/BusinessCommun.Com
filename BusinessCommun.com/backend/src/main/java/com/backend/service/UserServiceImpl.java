@@ -2,6 +2,7 @@ package com.backend.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.backend.custom_exception.AuthenticationException;
 import com.backend.dtos.ApiResponse;
@@ -24,19 +25,13 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
+	private final PasswordEncoder passwordEncoder;
 
-	@Override
-	public ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto) {
-		UserEntity user = userRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword())
-				.orElseThrow(() -> new AuthenticationException("Invalid Email or Password !!!"));
-
-		AuthResponse respDTO = modelMapper.map(user, AuthResponse.class);
-		return new ApiResponseWrapper<>("success", "Login Successful", respDTO);
-	}
 
 	@Override
 	public ApiResponse registerUser(UserRegistration dto) {
 		UserEntity entity = modelMapper.map(dto, UserEntity.class);
+		entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 		entity.setRole(UserRole.ROLE_USER);
 		System.out.println("mapped entity " + entity);
 		UserEntity persistentEntity = userRepository.save(entity);
