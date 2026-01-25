@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 
 public interface UserService {
 
-	ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto);
 
 	ApiResponse registerUser(UserRegistration dto);
 

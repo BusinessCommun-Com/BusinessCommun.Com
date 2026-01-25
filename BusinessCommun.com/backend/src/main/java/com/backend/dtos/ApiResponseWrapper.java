@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ApiResponseWrapper<T> {
     private String status;
     private String message;
@@ -19,9 +18,9 @@ public class ApiResponseWrapper<T> {
         this.data = data;
     }
 
-    public ApiResponseWrapper(String status, String message, T data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
+//    public ApiResponseWrapper(String status, String message, T data) {
+//        this.status = status;
+//        this.message = message;
+//        this.data = data;
+//    }
 }

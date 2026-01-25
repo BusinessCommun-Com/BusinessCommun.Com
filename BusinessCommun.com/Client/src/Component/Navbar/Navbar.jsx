@@ -60,6 +60,11 @@ export default function Navbar() {
                     News
                   </a>
                 </li>
+                <li className="nav-item">
+                  <a className="nav-link navText" href="government-schemes">
+                    Government Schemes
+                  </a>
+                </li>
               </ul>
 
               {/* RIGHT SIDE */}
