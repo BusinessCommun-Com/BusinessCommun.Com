@@ -17,6 +17,7 @@ import Register from './Pages/Register/Register.jsx'
 import InvestorConnect from './Component/Forms/Partner_Investor_Forms/Investor_Form/Investor_Form.jsx'
 import About from './Pages/About/About.jsx'
 import NewsPage from "./Pages/News_page/NewsPage.jsx";
+import GovernmentSchemes from "./Pages/GovernmentSchemes/GovernmentSchemes.jsx";
 
 
 import AdminLayout from "./Admin/Layout/AdminLayout";
@@ -72,6 +73,7 @@ function App() {
         <Route path="/news/" element={<NewsPage />} />
         <Route path="/contact-us/" element={<ContactUs />} />
         <Route path="/premium-service" element={<PremiumService />} />
+        <Route path="/government-schemes/" element={<GovernmentSchemes />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="companies" element={<Companies />} />
