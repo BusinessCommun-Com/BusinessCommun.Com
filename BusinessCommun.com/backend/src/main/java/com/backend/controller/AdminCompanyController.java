@@ -73,13 +73,13 @@ public class AdminCompanyController {
         return ResponseEntity.ok(companyService.deleteCompany(id));
     }
 
-    // ✅ Restore Company
+    // Restore Company
     @PutMapping("/restore/{id}")
     public ResponseEntity<?> restore(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.restoreCompany(id));
     }
 
-    // ✅ Permanent Delete (Optional)
+    // Permanent Delete (Optional)
     @DeleteMapping("/permanent/{id}")
     public ResponseEntity<?> permanent(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.permanentDelete(id));

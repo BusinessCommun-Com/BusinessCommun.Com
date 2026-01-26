@@ -1,13 +1,13 @@
-export async function fetchAdmins() {
-  return Promise.resolve([
-    { id: 1, name: "Admin One", email: "admin1@mail.com" }
-  ]);
-}
+import api from "./api";
 
-export async function addAdmin(admin) {
-  console.log("Admin added", admin);
-}
+//Fetch All Admins
+export const fetchAdmins = async () => {
+  const res = await api.get("/admin/admins");
+  return res.data.data;
+};
 
-export async function removeAdmin(id) {
-  console.log("Admin removed", id);
-}
+//Remove Admin (Demote Role)
+export const removeAdmin = async (id) => {
+  const res = await api.put(`/admin/admins/remove/${id}`);
+  return res.data;
+};
