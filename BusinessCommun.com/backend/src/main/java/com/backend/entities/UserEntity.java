@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.AttributeOverride;
@@ -41,8 +42,7 @@ public class UserEntity extends BaseEntity implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(this.role.toString());
-		return authorities;
+		return List.of(new SimpleGrantedAuthority(this.role.name()));
 	}
 
 	@Override

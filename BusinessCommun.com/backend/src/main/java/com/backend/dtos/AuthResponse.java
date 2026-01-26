@@ -11,10 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthResponse {
 
-	private Long id;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String role;
-	private String token;
+	private String message;
+	private String jwt;
 }

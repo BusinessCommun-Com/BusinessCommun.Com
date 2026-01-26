@@ -1,3 +1,8 @@
+/.metadata/
+.vs/
+bin/
+obj/
+
 # dependencies
 node_modules/
 
@@ -7,3 +12,4 @@ build/
 
 # env
 .env
+
