@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class ApiResponseWrapper<T> {
     private String status;
     private String message;
