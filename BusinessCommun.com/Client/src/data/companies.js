@@ -44,6 +44,36 @@ const companies = [
     partners: [],
     investors: [],
   },
+  {
+    id: 5,
+    name: "Digital Farm Solutions",
+    pitch:
+      "Empowering farmers with IoT sensors, data analytics, and smart irrigation technology.",
+    logo: "/src/assets/Company_images/compImag.jpg",
+    details: {
+      founded: 2021,
+      employees: 18,
+      industry: "AgriTech",
+      website: "https://example.com/digital-farm",
+    },
+    partners: [],
+    investors: [],
+  },
+  {
+    id: 6,
+    name: "EcoFresh Produce Co.",
+    pitch:
+      "Sustainable farming practices producing organic, pesticide-free crops for urban markets.",
+    logo: "/src/assets/Company_images/compImag.jpg",
+    details: {
+      founded: 2020,
+      employees: 22,
+      industry: "Organic Agriculture",
+      website: "https://example.com/ecofresh",
+    },
+    partners: [],
+    investors: [],
+  },
 ];
 
 export default companies;

@@ -1,0 +1,44 @@
+.scheme-card {
+    border-radius: 5px;
+    height: 200px;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    /* 50% + 50% */
+    background: white;
+}
+
+.image-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-section img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    /* makes it circular */
+    object-fit: cover;
+}
+
+.department-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 10px;
+}
+
+
+.scheme-layout {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 1fr;
+    background: linear-gradient(135deg, #001f3f, #3a7bd5);
+    min-height: 100vh;
+    margin: 0;
+}
