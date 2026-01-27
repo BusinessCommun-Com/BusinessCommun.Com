@@ -36,7 +36,7 @@ public class CustomJwtFilter extends OncePerRequestFilter {
 				Claims claims = jwtUtils.validateToken(jwt);
 				//store the claims in dto
 				String role = claims.get("role", String.class);
-				JWTDTO dto = new JWTDTO(claims.get("user_id", Long.class), claims.get("email", String.class), role);
+				JWTDTO dto = new JWTDTO(Long.valueOf(claims.getSubject()), claims.get("email", String.class), role);
 				// add it in Authenticaion object
 				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(dto, null, List.of(new SimpleGrantedAuthority(role)));
 				// add it under sec ctx holder

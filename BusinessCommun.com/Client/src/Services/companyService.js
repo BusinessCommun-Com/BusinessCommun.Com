@@ -1,7 +1,7 @@
 import axios from "axios";
 import config from "./config";
 
-const BASE_URL = `${config.server}/api/companies`;
+const BASE_URL = `${config.server}/companies`;
 
 export const registerCompany = async (formData) => {
     try {

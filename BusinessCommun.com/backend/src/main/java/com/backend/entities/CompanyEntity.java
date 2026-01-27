@@ -46,7 +46,7 @@ public class CompanyEntity extends BaseEntity {
     @Column(nullable = false)
     private String state;
 
-    @Column(name = "logo_url", nullable = false)
+    @Column(name = "logo_url")
     private String logoUrl;
     
     @Enumerated(EnumType.STRING)

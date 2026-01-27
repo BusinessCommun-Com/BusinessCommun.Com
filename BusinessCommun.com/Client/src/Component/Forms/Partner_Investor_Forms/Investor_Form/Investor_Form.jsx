@@ -49,7 +49,7 @@ const schema = z.object({
 
 function InvestorConnect() {
 
-    const { prevStep, updateForm, formData } = useMultiStepForm();
+    const { prevStep, updateForm, formData, resetForm } = useMultiStepForm();
     const {
         register,
         handleSubmit,
@@ -75,7 +75,7 @@ function InvestorConnect() {
 
             if (response.status === "success") {
                 toast.success("Company registered successfully!");
-                updateForm({}); // Clear stored form data
+                resetForm(); // Clear stored form data
                 navigate('/home');
             } else {
                 toast.error(response.message || "Registration failed");

@@ -40,7 +40,7 @@ const schema = yup.object({
 // Component Function
 // -------------------------
 function PartnerConnect() {
-  const { prevStep, updateForm, nextStep, formData } = useMultiStepForm();
+  const { prevStep, updateForm, nextStep, formData, resetForm } = useMultiStepForm();
   // Initialize React Hook Form
   const {
     register, // connects input fields to form
@@ -73,7 +73,7 @@ function PartnerConnect() {
 
       if (response.status === "success") {
         toast.success("Company registered successfully!");
-        updateForm({}); // Clear stored form data
+        resetForm(); // Clear stored form data
         navigate('/home');
       } else {
         toast.error(response.message || "Registration failed");

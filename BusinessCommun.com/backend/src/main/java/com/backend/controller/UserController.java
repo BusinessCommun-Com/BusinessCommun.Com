@@ -46,7 +46,7 @@ public class UserController {
 		UserEntity user = (UserEntity) fullyAuthenticated.getPrincipal();
 		System.out.println("principal " + user);
 		return ResponseEntity.ok(new ApiResponseWrapper<>("success", "Login successful", 
-				new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated))));		
+				new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated), user.getId(), user.getFirstName(), user.getLastName())));		
 
 	}
 
