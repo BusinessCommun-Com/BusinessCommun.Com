@@ -33,7 +33,7 @@ public interface CompanyService {
 
     ApiResponseWrapper<CompanyResponseDto> getApprovedCompanyById(Long id);
 
-    ApiResponse registerCompany(CompanyRequestDto dto, MultipartFile imageFile) throws IOException;
+    ApiResponse registerCompany(CompanyRequestDto dto) throws IOException;
 
 
 }

@@ -36,14 +36,8 @@ public class CompanyController {
 
 	 //Company Registration
 	    @PostMapping("/register")
-		public ResponseEntity<?> registerCompany(@ModelAttribute CompanyRequestDto dto,
-				@RequestParam("logoUrl") MultipartFile imageFile) throws IOException {
-				
-			String originalFilename = imageFile.getOriginalFilename();
-			Path fileNameAndPath = Paths.get(uploadDir, originalFilename);
-			Files.write(fileNameAndPath, imageFile.getBytes());
-			dto.setLogoUrl(originalFilename);
-			return ResponseEntity.status(HttpStatus.CREATED).body(companyService.registerCompany(dto, imageFile));
+		public ResponseEntity<?> registerCompany(@RequestBody CompanyRequestDto dto) throws IOException {
+				return ResponseEntity.status(HttpStatus.CREATED).body(companyService.registerCompany(dto));
 		}
 
 	    //Homepage API

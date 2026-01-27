@@ -71,7 +71,7 @@ public class CompanyServiceImpl implements CompanyService{
 
     //Register Company
     @Override
-    public ApiResponse registerCompany(CompanyRequestDto dto, MultipartFile imageFile) throws IOException {
+    public ApiResponse registerCompany(CompanyRequestDto dto) throws IOException {
 
 
         UserEntity user = userRepo.findById(dto.getUserId())

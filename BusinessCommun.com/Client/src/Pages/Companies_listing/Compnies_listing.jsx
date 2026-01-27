@@ -71,7 +71,7 @@ function Companies_listing() {
               >
                 <div className="card company-card">
                   <img
-                    src={company.logo}
+                    src={img}
                     className="card-img-top company-card-img"
                     alt={company.name}
                   />
