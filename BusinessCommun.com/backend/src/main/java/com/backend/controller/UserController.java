@@ -26,6 +26,8 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	private AuthenticationManager authenticationManager;
+	private JwtUtils jwtUtils;
 
 	@PostMapping("/login")
 	public ResponseEntity<ApiResponseWrapper<AuthResponse>> authenticateUser(@RequestBody @Valid AuthRequest dto) {
