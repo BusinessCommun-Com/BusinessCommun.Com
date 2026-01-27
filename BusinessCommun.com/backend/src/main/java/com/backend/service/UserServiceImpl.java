@@ -9,6 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.backend.dtos.ApiResponse;
+import com.backend.dtos.ApiResponseWrapper;
+import com.backend.dtos.AuthRequest;
+import com.backend.dtos.AuthResponse;
 import com.backend.dtos.UserRegistration;
 import com.backend.entities.UserEntity;
 import com.backend.entities.UserRole;
@@ -27,8 +30,8 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	
+	private final AuthenticationManager authenticationManager;
 
 	@Autowired
 	private JWTUtils jwtUtils;
@@ -47,17 +50,17 @@ public class UserServiceImpl implements UserService {
 
 		return new ApiResponse("New User Registered with id: " + persistentEntity.getId(), "success");
 	}
-//	@Override
-//	public ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto) {
-//
-//	    UserEntity user = userRepository
-//	            .findByEmailAndPassword(dto.getEmail(), dto.getPassword())
-//	            .orElseThrow(() -> new AuthenticationException("Invalid Email or Password"));
-//
-//	    AuthResponse resp = modelMapper.map(user, AuthResponse.class);
-//
-//	    return new ApiResponseWrapper<>("success", "Login Successful", resp);
-//	}
+	// @Override
+	// public ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto) {
+
+	//     UserEntity user = userRepository
+	//             .findByEmailAndPassword(dto.getEmail(), dto.getPassword())
+	//             .orElseThrow(() -> new AuthenticationException("Invalid Email or Password"));
+
+	//     AuthResponse resp = modelMapper.map(user, AuthResponse.class);
+
+	//     return new ApiResponseWrapper(null, null, null)<>("success", "Login Successful", resp);
+	// }
 	
 	@Override
 	public ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto) {

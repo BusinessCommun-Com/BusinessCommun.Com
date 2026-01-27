@@ -29,5 +29,7 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Long>  {
 """)
     List<ShortCompanyResponseDto> findApprovedCompanies(@Param("status") CompanyStatus status);
 
+    List<ShortCompanyResponseDto> findByStatusNot(CompanyStatus deleted);
+
     
 }

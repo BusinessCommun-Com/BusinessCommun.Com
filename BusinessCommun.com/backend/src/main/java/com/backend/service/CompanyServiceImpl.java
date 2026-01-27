@@ -84,7 +84,6 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     public ApiResponse registerCompany(CompanyRequestDto dto) throws IOException {
 
-
         UserEntity user = userRepo.findById(dto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -110,7 +109,6 @@ public class CompanyServiceImpl implements CompanyService{
         company.setCompanyOwner(owner);
         company.setUser(user);
         company.setStatus(CompanyStatus.PENDING);
-        
 
         //Pitch creation
         PitchEntity pitch = new PitchEntity();
@@ -128,6 +126,12 @@ public class CompanyServiceImpl implements CompanyService{
                 CompanyStatus.PENDING);
 
         return new ApiResponse("Company Registered & sent for approval", "success");
+    }
+
+    ShortCompanyResponseDto toDTO(CompanyEntity entity) {
+        ShortCompanyResponseDto dto = mapper.map(entity, ShortCompanyResponseDto.class);
+        dto.setPitch(entity.getPitch().getTitle());
+        return dto;
     }
 
     //Pending Companies
@@ -158,9 +162,9 @@ public class CompanyServiceImpl implements CompanyService{
     
     //Rejected Companies list
     @Override
-    public ApiResponseWrapper<List<CompanyResponseDto>> getRejectedCompanies() {
+    public ApiResponseWrapper<List<ShortCompanyResponseDto>> getRejectedCompanies() {
 
-        List<CompanyResponseDto> list =
+        List<ShortCompanyResponseDto> list =
                 companyRepo.findByStatus(CompanyStatus.REJECTED)
                         .stream().map(this::toDTO).toList();
 
@@ -168,9 +172,9 @@ public class CompanyServiceImpl implements CompanyService{
     }
     
     @Override
-    public ApiResponseWrapper<List<CompanyResponseDto>> getDeletedCompanies() {
+    public ApiResponseWrapper<List<ShortCompanyResponseDto>> getDeletedCompanies() {
 
-        List<CompanyResponseDto> list =
+        List<ShortCompanyResponseDto> list =
                 companyRepo.findByStatus(CompanyStatus.DELETED)
                         .stream().map(this::toDTO).toList();
 
