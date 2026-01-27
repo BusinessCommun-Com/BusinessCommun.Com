@@ -63,8 +63,8 @@ router.post('/verify-payment', async (req, res) => {
   }
 });
 
-// fetch the premium investors after successful payment
-router.get('/investors', async (req, res) => {
+// 3. Get Investors (Modified to check premium status)
+router.get("/investors", async (req, res) => {
   const { userId } = req.query;
 
   if (!userId) {
@@ -72,18 +72,23 @@ router.get('/investors', async (req, res) => {
   }
 
   try {
-    const [rows] = await pool.query('SELECT is_premium FROM users WHERE id = ?', [userId]);
-    
+    const [rows] = await pool.query(
+      "SELECT is_premium FROM users WHERE id = ?",
+      [userId],
+    );
+
     // Check if user exists and is_premium is truthy (1 or "1")
     const isPremium = rows.length > 0 && Boolean(rows[0].is_premium);
 
     if (isPremium) {
-      const [investors] = await pool.query('SELECT * FROM investors');
+      const [investors] = await pool.query("SELECT * FROM investors");
       return res.json({ preview: false, investors });
     }
 
     // Fallback for non-premium users
-    const [preview] = await pool.query('SELECT id, name, company FROM investors LIMIT 3');
+    const [preview] = await pool.query(
+      "SELECT id, name, company FROM investors LIMIT 3",
+    );
     res.json({ preview: true, investors: preview });
 
   } catch (err) {
