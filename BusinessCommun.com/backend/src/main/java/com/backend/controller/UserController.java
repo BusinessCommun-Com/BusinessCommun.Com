@@ -14,6 +14,7 @@ import com.backend.dtos.ApiResponseWrapper;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResponse;
 import com.backend.dtos.UserRegistration;
+import com.backend.entities.UserEntity;
 import com.backend.service.UserService;
 import com.backend.security.JWTUtils;
 
@@ -41,8 +42,11 @@ public class UserController {
 				)
 			);
 		System.out.println("is user authenticated " + fullyAuthenticated.isAuthenticated());
-		System.out.println("principal " + fullyAuthenticated.getPrincipal());
-		return ResponseEntity.ok(new ApiResponseWrapper<>("success", "Login successful", new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated))));
+		UserEntity user = (UserEntity) fullyAuthenticated.getPrincipal();
+		System.out.println("principal " + user);
+		return ResponseEntity.ok(new ApiResponseWrapper<>("success", "Login successful", 
+				new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated), 
+						user.getId(), user.getFirstName(), user.getLastName())));
 	}
 
 	@PostMapping("/register")
