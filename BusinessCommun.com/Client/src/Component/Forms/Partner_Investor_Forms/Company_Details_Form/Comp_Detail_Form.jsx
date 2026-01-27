@@ -1,3 +1,4 @@
+import { getDomains, getOrgTypes } from "../../../../Services/utilService";
 import { useState, useRef, useEffect } from "react";
 import { FaBuilding, FaReceipt } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
@@ -21,11 +22,8 @@ import useMultiStepForm from "../../../../store/useMultiStepForm";
 
 function CompanyDetail() {
   const [companyLogoUrl, setCompanyLogoUrl] = useState(null);
-  const [domains, setDomains] = useState(["Arts", "Mobile & Tech"]);
-  const [organizationTypes, setOrganizationTypes] = useState([
-    { id: 1, org_name: "PartnerShip" },
-    { id: 2, org_name: "Sole Proprietary" },
-  ]);
+  const [domains, setDomains] = useState([]);
+  const [organizationTypes, setOrganizationTypes] = useState([]);
   const [preview, setPreview] = useState(null);
   const dateInputRef = useRef(null);
 
@@ -53,7 +51,7 @@ function CompanyDetail() {
     domain_name: yup
       .string()
       .required("Domain Name must be selected")
-      .max(100),
+      .nullable(),
     org_type: yup
       .string()
       .required("Organization type must be selected")
@@ -61,11 +59,10 @@ function CompanyDetail() {
     gst_no: yup
       .string()
       .required("GSTIN is required")
-    // .matches(
-    //   /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
-    //   "Invalid GST number"
-    // ),
-    ,
+      .matches(
+        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
+        "Invalid GST number"
+      ),
     revenue: yup
       .number()
       .transform((value, originalValue) =>
@@ -137,6 +134,15 @@ function CompanyDetail() {
   const { nextStep, updateForm, formData } = useMultiStepForm();
 
   useEffect(() => {
+    // Load Data
+    const fetchData = async () => {
+      const d = await getDomains();
+      const o = await getOrgTypes();
+      setDomains(d);
+      setOrganizationTypes(o);
+    };
+    fetchData();
+
     if (formData && Object.keys(formData).length > 0) {
       reset(formData); // restore saved values
       if (formData.comp_logo_url_preview) {
@@ -338,9 +344,9 @@ function CompanyDetail() {
               <option value="" disabled>
                 Select Domain
               </option>
-              {domains.map((domain, i) => (
-                <option key={i} value={domain}>
-                  {domain}
+              {domains.map((domain) => (
+                <option key={domain.id} value={domain.id}>
+                  {domain.name}
                 </option>
               ))}
             </select>
@@ -379,9 +385,9 @@ function CompanyDetail() {
               <option value="" disabled>
                 Select Organization Type
               </option>
-              {organizationTypes.map((organization, i) => (
-                <option key={i} value={organization.org_name}>
-                  {organization.org_name}
+              {organizationTypes.map((org) => (
+                <option key={org.id} value={org.id}>
+                  {org.name}
                 </option>
               ))}
             </select>

@@ -5,7 +5,7 @@ const useMultiStepForm = create((set) => ({
     totalSteps: 4,  // total unique screens
 
     formData: {},
-    userType: null,
+    userConnectType: null,  // 'partner' or 'investor'     
 
     // Normal navigation
     nextStep: () => set((s) => ({ step: Math.min(s.step + 1, s.totalSteps - 1) })),
@@ -13,14 +13,14 @@ const useMultiStepForm = create((set) => ({
     //context aware
     prevStep: () =>
         set((s) => {
-            if (s.step === 3 && s.userType === "investor") {
-                s.userType = null;
-                return { step: 1 }; // go back to pitch
+            if (s.step === 3 && s.userConnectType === "investor") {
+                s.userConnectType = null;
+                return { step: 1 }; // go back to pitch    
             }
-            if (s.step === 2 && s.userType === "partner") {
+            if (s.step === 2 && s.userConnectType === "partner") {
 
-                s.userType = null;
-                return { step: 1 }; // go back to pitch
+                s.userConnectType = null;
+                return { step: 1 }; // go back to pitch    
             }
             return { step: Math.max(s.step - 1, 0) };
         }),
@@ -28,13 +28,13 @@ const useMultiStepForm = create((set) => ({
     // Jump to step directly
     goTo: (n) =>
         set((s) => {
-            // Prevent jumping to step 2/3 if userType is not set
-            if ((n === 2 || n === 3) && !s.userType) {
+            // Prevent jumping to step 2/3 if userConnectType is not set
+            if ((n === 2 || n === 3) && !s.userConnectType) {
                 return s; // Don't change state - user must choose path first
             }
             return {
                 step: n,
-                userType: n === 1 ? null : s.userType    // RESET userType when going back to step 1 (Pitch)
+                userConnectType: n === 1 ? null : s.userConnectType    // RESET userConnectType when going back to step 1 (Pitch)
             };
         }),
 
@@ -46,8 +46,16 @@ const useMultiStepForm = create((set) => ({
     choosePath: (type) =>
         set((s) => ({
             step: type === "investor" ? 3 : 2, // jump based on user choice
-            userType: type,
-            formData: { ...s.formData, userType: type }  // optional store who they are
+            userConnectType: type,
+            formData: { ...s.formData, userConnectType: type }  // store connection type
+        })),
+
+    // Reset form to initial state (call after successful submission)
+    resetForm: () =>
+        set(() => ({
+            step: 0,
+            formData: {},
+            userConnectType: null,
         })),
 }));
 
