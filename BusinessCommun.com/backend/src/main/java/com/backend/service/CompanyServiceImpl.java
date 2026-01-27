@@ -31,6 +31,12 @@ import com.backend.repository.DomainRepository;
 import com.backend.repository.OrganizationTypeRepository;
 import com.backend.repository.UserRepository;
 
+import com.backend.entities.InvestorConnectEntity;
+import com.backend.entities.PartnerConnectEntity;
+import com.backend.repository.InvestorConnectRepository;
+import com.backend.repository.PartnerConnectRepository;
+import com.backend.repository.PitchRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -38,13 +44,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService{
 	
-	private final CompanyRepository companyRepo;
+    private final CompanyRepository companyRepo;
     private final CompanyOwnerRepository ownerRepo;
     private final ActivityLogRepository activityRepo;
 
     private final DomainRepository domainRepo;
     private final OrganizationTypeRepository orgRepo;
     private final UserRepository userRepo;
+    
+    // New Repositories
+    private final InvestorConnectRepository investorRepo;
+    private final PartnerConnectRepository partnerRepo;
+    private final PitchRepository pitchRepo;
 
     private final ModelMapper mapper;
     
@@ -128,7 +139,7 @@ public class CompanyServiceImpl implements CompanyService{
         return new ApiResponseWrapper<>("success", "Pending requests fetched", list);
     }
 
-    //Approved Companies
+    //Approved Companies list
     @Override
     public ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompanies() {
         List<ShortCompanyResponseDto> list =
@@ -136,13 +147,34 @@ public class CompanyServiceImpl implements CompanyService{
         return new ApiResponseWrapper<>("success", "Approved companies fetched", list);
     }
 
-    //All Companies
+    //All Companies list
     @Override
     public ApiResponseWrapper<List<ShortCompanyResponseDto>> getAllCompanies() {
         List<ShortCompanyResponseDto> list =
                 companyRepo.findAll()
                         .stream().map(this::toShortDTO).toList();
         return new ApiResponseWrapper<>("success", "All companies fetched", list);
+    }
+    
+    //Rejected Companies list
+    @Override
+    public ApiResponseWrapper<List<CompanyResponseDto>> getRejectedCompanies() {
+
+        List<CompanyResponseDto> list =
+                companyRepo.findByStatus(CompanyStatus.REJECTED)
+                        .stream().map(this::toDTO).toList();
+
+        return new ApiResponseWrapper<>("success", "Rejected companies fetched", list);
+    }
+    
+    @Override
+    public ApiResponseWrapper<List<CompanyResponseDto>> getDeletedCompanies() {
+
+        List<CompanyResponseDto> list =
+                companyRepo.findByStatus(CompanyStatus.DELETED)
+                        .stream().map(this::toDTO).toList();
+
+        return new ApiResponseWrapper<>("success", "Deleted companies fetched", list);
     }
 
     //Approve Company
@@ -172,13 +204,65 @@ public class CompanyServiceImpl implements CompanyService{
 
         return new ApiResponse("Company Rejected Successfully", "success");
     }
+    
+    //Soft delete companies
+    @Override
+    public ApiResponse deleteCompany(Long id) {
+
+        CompanyEntity company = companyRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
+       
+        company.setStatus(CompanyStatus.DELETED);
+
+        logActivity("Admin soft deleted company " + company.getName(),
+                CompanyStatus.DELETED);
+
+        return new ApiResponse("Company moved to Deleted state", "success");
+    }
+
+    //Restore Deleted Company
+    @Override
+    public ApiResponse restoreCompany(Long id) {
+
+        CompanyEntity company = companyRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
+        if (company.getStatus() != CompanyStatus.DELETED) {
+            return new ApiResponse("Company is not deleted", "failed");
+        }
+
+        company.setStatus(CompanyStatus.PENDING);
+
+        logActivity("Admin restored company " + company.getName(),
+                CompanyStatus.PENDING);
+
+        return new ApiResponse("Company restored to Pending approval", "success");
+    }
+    
+    //Permanent Delete (Optional)
+    @Override
+    public ApiResponse permanentDelete(Long id) {
+
+        CompanyEntity company = companyRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
+        companyRepo.delete(company);
+
+        logActivity("Admin permanently deleted company " + company.getName(),
+                CompanyStatus.DELETED);
+
+        return new ApiResponse("Company permanently removed", "success");
+    }
+
 
     //Dashboard Summary
     @Override
     public ApiResponseWrapper<DashboardSummeryDto> dashboardSummary() {
 
         DashboardSummeryDto dto = new DashboardSummeryDto(
-                companyRepo.count(),
+                companyRepo.findByStatusNot(CompanyStatus.DELETED).size(),
+
                 companyRepo.countByStatus(CompanyStatus.PENDING),
                 companyRepo.countByStatus(CompanyStatus.APPROVED),
                 companyRepo.countByStatus(CompanyStatus.REJECTED)

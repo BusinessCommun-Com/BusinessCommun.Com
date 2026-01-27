@@ -26,6 +26,12 @@ public interface CompanyService {
     ApiResponse approveCompany(Long id);
 
     ApiResponse rejectCompany(Long id);
+    
+    ApiResponse deleteCompany(Long id);  
+    
+    ApiResponse restoreCompany(Long id);  
+
+    ApiResponse permanentDelete(Long id); 
 
     ApiResponseWrapper<DashboardSummeryDto> dashboardSummary();
 

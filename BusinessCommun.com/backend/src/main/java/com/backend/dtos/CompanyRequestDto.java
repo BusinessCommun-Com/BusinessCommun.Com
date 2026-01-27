@@ -18,6 +18,7 @@ public class CompanyRequestDto {
     private byte[] logoData;
     private Integer establishmentYear;
 
+
     private Long domainId;
     private Long orgTypeId;
 
@@ -29,4 +30,14 @@ public class CompanyRequestDto {
     private String description;
     private String productImage;
     private String website;
+
+    // Connect Type
+    private String connectType; // "partner" or "investor" 
+
+    // Connect Details
+    private String requirement;
+    private String minimumQualification;
+    private String skills;
+    private String equityPercentage;
+    private String investmentRange; // Only for investor   
 }

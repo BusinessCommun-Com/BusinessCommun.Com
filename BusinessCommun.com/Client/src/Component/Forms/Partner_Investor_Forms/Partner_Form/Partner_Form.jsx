@@ -8,6 +8,8 @@ import { FaClipboardList, FaGraduationCap, FaTools, FaMoneyBillWave, FaPercent, 
 import "./Partner_Form.css"; // CSS styling
 import useMultiStepForm from "../../../../store/useMultiStepForm";
 import { useEffect } from "react";
+import { registerCompany } from "../../../../Services/companyService";
+import { toast } from "react-toastify";
 
 // -------------------------
 // Create a Validation Schema using Yup
@@ -55,10 +57,31 @@ function PartnerConnect() {
   // const onSubmit = (data) => {
   //     // will later connect backend API
   const navigate = useNavigate();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     updateForm(data); // Save partner form data in the Zustand store
-    alert("Partner details submitted successfully!");
-    navigate('/home');
+    const allFormData = {
+      ...formData,
+      ...data,
+      minimumQualification: data.min_qualification,
+      equityPercentage: data.stakes
+    };
+
+    console.log("=== COMPLETE FORM DATA ===");
+    console.log(allFormData);
+    try {
+      const response = await registerCompany(allFormData);
+
+      if (response.status === "success") {
+        toast.success("Company registered successfully!");
+        updateForm({}); // Clear stored form data
+        navigate('/home');
+      } else {
+        toast.error(response.message || "Registration failed");
+      }
+    } catch (error) {
+      toast.error("Failed to register company. Please try again.");
+      console.error("Registration error:", error);
+    }
   };
 
   useEffect(() => {

@@ -24,9 +24,11 @@ import com.backend.dtos.CompanyRequestDto;
 import com.backend.service.CompanyService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/api/companies")
 @RequiredArgsConstructor
 public class CompanyController {
 	
@@ -53,4 +55,3 @@ public class CompanyController {
 
 		
 }
-
