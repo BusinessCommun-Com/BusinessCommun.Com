@@ -53,7 +53,7 @@ public class SecurityConfiguration {
 				.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml",
 						"/users/login", "/users/register")
 				.permitAll()
-
+                .requestMatchers("/admin/**").permitAll()
 				.requestMatchers(HttpMethod.OPTIONS).permitAll()
 				.anyRequest().authenticated())
 				.addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);

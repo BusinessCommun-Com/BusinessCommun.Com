@@ -1,40 +1,90 @@
-export async function fetchPendingCompanies() {
-  return Promise.resolve([
-    { id: 1, name: "TechX", industry: "IT", location: "Bangalore" }
-  ]);
-}
+import api from "./api";
 
-export async function fetchApprovedCompanies() {
-  return Promise.resolve([
-    { id: 2, name: "Green Solutions", industry: "Energy", location: "Pune" }
-  ]);
-}
 
-export async function fetchAllCompanies() {
-  return Promise.resolve([
-    { id: 1, name: "TechX", status: "Pending" },
-    { id: 2, name: "Green Solutions", status: "Approved" }
-  ]);
-}
+// USER SIDE 
 
-export async function approveCompany(id) {
-  console.log("Approved:", id);
-}
+//Company Registration
+export const registerCompany = async (companyData) => {
+  const response = await api.post("/companies/register", companyData);
+  return response.data;
+};
 
-export async function rejectCompany(id) {
-  console.log("Rejected:", id);
-}
+// Homepage Approved Companies List
+export const fetchApprovedCompanies = async () => {
+  const response = await api.get("/companies/approved");
+  return response.data.data; // wrapper → data
+};
 
-export async function deleteCompany(id) {
-  console.log("Deleted:", id);
-}
 
-export async function fetchCompanyById(id) {
-  return Promise.resolve({
-    id,
-    name: "TechX",
-    industry: "IT",
-    location: "Bangalore",
-    description: "Startup company"
-  });
-}
+
+// ADMIN SIDE 
+
+// Fetch All Companies
+export const fetchAllCompanies = async () => {
+  const response = await api.get("/admin/companies");
+  return response.data.data;
+};
+
+// Pending Requests
+export const fetchPendingCompanies = async () => {
+  const response = await api.get("/admin/companies/pending");
+  return response.data.data;
+};
+
+//Approved Companies
+export const fetchAdminApprovedCompanies = async () => {
+  const response = await api.get("/admin/companies/approved");
+  return response.data.data;
+};
+
+// Rejected Companies
+export const fetchRejectedCompanies = async () => {
+  const response = await api.get("/admin/companies/rejected");
+  return response.data.data;
+};
+
+// Deleted Companies
+export const fetchDeletedCompanies = async () => {
+  const response = await api.get("/admin/companies/deleted");
+  return response.data.data;
+};
+
+
+
+// Approve Company
+export const approveCompany = async (id) => {
+  const response = await api.put(`/admin/companies/approve/${id}`);
+  return response.data;
+};
+
+// Reject Company
+export const rejectCompany = async (id) => {
+  const response = await api.put(`/admin/companies/reject/${id}`);
+  return response.data;
+};
+
+
+
+// Soft Delete Company
+export const deleteCompany = async (id) => {
+  const response = await api.delete(`/admin/companies/${id}`);
+  return response.data;
+};
+
+// Restore Company
+export const restoreCompany = async (id) => {
+  const response = await api.put(`/admin/companies/restore/${id}`);
+  return response.data;
+};
+
+// Permanent Delete
+export const permanentDeleteCompany = async (id) => {
+  const response = await api.delete(`/admin/companies/permanent/${id}`);
+  return response.data;
+};
+
+//Fetch Company By ID
+export const fetchCompanyById = async (id) => {
+  const res = await api.get(`/admin/companies/${id}`);
+  return res.data.data;
+};

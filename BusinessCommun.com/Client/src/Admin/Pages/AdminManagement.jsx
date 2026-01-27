@@ -7,17 +7,32 @@ export default function AdminManagement() {
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
-    fetchAdmins().then(setAdmins);
+    loadAdmins();
   }, []);
+
+  async function loadAdmins() {
+    const data = await fetchAdmins();
+    setAdmins(data);
+  }
+
+  async function handleRemove(id) {
+    await removeAdmin(id);
+    loadAdmins();
+  }
 
   return (
     <>
       <h2>Admin Management</h2>
+
       <Table
         columns={["ID", "Name", "Email"]}
         data={admins}
         actions={(row) => (
-          <Button text="Remove" variant="danger" onClick={() => removeAdmin(row.id)} />
+          <Button
+            text="Remove"
+            variant="danger"
+            onClick={() => handleRemove(row.id)}
+          />
         )}
       />
     </>

@@ -18,12 +18,23 @@ public interface CompanyService {
     ApiResponseWrapper<List<CompanyResponseDto>> getPendingCompanies();
 
     ApiResponseWrapper<List<CompanyResponseDto>> getApprovedCompanies();
+    
+    ApiResponseWrapper<List<CompanyResponseDto>> getRejectedCompanies(); 
+    
+    ApiResponseWrapper<List<CompanyResponseDto>> getDeletedCompanies(); 
 
     ApiResponseWrapper<List<CompanyResponseDto>> getAllCompanies();
+    
 
     ApiResponse approveCompany(Long id);
 
     ApiResponse rejectCompany(Long id);
+    
+    ApiResponse deleteCompany(Long id);  
+    
+    ApiResponse restoreCompany(Long id);  
+
+    ApiResponse permanentDelete(Long id); 
 
     ApiResponseWrapper<DashboardSummeryDto> dashboardSummary();
 

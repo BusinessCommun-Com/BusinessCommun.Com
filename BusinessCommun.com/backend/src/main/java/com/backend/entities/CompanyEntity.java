@@ -46,6 +46,7 @@ public class CompanyEntity extends BaseEntity {
     
     @Enumerated(EnumType.STRING)
     private CompanyStatus status = CompanyStatus.PENDING;
+   
     
     @ManyToOne
     @JoinColumn(name = "owner_id")
