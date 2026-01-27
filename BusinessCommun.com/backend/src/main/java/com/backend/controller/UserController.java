@@ -2,6 +2,9 @@ package com.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +16,7 @@ import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResponse;
 import com.backend.dtos.UserRegistration;
 import com.backend.entities.UserEntity;
+import com.backend.security.JWTUtils;
 import com.backend.service.UserService;
 
 import jakarta.validation.Valid;
@@ -24,10 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-	@Autowired
-	private UserService userService;
-	private AuthenticationManager authenticationManager;
-	private JwtUtils jwtUtils;
+	private final UserService userService;
+	private final AuthenticationManager authenticationManager;
+	private final JWTUtils jwtUtils;
 
 	@PostMapping("/login")
 	public ResponseEntity<ApiResponseWrapper<AuthResponse>> authenticateUser(@RequestBody @Valid AuthRequest dto) {
@@ -43,8 +46,8 @@ public class UserController {
 		UserEntity user = (UserEntity) fullyAuthenticated.getPrincipal();
 		System.out.println("principal " + user);
 		return ResponseEntity.ok(new ApiResponseWrapper<>("success", "Login successful", 
-				new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated), 
-						user.getId(), user.getFirstName(), user.getLastName())));
+				new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated))));		
+
 	}
 
 	@PostMapping("/register")

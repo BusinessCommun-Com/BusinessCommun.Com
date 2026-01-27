@@ -41,5 +41,9 @@ public interface CompanyService {
 
     ApiResponse registerCompany(CompanyRequestDto dto) throws IOException;
 
+    ApiResponseWrapper<List<ShortCompanyResponseDto>> getRejectedCompanies();
+
+    ApiResponseWrapper<List<ShortCompanyResponseDto>> getDeletedCompanies();
+
 
 }
