@@ -1,6 +1,6 @@
 -- Create DB
-CREATE DATABASE IF NOT EXISTS businesscommun;
-USE businesscommun;
+CREATE DATABASE IF NOT EXISTS SubScriptionService;
+USE SubScriptionService;
 
 -- Investors
 CREATE TABLE IF NOT EXISTS investors (
