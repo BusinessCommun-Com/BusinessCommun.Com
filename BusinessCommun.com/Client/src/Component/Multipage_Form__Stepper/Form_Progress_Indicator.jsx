@@ -5,16 +5,16 @@ import useMultiStepForm from "../../store/useMultiStepForm";
 import "./Form_Progress_Indicator.css";
 
 export default function ProgressIndicator() {
-  const { step, goTo, userType } = useMultiStepForm();
+  const { step, goTo, userConnectType } = useMultiStepForm();
 
   // Step-3 dynamic icon
   const step3Icon =
-    !userType ? User : userType === "partner" ? Handshake : BriefcaseBusiness;
+    !userConnectType ? User : userConnectType === "partner" ? Handshake : BriefcaseBusiness;
 
   const steps = [
     { id: 0, icon: Building2, label: "Company Reg" },
     { id: 1, icon: Presentation, label: "Pitch" },
-    { id: 2, icon: step3Icon, label: userType ? (userType === "partner" ? "Partner" : "Investor") : "Partner/Investor" },
+    { id: 2, icon: step3Icon, label: userConnectType ? (userConnectType === "partner" ? "Partner" : "Investor") : "Partner/Investor" },
   ];
 
   // Calculate progress percentage
@@ -38,8 +38,8 @@ export default function ProgressIndicator() {
         const Icon = s.icon;
         const completed = (i < 2) ? i < step : false;            // user moved past step
         const active = (i < 2) ? i <= step : (step === 2 && i === 2 ? true : (step === 3 && i === 2 ? true : false));
-        // Lock step 2 if user hasn't chosen a path yet
-        const locked = i > step || (i === 2 && !userType && step < 2);
+        // Lock step 2 if user hasn't chosen a path yet    
+        const locked = i > step || (i === 2 && !userConnectType && step < 2);
 
         return (
           <div className="step-wrapper" key={i}>
@@ -50,8 +50,8 @@ export default function ProgressIndicator() {
               disabled={locked}
               onClick={() => {
                 if (!locked) {
-                  // Prevent navigation to step 2 if userType is not set
-                  if (i === 2 && !userType) {
+                  // Prevent navigation to step 2 if userConnectType is not set
+                  if (i === 2 && !userConnectType) {
                     return; // Don't navigate - user must choose Partner/Investor first
                   }
                   goTo(i);
