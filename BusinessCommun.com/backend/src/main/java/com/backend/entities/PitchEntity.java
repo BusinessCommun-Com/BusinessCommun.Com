@@ -1,13 +1,6 @@
 package com.backend.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,25 +10,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PitchEntity {
+public class PitchEntity extends BaseEntity {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-	
-	@Column(nullable = false, length = 100)
+    @Column(name = "title")
     private String title;
 
-    @Column(nullable = false, length = 1000)
+    @Column(name = "description", length = 5000)
     private String description;
 
     @Column(name = "product_image_url")
     private String productImage;
 
-    @Column(name= "website_url")
+    @Column(name = "website_url")
     private String website;
 
-    @OneToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
     private CompanyEntity company;
 }

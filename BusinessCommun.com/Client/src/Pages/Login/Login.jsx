@@ -20,15 +20,15 @@ function Login() {
 
   const onLogin = async (e) => {
     e.preventDefault()
-    
+
     if (email.length == 0) {
       toast.warning('Please enter Email')
       return
     } else if (password.length == 0) {
       toast.warning('Please enter Password')
       return
-    } 
-    
+    }
+
     setLoading(true)
     try {
       const response = await login(email, password)
@@ -37,7 +37,8 @@ function Login() {
         toast.success('Login Successful')
 
         // get the token from response and cache it in local storage
-        //localStorage.setItem("token", response["data"]["token"]);
+        localStorage.setItem("token", response["data"]["token"]);
+        localStorage.setItem("userId", response["data"]["id"]);
         localStorage.setItem("firstName", response["data"]["firstName"]);
         localStorage.setItem("lastName", response["data"]["lastName"]);
 

@@ -12,6 +12,7 @@ import com.backend.dtos.ApiResponseWrapper;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResponse;
 import com.backend.dtos.UserRegistration;
+import com.backend.entities.UserEntity;
 import com.backend.service.UserService;
 
 import jakarta.validation.Valid;
@@ -30,7 +31,18 @@ public class UserController {
 	public ResponseEntity<ApiResponseWrapper<AuthResponse>> authenticateUser(@RequestBody @Valid AuthRequest dto) {
 
 		System.out.println("in login " + dto);
-		return ResponseEntity.ok(userService.authenticateUser(dto));
+		Authentication fullyAuthenticated = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						dto.getEmail(),
+						dto.getPassword()
+				)
+			);
+		System.out.println("is user authenticated " + fullyAuthenticated.isAuthenticated());
+		UserEntity user = (UserEntity) fullyAuthenticated.getPrincipal();
+		System.out.println("principal " + user);
+		return ResponseEntity.ok(new ApiResponseWrapper<>("success", "Login successful", 
+				new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated), 
+						user.getId(), user.getFirstName(), user.getLastName())));
 	}
 
 	@PostMapping("/register")

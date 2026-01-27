@@ -10,6 +10,8 @@ import { z } from "zod";
 import { FaClipboardList, FaGraduationCap, FaTools, FaMoneyBillWave, FaPercent, FaPhone } from "react-icons/fa";
 import "./Investor_Form.css";
 import useMultiStepForm from "../../../../store/useMultiStepForm";
+import { registerCompany } from "../../../../Services/companyService"; // Correct path check
+import { toast } from "react-toastify";
 
 // Zod Schema
 const stakesRegex = /^(\d{1,3}%|\d+(\.\d+)?%?)$/;
@@ -47,7 +49,7 @@ const schema = z.object({
 
 function InvestorConnect() {
 
-    const { prevStep, updateForm } = useMultiStepForm();
+    const { prevStep, updateForm, formData } = useMultiStepForm();
     const {
         register,
         handleSubmit,
@@ -56,10 +58,32 @@ function InvestorConnect() {
         resolver: zodResolver(schema),
     });
     const navigate = useNavigate();
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         updateForm(data);
-        alert("Investor details submitted successfully!");
-        navigate('/home');
+        const allFormData = {
+            ...formData,
+            ...data,
+            minimumQualification: data.min_qualification,
+            equityPercentage: data.stakes,
+            investmentRange: data.investment_range
+        };
+
+        console.log("=== COMPLETE FORM DATA ===");
+        console.log(allFormData);
+        try {
+            const response = await registerCompany(allFormData);
+
+            if (response.status === "success") {
+                toast.success("Company registered successfully!");
+                updateForm({}); // Clear stored form data
+                navigate('/home');
+            } else {
+                toast.error(response.message || "Registration failed");
+            }
+        } catch (error) {
+            toast.error("Failed to register company. Please try again.");
+            console.error("Registration error:", error);
+        }
     };
 
     return (

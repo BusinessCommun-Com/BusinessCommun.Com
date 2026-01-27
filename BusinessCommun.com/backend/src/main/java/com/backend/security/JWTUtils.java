@@ -46,7 +46,8 @@ public class JWTUtils {
                 .subject(userId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expTime))
-                .claims(Map.of("email", user.getEmail(), "role", user.getRole().name()))
+                .claims(Map.of("email", user.getEmail(), "role", user.getRole().name(), 
+                		"user_id", user.getId()))
                 .signWith(key)
                 .compact();
 

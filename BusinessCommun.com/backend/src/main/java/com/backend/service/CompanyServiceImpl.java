@@ -28,6 +28,12 @@ import com.backend.repository.DomainRepository;
 import com.backend.repository.OrganizationTypeRepository;
 import com.backend.repository.UserRepository;
 
+import com.backend.entities.InvestorConnectEntity;
+import com.backend.entities.PartnerConnectEntity;
+import com.backend.repository.InvestorConnectRepository;
+import com.backend.repository.PartnerConnectRepository;
+import com.backend.repository.PitchRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,13 +41,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService{
 	
-	private final CompanyRepository companyRepo;
+    private final CompanyRepository companyRepo;
     private final CompanyOwnerRepository ownerRepo;
     private final ActivityLogRepository activityRepo;
 
     private final DomainRepository domainRepo;
     private final OrganizationTypeRepository orgRepo;
     private final UserRepository userRepo;
+    
+    // New Repositories
+    private final InvestorConnectRepository investorRepo;
+    private final PartnerConnectRepository partnerRepo;
+    private final PitchRepository pitchRepo;
 
     private final ModelMapper mapper;
     
@@ -89,20 +100,37 @@ public class CompanyServiceImpl implements CompanyService{
         company.setDomain(domain);
         company.setOrganizationType(orgType);
         company.setCompanyOwner(owner);
+        company.setUser(user);
         company.setStatus(CompanyStatus.PENDING);
 
         //Pitch creation
         PitchEntity pitch = new PitchEntity();
+        pitch.setTitle(dto.getTitle());
         pitch.setDescription(dto.getDescription());
         pitch.setProductImage(dto.getProductImage());
         pitch.setWebsite(dto.getWebsite());
 
         pitch.setCompany(company);
-        company.setPitch(pitch);
+        
+        // Save Company First
+        CompanyEntity savedCompany = companyRepo.save(company);
+        
+        // Save Pitch
+        pitch.setCompany(savedCompany);
+        pitchRepo.save(pitch);
+        
+        // Logic for Connects
+        if ("partner".equalsIgnoreCase(dto.getConnectType())) {
+            PartnerConnectEntity partnerConnect = mapper.map(dto, PartnerConnectEntity.class);
+            partnerConnect.setCompany(savedCompany);
+            partnerRepo.save(partnerConnect);
+        } else if ("investor".equalsIgnoreCase(dto.getConnectType())) {
+            InvestorConnectEntity investorConnect = mapper.map(dto, InvestorConnectEntity.class);
+            investorConnect.setCompany(savedCompany);
+            investorRepo.save(investorConnect);
+        }
 
-        companyRepo.save(company);
-
-        logActivity("Startup " + company.getName() + " submitted a request",
+        logActivity("Startup " + savedCompany.getName() + " submitted a request",
                 CompanyStatus.PENDING);
 
         return new ApiResponse("Company Registered & sent for approval", "success");

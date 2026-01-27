@@ -19,9 +19,9 @@ public class ApiResponseWrapper<T> {
         this.data = data;
     }
 
-    public ApiResponseWrapper(String status, String message, T data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
+   public ApiResponseWrapper(String status, String message, T data) {
+       this.status = status;
+       this.message = message;
+       this.data = data;
+   }
 }
