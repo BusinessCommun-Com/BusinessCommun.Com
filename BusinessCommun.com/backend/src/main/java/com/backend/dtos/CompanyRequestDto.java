@@ -13,6 +13,9 @@ public class CompanyRequestDto {
     private String address;
     private String city;
     private String state;
+    private String logoUrl;
+    private String logoType;
+    private byte[] logoData;
     private Integer establishmentYear;
 
 
@@ -23,7 +26,6 @@ public class CompanyRequestDto {
     private String mobileNumber;
     private Long userId;
 
-   
     private String title;
     private String description;
     private String productImage;

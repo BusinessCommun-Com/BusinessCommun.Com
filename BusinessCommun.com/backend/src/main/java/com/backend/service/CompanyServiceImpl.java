@@ -1,10 +1,12 @@
 package com.backend.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.custom_exception.ResourceNotFoundException;
 import com.backend.dtos.AdminActivityDto;
@@ -12,6 +14,7 @@ import com.backend.dtos.ApiResponse;
 import com.backend.dtos.ApiResponseWrapper;
 import com.backend.dtos.CompanyRequestDto;
 import com.backend.dtos.CompanyResponseDto;
+import com.backend.dtos.ShortCompanyResponseDto;
 import com.backend.dtos.DashboardSummeryDto;
 import com.backend.entities.AdminActivityLog;
 import com.backend.entities.CompanyEntity;
@@ -64,19 +67,23 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     // Entity to DTO 
-    private CompanyResponseDto toDTO(CompanyEntity c) {
-
-        CompanyResponseDto dto = mapper.map(c, CompanyResponseDto.class);
-
-        dto.setDomainName(c.getDomain().getName());
-        dto.setStatus(c.getStatus().name());
-
+    private ShortCompanyResponseDto toShortDTO(CompanyEntity c) {
+        ShortCompanyResponseDto dto = new ShortCompanyResponseDto();
+        dto.setId(c.getId());
+        dto.setName(c.getName());
+        dto.setLogoUrl(c.getLogoUrl());
+        dto.setCity(c.getCity());
+        dto.setState(c.getState());
+        if (c.getPitch() != null) {
+            dto.setPitch(c.getPitch().getTitle());
+        }
         return dto;
     }
 
     //Register Company
     @Override
-    public ApiResponse registerCompany(CompanyRequestDto dto) {
+    public ApiResponse registerCompany(CompanyRequestDto dto) throws IOException {
+
 
         UserEntity user = userRepo.findById(dto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -92,7 +99,8 @@ public class CompanyServiceImpl implements CompanyService{
                 .orElseGet(() -> {
                     CompanyOwner newOwner = mapper.map(dto, CompanyOwner.class);
                     newOwner.setUser(user);
-                    return ownerRepo.save(newOwner);
+                    newOwner = ownerRepo.save(newOwner);
+                    return newOwner;
                 });
 
         // DTO to Company Entity
@@ -102,35 +110,21 @@ public class CompanyServiceImpl implements CompanyService{
         company.setCompanyOwner(owner);
         company.setUser(user);
         company.setStatus(CompanyStatus.PENDING);
+        
 
         //Pitch creation
         PitchEntity pitch = new PitchEntity();
-        pitch.setTitle(dto.getTitle());
+        pitch.setTitle(dto.getName()); // Use company name as pitch title
         pitch.setDescription(dto.getDescription());
         pitch.setProductImage(dto.getProductImage());
         pitch.setWebsite(dto.getWebsite());
 
         pitch.setCompany(company);
-        
-        // Save Company First
-        CompanyEntity savedCompany = companyRepo.save(company);
-        
-        // Save Pitch
-        pitch.setCompany(savedCompany);
-        pitchRepo.save(pitch);
-        
-        // Logic for Connects
-        if ("partner".equalsIgnoreCase(dto.getConnectType())) {
-            PartnerConnectEntity partnerConnect = mapper.map(dto, PartnerConnectEntity.class);
-            partnerConnect.setCompany(savedCompany);
-            partnerRepo.save(partnerConnect);
-        } else if ("investor".equalsIgnoreCase(dto.getConnectType())) {
-            InvestorConnectEntity investorConnect = mapper.map(dto, InvestorConnectEntity.class);
-            investorConnect.setCompany(savedCompany);
-            investorRepo.save(investorConnect);
-        }
+        company.setPitch(pitch);
 
-        logActivity("Startup " + savedCompany.getName() + " submitted a request",
+        company = companyRepo.save(company);
+
+        logActivity("Startup " + company.getName() + " submitted a request",
                 CompanyStatus.PENDING);
 
         return new ApiResponse("Company Registered & sent for approval", "success");
@@ -138,34 +132,27 @@ public class CompanyServiceImpl implements CompanyService{
 
     //Pending Companies
     @Override
-    public ApiResponseWrapper<List<CompanyResponseDto>> getPendingCompanies() {
-
-        List<CompanyResponseDto> list =
+    public ApiResponseWrapper<List<ShortCompanyResponseDto>> getPendingCompanies() {
+        List<ShortCompanyResponseDto> list =
                 companyRepo.findByStatus(CompanyStatus.PENDING)
-                        .stream().map(this::toDTO).toList();
-
+                        .stream().map(this::toShortDTO).toList();
         return new ApiResponseWrapper<>("success", "Pending requests fetched", list);
     }
 
     //Approved Companies list
     @Override
-    public ApiResponseWrapper<List<CompanyResponseDto>> getApprovedCompanies() {
-
-        List<CompanyResponseDto> list =
-                companyRepo.findByStatus(CompanyStatus.APPROVED)
-                        .stream().map(this::toDTO).toList();
-
+    public ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompanies() {
+        List<ShortCompanyResponseDto> list =
+                companyRepo.findApprovedCompanies(CompanyStatus.APPROVED);
         return new ApiResponseWrapper<>("success", "Approved companies fetched", list);
     }
 
     //All Companies list
     @Override
-    public ApiResponseWrapper<List<CompanyResponseDto>> getAllCompanies() {
-
-        List<CompanyResponseDto> list =
-                companyRepo.findByStatusNot(CompanyStatus.DELETED)
-                        .stream().map(this::toDTO).toList();
-
+    public ApiResponseWrapper<List<ShortCompanyResponseDto>> getAllCompanies() {
+        List<ShortCompanyResponseDto> list =
+                companyRepo.findAll()
+                        .stream().map(this::toShortDTO).toList();
         return new ApiResponseWrapper<>("success", "All companies fetched", list);
     }
     
@@ -302,12 +289,42 @@ public class CompanyServiceImpl implements CompanyService{
         return new ApiResponseWrapper<>("success", "Recent activity fetched", list);
     }
 
-	
-    
-    
-    
-    
-    
+ public ApiResponseWrapper<CompanyResponseDto> getApprovedCompanyById(Long id) {
+
+    CompanyEntity company = companyRepo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
+    CompanyResponseDto dto = new CompanyResponseDto();
+
+    // Company fields
+    dto.setName(company.getName());
+    dto.setEstablishmentYear(company.getEstablishmentYear());
+    dto.setGstNo(company.getGstNo());
+    dto.setRevenue(company.getRevenue());
+    dto.setAddress(company.getAddress());
+    dto.setCity(company.getCity());
+    dto.setState(company.getState());
+    dto.setLogoUrl(company.getLogoUrl());
+    dto.setDomain(company.getDomain().getName());
+    dto.setOrgType(company.getOrganizationType().getName());
+
+    // Owner fields
+    if (company.getCompanyOwner() != null) {
+        dto.setOwnerName(company.getCompanyOwner().getOwnerName());
+        dto.setMobileNumber(company.getCompanyOwner().getMobileNumber());
+    }
+
+    // Pitch fields
+    if (company.getPitch() != null) {
+        dto.setTitle(company.getPitch().getTitle());
+        dto.setDescription(company.getPitch().getDescription());
+        dto.setProductImage(company.getPitch().getProductImage());
+        dto.setWebsite(company.getPitch().getWebsite());
+    }
+
+    return new ApiResponseWrapper<>("success", "Company fetched successfully", dto);
+}
+
     
     
     

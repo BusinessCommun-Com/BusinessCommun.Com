@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,6 +45,9 @@ public class CompanyEntity extends BaseEntity {
 
     @Column(nullable = false)
     private String state;
+
+    @Column(name = "logo_url", nullable = false)
+    private String logoUrl;
     
     @Enumerated(EnumType.STRING)
     private CompanyStatus status = CompanyStatus.PENDING;
@@ -65,7 +70,6 @@ public class CompanyEntity extends BaseEntity {
     private OrganizationTypeEntity organizationType;
 
 
-    @OneToOne(mappedBy = "company")
-    private PitchEntity
-    pitch;
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PitchEntity pitch;
 }

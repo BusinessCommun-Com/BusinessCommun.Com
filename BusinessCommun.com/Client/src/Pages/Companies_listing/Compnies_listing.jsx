@@ -1,10 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Companies_listing.css";
 import img from "../../assets/Company_images/compImag.jpg";
 import { Link } from "react-router-dom"; // make sure you're using react-router
-import companies from "../../data/companies";
+import {
+  getApprovedCompDetails,
+} from "../../Services/companyDetails";
+
 
 function Companies_listing() {
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        setLoading(true);
+        const response = await getApprovedCompDetails();
+        print(response);
+        setCompanies(response);
+      } catch (err) {
+        console.error("Error fetching companies:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+  if (loading) {
+    return (
+      <div id="companies" className="companies-section">
+        <div className="container">
+          <p>Loading companies...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div id="companies" className="companies-section">
+        <div className="container">
+          <p>Error loading companies: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div id="companies" className="companies-section">
       <div className="container">
@@ -26,7 +71,7 @@ function Companies_listing() {
               >
                 <div className="card company-card">
                   <img
-                    src={company.logo}
+                    src={img}
                     className="card-img-top company-card-img"
                     alt={company.name}
                   />

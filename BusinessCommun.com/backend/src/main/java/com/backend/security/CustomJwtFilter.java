@@ -29,34 +29,23 @@ public class CustomJwtFilter extends OncePerRequestFilter {
 		
 		// check if jwt exists in request auth header
 		String headerValue = request.getHeader("Authorization");
-		if (headerValue!= null && headerValue.startsWith("Bearer")) {
+		if (headerValue!= null && headerValue.startsWith("Bearer ")) {
+			String jwt = headerValue.substring(7).trim();
+			System.out.println("jwt found : " + jwt);
 			try {
-				String jwt = headerValue.substring(7);
-				System.out.println("jwt found : " + jwt);
 				Claims claims = jwtUtils.validateToken(jwt);
-				
 				//store the claims in dto
 				String role = claims.get("role", String.class);
-				Long userId = claims.get("user_id", Long.class);
-				String email = claims.get("email", String.class);
-				
-				System.out.println("Extracted claims - Role: " + role + ", UserID: " + userId + ", Email: " + email);
-
-				if (role == null) {
-					System.out.println("ERROR: Role is null in JWT");
-				}
-
-				JWTDTO dto = new JWTDTO(userId, email, role);
+				JWTDTO dto = new JWTDTO(claims.get("user_id", Long.class), claims.get("email", String.class), role);
 				// add it in Authenticaion object
 				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(dto, null, List.of(new SimpleGrantedAuthority(role)));
 				// add it under sec ctx holder
 				SecurityContextHolder.getContext().setAuthentication(auth);
-				System.out.println("SecurityContext set successfully");
+				System.out.println("add sec ctx");
 			} catch (Exception e) {
-				System.out.println("JWT Validation Failed: " + e.getMessage());
-				e.printStackTrace();
+				System.out.println("JWT validation failed: " + e.getMessage());
+				SecurityContextHolder.clearContext();
 			}
-			
 		}
 		filterChain.doFilter(request, response);
 		

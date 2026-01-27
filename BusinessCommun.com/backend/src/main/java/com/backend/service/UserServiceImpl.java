@@ -8,11 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.backend.custom_exception.AuthenticationException;
 import com.backend.dtos.ApiResponse;
-import com.backend.dtos.ApiResponseWrapper;
-import com.backend.dtos.AuthRequest;
-import com.backend.dtos.AuthResponse;
 import com.backend.dtos.UserRegistration;
 import com.backend.entities.UserEntity;
 import com.backend.entities.UserRole;
