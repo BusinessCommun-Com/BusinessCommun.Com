@@ -90,6 +90,7 @@ router.get("/investors", async (req, res) => {
       "SELECT id, name, company FROM investors LIMIT 3",
     );
     res.json({ preview: true, investors: preview });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
