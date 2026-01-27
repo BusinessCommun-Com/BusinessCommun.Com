@@ -15,6 +15,7 @@ public class CompanyRequestDto {
     private String state;
     private Integer establishmentYear;
 
+
     private Long domainId;
     private Long orgTypeId;
 

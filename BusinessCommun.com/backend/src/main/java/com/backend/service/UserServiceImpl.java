@@ -2,6 +2,10 @@ package com.backend.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.backend.custom_exception.AuthenticationException;
@@ -14,6 +18,7 @@ import com.backend.entities.UserEntity;
 import com.backend.entities.UserRole;
 import com.backend.logger.KafkaLogger;
 import com.backend.repository.UserRepository;
+import com.backend.security.JWTUtils;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +31,12 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private JWTUtils jwtUtils;
+
 
 
 	@Override
@@ -40,5 +51,37 @@ public class UserServiceImpl implements UserService {
 
 		return new ApiResponse("New User Registered with id: " + persistentEntity.getId(), "success");
 	}
+//	@Override
+//	public ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto) {
+//
+//	    UserEntity user = userRepository
+//	            .findByEmailAndPassword(dto.getEmail(), dto.getPassword())
+//	            .orElseThrow(() -> new AuthenticationException("Invalid Email or Password"));
+//
+//	    AuthResponse resp = modelMapper.map(user, AuthResponse.class);
+//
+//	    return new ApiResponseWrapper<>("success", "Login Successful", resp);
+//	}
+	
+	@Override
+	public ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto) {
+
+	    Authentication authentication =
+	            authenticationManager.authenticate(
+	                    new UsernamePasswordAuthenticationToken(
+	                            dto.getEmail(),
+	                            dto.getPassword()
+	                    )
+	            );
+
+	    String token = jwtUtils.generateToken(authentication);
+
+	    AuthResponse resp = new AuthResponse("Login Successful", token);
+
+	    return new ApiResponseWrapper<>("success", "Login Successful", resp);
+	}
+
+
+
 
 }
