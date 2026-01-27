@@ -122,6 +122,26 @@ public class CompanyServiceImpl implements CompanyService{
 
         company = companyRepo.save(company);
 
+        // Handle Partner/Investor Connect
+        if ("partner".equalsIgnoreCase(dto.getConnectType())) {
+            PartnerConnectEntity partner = new PartnerConnectEntity();
+            partner.setCompany(company);
+            partner.setRequirement(dto.getRequirement());
+            partner.setMinimumQualification(dto.getMinimumQualification());
+            partner.setSkills(dto.getSkills());
+            partner.setEquityPercentage(dto.getEquityPercentage());
+            partnerRepo.save(partner);
+        } else if ("investor".equalsIgnoreCase(dto.getConnectType())) {
+            InvestorConnectEntity investor = new InvestorConnectEntity();
+            investor.setCompany(company);
+            investor.setRequirement(dto.getRequirement());
+            investor.setMinimumQualification(dto.getMinimumQualification());
+            investor.setSkills(dto.getSkills());
+            investor.setInvestmentRange(dto.getInvestmentRange());
+            investor.setEquityPercentage(dto.getEquityPercentage());
+            investorRepo.save(investor);
+        }
+
         logActivity("Startup " + company.getName() + " submitted a request",
                 CompanyStatus.PENDING);
 
