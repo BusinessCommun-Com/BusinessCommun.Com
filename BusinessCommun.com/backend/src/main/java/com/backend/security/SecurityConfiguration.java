@@ -56,6 +56,7 @@ public class SecurityConfiguration {
 				.requestMatchers(HttpMethod.GET, "/companies/approved").permitAll()
 				.requestMatchers(HttpMethod.POST, "/companies/register").permitAll()
 				.requestMatchers(HttpMethod.GET, "/companies/approved/{id}").permitAll()
+				.requestMatchers(HttpMethod.GET, "/utils/**").permitAll()
 				.requestMatchers(HttpMethod.OPTIONS).permitAll()
 				)
 				.addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
