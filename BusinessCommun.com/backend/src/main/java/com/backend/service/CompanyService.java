@@ -1,25 +1,27 @@
 package com.backend.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.dtos.AdminActivityDto;
 import com.backend.dtos.ApiResponse;
 import com.backend.dtos.ApiResponseWrapper;
 import com.backend.dtos.CompanyRequestDto;
 import com.backend.dtos.CompanyResponseDto;
+import com.backend.dtos.ShortCompanyResponseDto;
 
 import com.backend.dtos.DashboardSummeryDto;
-import com.backend.entities.CompanyEntity;
 
 public interface CompanyService {
 
-	ApiResponse registerCompany(CompanyRequestDto dto);
 
-    ApiResponseWrapper<List<CompanyResponseDto>> getPendingCompanies();
+    ApiResponseWrapper<List<ShortCompanyResponseDto>> getPendingCompanies();
 
-    ApiResponseWrapper<List<CompanyResponseDto>> getApprovedCompanies();
+    ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompanies();
 
-    ApiResponseWrapper<List<CompanyResponseDto>> getAllCompanies();
+    ApiResponseWrapper<List<ShortCompanyResponseDto>> getAllCompanies();
 
     ApiResponse approveCompany(Long id);
 
@@ -28,4 +30,10 @@ public interface CompanyService {
     ApiResponseWrapper<DashboardSummeryDto> dashboardSummary();
 
     ApiResponseWrapper<List<AdminActivityDto>> recentActivities();
+
+    ApiResponseWrapper<CompanyResponseDto> getApprovedCompanyById(Long id);
+
+    ApiResponse registerCompany(CompanyRequestDto dto, MultipartFile imageFile) throws IOException;
+
+
 }

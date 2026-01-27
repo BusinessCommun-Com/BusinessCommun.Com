@@ -42,7 +42,7 @@ public class UserController {
 			);
 		System.out.println("is user authenticated " + fullyAuthenticated.isAuthenticated());
 		System.out.println("principal " + fullyAuthenticated.getPrincipal());
-		return ResponseEntity.ok(new ApiResponseWrapper<>("success", "Login successful", new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated))));
+		return ResponseEntity.ok(new ApiResponseWrapper<>("success", "Login SuccessFully",  new AuthResponse("Login successful", jwtUtils.generateToken(fullyAuthenticated))));
 	}
 
 	@PostMapping("/register")
