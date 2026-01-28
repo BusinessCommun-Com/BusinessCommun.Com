@@ -1,11 +1,12 @@
 import axios from "axios";
 import config from "./config";
+import api from "./api";
 
 // Get company details by ID
 export const getCompanyDetailsById = async (companyId) => {
   try {
-    const response = await axios.get(
-      `${config.server}/companies/approved/${companyId}`,
+    const response = await api.get(
+      `/companies/approved/${companyId}`,
     );
     return response.data;
   } catch (error) {
@@ -15,7 +16,7 @@ export const getCompanyDetailsById = async (companyId) => {
 };
 export const getApprovedCompDetails = async () => {
   try {
-    const response = await axios.get(`${config.server}/companies/approved`);
+    const response = await api.get("/companies/approved");
     console.log(response.data);
     return response.data.data || response.data;
   } catch (error) {
@@ -27,10 +28,7 @@ export const getApprovedCompDetails = async () => {
 // Create new company
 export const createCompany = async (companyData) => {
   try {
-    const response = await axios.post(
-      `${config.server}/companies`,
-      companyData,
-    );
+    const response = await api.post("/companies", companyData);
     return response.data;
   } catch (error) {
     console.error("Error creating company:", error);
@@ -41,9 +39,9 @@ export const createCompany = async (companyData) => {
 // Update company details
 export const updateCompany = async (companyId, companyData) => {
   try {
-    const response = await axios.put(
-      `${config.server}/companies/${companyId}`,
-      companyData,
+    const response = await api.put(
+      `/companies/${companyId}`,
+      companyData
     );
     return response.data;
   } catch (error) {
@@ -55,8 +53,8 @@ export const updateCompany = async (companyId, companyData) => {
 // Delete company
 export const deleteCompany = async (companyId) => {
   try {
-    const response = await axios.delete(
-      `${config.server}/companies/${companyId}`,
+    const response = await api.delete(
+      `/companies/${companyId}`,
     );
     return response.data;
   } catch (error) {

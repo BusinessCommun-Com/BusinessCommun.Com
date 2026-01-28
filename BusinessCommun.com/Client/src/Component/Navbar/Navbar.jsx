@@ -1,10 +1,13 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Navbar.css";
+import { useAuth } from "../../Providers/AuthProvider";
 
 export default function Navbar() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
 
     const handleCompaniesClick = (e) => {
         e.preventDefault();
@@ -12,9 +15,20 @@ export default function Navbar() {
         if (el) {
             el.scrollIntoView({ behavior: "smooth" });
         } else {
-            navigate("/companies");
+            navigate("companies");
         }
-    };
+  };
+  
+  const onLogOut = (e) => {
+    e.preventDefault();
+    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+      localStorage.removeItem("userId");
+    delete axios.defaults.headers.common["Authorization"];
+    navigate("/login");
+  };
 
     return (
       <div>
@@ -44,7 +58,7 @@ export default function Navbar() {
                   <a
                     className="nav-link active navText"
                     aria-current="page"
-                    href="#companies"
+                    href="companies"
                     onClick={handleCompaniesClick}
                   >
                     Companies
@@ -70,7 +84,7 @@ export default function Navbar() {
               {/* RIGHT SIDE */}
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <a className="nav-link navText" href="/contact-us">
+                  <a className="nav-link navText" href="contact-us">
                     Contact Us
                   </a>
                 </li>
@@ -80,7 +94,7 @@ export default function Navbar() {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link navText" href="#">
+                  <a className="nav-link navText" href="#" onClick={onLogOut}>
                     LogOut
                   </a>
                 </li>

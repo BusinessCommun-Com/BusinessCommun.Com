@@ -27,6 +27,9 @@ import AdminCompanyProfile from "./Admin/Pages/CompanyProfile";
 import PendingRequests from "./Admin/Pages/PendingRequests";
 import ApprovedCompanies from "./Admin/Pages/ApprovedCompanies";
 import AdminManagement from "./Admin/Pages/AdminManagement";
+import { ProtectedRoute } from "./Component/ProtectedRoute/ProtectedRoute.jsx";
+import Companies_listing from "./Pages/Companies_listing/Compnies_listing.jsx";
+import SlideShow from "./Component/SlideShow/SlideShow.jsx";
 
 function App() {
   const { step } = useMultiStepForm();
@@ -56,10 +59,25 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/about-us" element={<About />} />
         <Route
-          path="/company-registration/*"
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Companies_listing />} />
+          <Route path="companies/" element={<Companies_listing />} />
+          <Route path="about-us/" element={<About />} />
+          <Route path="companies/:id" element={<CompanyDetails />} />
+
+          <Route path="news/" element={<NewsPage />} />
+          <Route path="contact-us/" element={<ContactUs />} />
+          <Route path="premium-service/" element={<PremiumService />} />
+          <Route path="government-schemes/" element={<GovernmentSchemes />} />
+        <Route
+          path="company-registration/*"
           element={
             <div className="root">
               <div id="main-wrapper" className="container">
@@ -69,11 +87,7 @@ function App() {
             </div>
           }
         />
-        <Route path="/companies/:id" element={<CompanyDetails />} />
-        <Route path="/news/" element={<NewsPage />} />
-        <Route path="/contact-us/" element={<ContactUs />} />
-        <Route path="/premium-service" element={<PremiumService />} />
-        <Route path="/government-schemes/" element={<GovernmentSchemes />} />
+        </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="companies" element={<Companies />} />

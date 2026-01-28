@@ -1,66 +1,69 @@
-import React, { useState } from 'react'
-import './Register.css';
-import img2 from '../../assets/UI_Images/logo2.png'
-import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom';
-import { register } from '../../Services/users';
+import React, { useState } from "react";
+import "./Register.css";
+import img2 from "../../assets/UI_Images/logo2.png";
+import { toast } from "react-toastify";
+import { register } from "../../Services/users";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Register() {
-
   // creating instances of all the inputs
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // create an instance of useNavigate
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onRegister = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     try {
       if (firstName.trim().length == 0) {
         toast.warning("Please enter first name");
-        return
+        return;
       } else if (lastName.trim().length == 0) {
         toast.warning("Please enter last name");
-        return
+        return;
       } else if (email.trim().length == 0) {
         toast.warning("Please enter email");
-        return
+        return;
       } else if (password.length == 0) {
         toast.warning("Please enter password");
-        return
+        return;
       } else if (confirmPassword != password) {
-        toast.warning("Passwords do not match")
-        return
+        toast.warning("Passwords do not match");
+        return;
       }
-      
-      setLoading(true)
+
+      setLoading(true);
       const response = await register(firstName, lastName, email, password);
-      console.log('Registration Response:', response.status);
-      if ( response.status == 'success') {
-        toast.success('Registered successfully');
+      console.log("Registration Response:", response.status);
+      if (response.status == "success") {
+        toast.success("Registered successfully");
         // Clear form fields
-        setFirstName('')
-        setLastName('')
-        setEmail('')
-        setPassword('')
-        setConfirmPassword('')
-        navigate('/login')
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        navigate("/login");
       } else {
-        toast.error(response && response['error'] ? response['error'] : 'Registration failed');
+        toast.error(
+          response && response["error"]
+            ? response["error"]
+            : "Registration failed",
+        );
       }
     } catch (error) {
-      toast.error('An error occurred during registration')
-      console.error('Registration error:', error)
+      toast.error("An error occurred during registration");
+      console.error("Registration error:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
   return (
     <div className="root">
       <div id="main-wrapper" className="container">
@@ -73,7 +76,9 @@ export function Register() {
                   <div className="col-lg-6">
                     <div className="p-5">
                       <div className="mb-5">
-                        <h3 className="h4 font-weight-bold text-theme">Register</h3>
+                        <h3 className="h4 font-weight-bold text-theme">
+                          Register
+                        </h3>
                       </div>
 
                       <h6 className="h5 mb-0">Welcome back!</h6>
@@ -83,10 +88,12 @@ export function Register() {
 
                       <form onSubmit={onRegister}>
                         <div className="form-group">
-                          <label htmlFor="exampleInputFirstName">First Name</label>
+                          <label htmlFor="exampleInputFirstName">
+                            First Name
+                          </label>
                           <input
                             onChange={(e) => {
-                              setFirstName(e.target.value)
+                              setFirstName(e.target.value);
                             }}
                             value={firstName}
                             type="text"
@@ -96,10 +103,12 @@ export function Register() {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputLastName">Last Name</label>
+                          <label htmlFor="exampleInputLastName">
+                            Last Name
+                          </label>
                           <input
                             onChange={(e) => {
-                              setLastName(e.target.value)
+                              setLastName(e.target.value);
                             }}
                             value={lastName}
                             type="text"
@@ -109,10 +118,12 @@ export function Register() {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="exampleInputEmail1">Email address</label>
+                          <label htmlFor="exampleInputEmail1">
+                            Email address
+                          </label>
                           <input
                             onChange={(e) => {
-                              setEmail(e.target.value)
+                              setEmail(e.target.value);
                             }}
                             value={email}
                             type="email"
@@ -122,10 +133,12 @@ export function Register() {
                           />
                         </div>
                         <div className="form-group mb-4">
-                          <label htmlFor="exampleInputPassword1">Password</label>
+                          <label htmlFor="exampleInputPassword1">
+                            Password
+                          </label>
                           <input
                             onChange={(e) => {
-                              setPassword(e.target.value)
+                              setPassword(e.target.value);
                             }}
                             value={password}
                             type="password"
@@ -134,10 +147,12 @@ export function Register() {
                             required
                           />
                           <div className="form-group">
-                            <label htmlFor="exampleInputConfirmPassword">Confirm Password</label>
+                            <label htmlFor="exampleInputConfirmPassword">
+                              Confirm Password
+                            </label>
                             <input
                               onChange={(e) => {
-                                setConfirmPassword(e.target.value)
+                                setConfirmPassword(e.target.value);
                               }}
                               value={confirmPassword}
                               type="password"
@@ -147,12 +162,12 @@ export function Register() {
                             />
                           </div>
                         </div>
-                        <button 
-                          type="submit" 
+                        <button
+                          type="submit"
                           className="btn btn-theme"
                           disabled={loading}
                         >
-                          {loading ? 'Registering...' : 'Register'}
+                          {loading ? "Registering..." : "Register"}
                         </button>
                       </form>
                     </div>
@@ -166,7 +181,10 @@ export function Register() {
                         <img className="logo1" src={img2} alt="" />
                         <h4 className=" mb-3">WELCOME TO</h4>
                         <h4 className=" mb-4">BusinessCommun.com</h4>
-                        <p className="lead text-white" style={{ fontSize: "1.3rem" }}>
+                        <p
+                          className="lead text-white"
+                          style={{ fontSize: "1.3rem" }}
+                        >
                           "Create your Account"
                         </p>
                       </div>
@@ -180,9 +198,9 @@ export function Register() {
 
             <p className="text-muted text-center mt-3 mt-2">
               Already Have an Account?{" "}
-              <a href="/login" className="text-primary ml-1">
+              <Link to="/login" className="text-primary ml-1">
                 Login Here
-              </a>
+              </Link>
             </p>
           </div>
           {/* end col */}
@@ -190,6 +208,6 @@ export function Register() {
       </div>
     </div>
   );
-};
+}
 
-export default Register
+export default Register;

@@ -1,7 +1,4 @@
-import axios from "axios";
-import config from "./config";
-
-const BASE_URL = `${config.server}/companies`;
+import api from "./api";
 
 export const registerCompany = async (formData) => {
     try {
@@ -50,10 +47,8 @@ export const registerCompany = async (formData) => {
             throw new Error("No authentication token found. Please login again.");
         }
 
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        };
-        const response = await axios.post(`${BASE_URL}/register`, payload, config);
+
+        const response = await api.post("companies/register", payload);
         return response.data;
     } catch (error) {
         console.error("Error registering company:", error);
