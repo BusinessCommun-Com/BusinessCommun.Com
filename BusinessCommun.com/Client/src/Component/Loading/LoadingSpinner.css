@@ -1,0 +1,56 @@
+.loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.spinner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 6px solid rgba(0, 0, 0, 0.08);
+  border-top-color: #0d6efd; /* bootstrap primary blue */
+  animation: spin 0.9s linear infinite;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.12);
+}
+
+.loading-message {
+  margin-top: 12px;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* small helper styles for placeholders (optional) */
+.placeholder {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.03) 25%,
+    rgba(0, 0, 0, 0.06) 50%,
+    rgba(0, 0, 0, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: placeholderShimmer 1.2s linear infinite;
+}
+
+.placeholder-img {
+  height: 140px;
+}
+.placeholder-text {
+  height: 16px;
+  margin: 8px 0;
+  border-radius: 4px;
+}
+
+@keyframes placeholderShimmer {
+  100% {
+    background-position: -200% 0;
+  }
+}

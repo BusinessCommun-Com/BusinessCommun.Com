@@ -39,7 +39,7 @@ export default function SlideShow() {
 
   return (
     <div className="hero-wrapper">
-      <Navbar/>
+      <Navbar />
       {/* SLIDESHOW */}
       <div
         className="slideshow-container"

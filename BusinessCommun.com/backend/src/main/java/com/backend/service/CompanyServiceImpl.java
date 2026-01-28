@@ -6,7 +6,6 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.custom_exception.ResourceNotFoundException;
 import com.backend.dtos.AdminActivityDto;
@@ -35,7 +34,6 @@ import com.backend.entities.InvestorConnectEntity;
 import com.backend.entities.PartnerConnectEntity;
 import com.backend.repository.InvestorConnectRepository;
 import com.backend.repository.PartnerConnectRepository;
-import com.backend.repository.PitchRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,7 +53,6 @@ public class CompanyServiceImpl implements CompanyService{
     // New Repositories
     private final InvestorConnectRepository investorRepo;
     private final PartnerConnectRepository partnerRepo;
-    private final PitchRepository pitchRepo;
 
     private final ModelMapper mapper;
     

@@ -1,63 +1,83 @@
-import React, { useState } from "react"
-import "./Login.css"
-import img1 from '../../assets/UI_Images/_0013.png'
-import { useNavigate, useSearchParams } from "react-router-dom"
-import { FcGoogle } from "react-icons/fc"
-import { FaApple, FaFacebook } from 'react-icons/fa'
-import { login } from "../../Services/users"
-import { toast } from "react-toastify"
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./Login.css";
+import img1 from "../../assets/UI_Images/_0013.png";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { FaApple, FaFacebook } from "react-icons/fa";
+import { login } from "../../Services/users";
+import { toast } from "react-toastify";
+import { useAuth } from "../../Providers/AuthProvider";
 
 function Login() {
   // add the state members for inputs
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  //const navigate function reference 
-  const navigate = useNavigate()
+  //const navigate function reference
+  const navigate = useNavigate();
 
-  // const {setUser} = useAuth()
+  const { setUser } = useAuth();
 
+  useEffect(() => {
+    const expired = localStorage.getItem("sessionExpired");
+
+    if (expired) {
+      toast.warning("Your session has expired. Please login again.");
+      localStorage.removeItem("sessionExpired");
+    }
+  }, []);
   const onLogin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (email.length == 0) {
-      toast.warning('Please enter Email')
-      return
+      toast.warning("Please enter Email");
+      return;
     } else if (password.length == 0) {
-      toast.warning('Please enter Password')
-      return
+      toast.warning("Please enter Password");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
     try {
-      const response = await login(email, password)
-      console.log('Login Response:', response.status);
-      if (response && response.status == 'success') {
-        toast.success('Login Successful')
+      const response = await login(email, password);
+      console.log("Login Response:", response.status);
+      if (response && response.status == "success") {
+        toast.success("Login Successful");
 
-        // get the token from response and cache it in local storage
-        localStorage.setItem("token", response["data"]["token"]);
-        localStorage.setItem("userId", response["data"]["id"]);
-        localStorage.setItem("firstName", response["data"]["firstName"]);
-        localStorage.setItem("lastName", response["data"]["lastName"]);
+        // extract auth payload (backend wraps data in `data`)
+        const auth = response?.data || response;
+        const payload = auth?.data ? auth.data : auth;
+        const token = payload?.token;
+        if (token) {
+          localStorage.setItem("token", token);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        }
 
-        // if login successful then add the user's details
-        // setUser( {
-        //   firstName : response['data']['firstName'],
-        //   lastName : response['data']['lastName']
-        // })
+        const id = payload?.userId;
+        const firstName = payload?.firstName;
+        const lastName = payload?.lastName;
+
+        // localStorage.setItem("userId", id);
+        // localStorage.setItem("firstName", firstName);
+        // localStorage.setItem("lastName", lastName);
+
+        // set user in context (AuthProvider will persist it)
+        setUser({ id, firstName, lastName });
 
         // Navigate to the Home page
-        navigate('/home')
+        navigate("/home/");
       } else {
-        toast.error(response && response["error"] ? response["error"] : 'Login failed')
+        toast.error(
+          response && response["error"] ? response["error"] : "Login failed",
+        );
       }
     } catch (error) {
-      toast.error('An error occurred during login')
-      console.error('Login error:', error)
+      toast.error("An error occurred during login");
+      console.error("Login error:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
 
     // const onGoogle = () => {
@@ -131,7 +151,7 @@ function Login() {
                           className="btn btn-theme"
                           disabled={loading}
                         >
-                          {loading ? 'Logging in...' : 'Login'}
+                          {loading ? "Logging in..." : "Login"}
                         </button>
                         <a
                           href="#"
@@ -141,15 +161,27 @@ function Login() {
                         </a>
                         <hr />
                         <div className="option">
-                          <button type="button" id="google" className="btn btn-sm">
+                          <button
+                            type="button"
+                            id="google"
+                            className="btn btn-sm"
+                          >
                             {" "}
                             <FcGoogle size={22} /> <span>Google</span>
                           </button>
-                          <button type="button" id="facebook" className="btn btn btn-sm">
+                          <button
+                            type="button"
+                            id="facebook"
+                            className="btn btn btn-sm"
+                          >
                             {" "}
                             <FaFacebook size={22} /> <span>Facebook</span>
                           </button>
-                          <button type="button" id="apple" className="btn btn btn-sm">
+                          <button
+                            type="button"
+                            id="apple"
+                            className="btn btn btn-sm"
+                          >
                             {" "}
                             <FaApple size={22} /> <span>Apple</span>
                           </button>
@@ -183,9 +215,9 @@ function Login() {
 
             <p className="text-muted text-center mt-3 mt-2">
               Don't have an account?{" "}
-              <a href="/register" className="text-primary ml-1">
+              <Link to="/register" className="text-primary ml-1">
                 Register Here
-              </a>
+              </Link>
             </p>
           </div>
           {/* end col */}
@@ -193,7 +225,6 @@ function Login() {
       </div>
     </div>
   );
-
 }
 
 export default Login;
