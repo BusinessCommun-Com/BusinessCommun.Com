@@ -1,24 +1,22 @@
-
 import ContactUs from "./Pages/ContactUs/ContactUs.jsx";
 import CompanyDetails from "./Pages/Company/CompanyDetails.jsx";
 import CompanyPitch from "./Component/Forms/Partner_Investor_Forms/Pitch_Details_Form/Pitch_Detail_Form.jsx";
 import useMultiStepForm from "./store/useMultiStepForm.js";
 import ProgressIndicator from "./Component/Multipage_Form__Stepper/Form_Progress_Indicator.jsx";
 import PremiumService from "./Pages/PremiumService/PremiumService.jsx";
-import './App.css'
-import { Route, Routes, Navigate } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import Login from './Pages/Login/Login.jsx'
-import Home from './Pages/Home/Home.jsx'
-import CompanyDetail from './Component/Forms/Partner_Investor_Forms/Company_Details_Form/Comp_Detail_Form.jsx'
-import PartnerConnect from './Component/Forms/Partner_Investor_Forms/Partner_Form/Partner_Form.jsx'
-import Register from './Pages/Register/Register.jsx'
-import InvestorConnect from './Component/Forms/Partner_Investor_Forms/Investor_Form/Investor_Form.jsx'
-import About from './Pages/About/About.jsx'
+import "./App.css";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Login from "./Pages/Login/Login.jsx";
+import Home from "./Pages/Home/Home.jsx";
+import CompanyDetail from "./Component/Forms/Partner_Investor_Forms/Company_Details_Form/Comp_Detail_Form.jsx";
+import PartnerConnect from "./Component/Forms/Partner_Investor_Forms/Partner_Form/Partner_Form.jsx";
+import Register from "./Pages/Register/Register.jsx";
+import InvestorConnect from "./Component/Forms/Partner_Investor_Forms/Investor_Form/Investor_Form.jsx";
+import About from "./Pages/About/About.jsx";
 import NewsPage from "./Pages/News_page/NewsPage.jsx";
 import GovernmentSchemes from "./Pages/GovernmentSchemes/GovernmentSchemes.jsx";
-
 
 import AdminLayout from "./Admin/Layout/AdminLayout";
 import Dashboard from "./Admin/Pages/Dashboard";
@@ -30,6 +28,7 @@ import AdminManagement from "./Admin/Pages/AdminManagement";
 import { ProtectedRoute } from "./Component/ProtectedRoute/ProtectedRoute.jsx";
 import Companies_listing from "./Pages/Companies_listing/Compnies_listing.jsx";
 import SlideShow from "./Component/SlideShow/SlideShow.jsx";
+import Unauthorized from "./Component/Unauthorized_Page/Unauthorized.jsx";
 
 function App() {
   const { step } = useMultiStepForm();
@@ -59,10 +58,11 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
         <Route
           path="/home"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
               <Home />
             </ProtectedRoute>
           }
@@ -76,6 +76,7 @@ function App() {
           <Route path="contact-us/" element={<ContactUs />} />
           <Route path="premium-service/" element={<PremiumService />} />
           <Route path="government-schemes/" element={<GovernmentSchemes />} />
+        </Route>
         <Route
           path="company-registration/*"
           element={
@@ -87,8 +88,14 @@ function App() {
             </div>
           }
         />
-        </Route>
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Dashboard />} />
           <Route path="companies" element={<Companies />} />
           <Route path="company/:id" element={<AdminCompanyProfile />} />
