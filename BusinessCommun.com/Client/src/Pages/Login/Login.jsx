@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Login.css";
 import img1 from "../../assets/UI_Images/_0013.png";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaFacebook } from "react-icons/fa";
 import { login } from "../../Services/users";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Providers/AuthProvider";
+import { decodeUserFromToken } from "../../Services/auth";
 
 function Login() {
   // add the state members for inputs
@@ -46,28 +47,24 @@ function Login() {
       if (response && response.status == "success") {
         toast.success("Login Successful");
 
-        // extract auth payload (backend wraps data in `data`)
-        const auth = response?.data || response;
-        const payload = auth?.data ? auth.data : auth;
-        const token = payload?.token;
+        const token = response?.data?.token;
+        //add token in localStorage and set default axios header
         if (token) {
           localStorage.setItem("token", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        
+          // Decode user from token and set in context
+          const userData = decodeUserFromToken(token);
+          setUser(userData);
+          
+          //role based navigation
+          if (userData.roles.includes("ROLE_ADMIN")) {
+            navigate("/admin/");
+          } else {
+            navigate("/home/");
+          }
         }
 
-        const id = payload?.userId;
-        const firstName = payload?.firstName;
-        const lastName = payload?.lastName;
-
-        // localStorage.setItem("userId", id);
-        // localStorage.setItem("firstName", firstName);
-        // localStorage.setItem("lastName", lastName);
-
-        // set user in context (AuthProvider will persist it)
-        setUser({ id, firstName, lastName });
-
-        // Navigate to the Home page
-        navigate("/home/");
       } else {
         toast.error(
           response && response["error"] ? response["error"] : "Login failed",
