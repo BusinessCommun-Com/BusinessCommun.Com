@@ -1,3 +1,4 @@
+/* ... imports remain the same ... */
 import ContactUs from "./Pages/ContactUs/ContactUs.jsx";
 import CompanyDetails from "./Pages/Company/CompanyDetails.jsx";
 import CompanyPitch from "./Component/Forms/Partner_Investor_Forms/Pitch_Details_Form/Pitch_Detail_Form.jsx";
@@ -17,6 +18,7 @@ import InvestorConnect from "./Component/Forms/Partner_Investor_Forms/Investor_F
 import About from "./Pages/About/About.jsx";
 import NewsPage from "./Pages/News_page/NewsPage.jsx";
 import GovernmentSchemes from "./Pages/GovernmentSchemes/GovernmentSchemes.jsx";
+import MyAccount from "./Pages/MyAccount/MyAccount.jsx";
 
 import AdminLayout from "./Admin/Layout/AdminLayout";
 import Dashboard from "./Admin/Pages/Dashboard";
@@ -55,39 +57,75 @@ function App() {
         pauseOnHover
       />
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
-              <Home />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Companies_listing />} />
-          <Route path="companies/" element={<Companies_listing />} />
-          <Route path="about-us/" element={<About />} />
-          <Route path="companies/:id" element={<CompanyDetails />} />
+        {/* Redirect root to /home/login (or just /home if you prefer landing page) */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
-          <Route path="news/" element={<NewsPage />} />
-          <Route path="contact-us/" element={<ContactUs />} />
-          <Route path="premium-service/" element={<PremiumService />} />
-          <Route path="government-schemes/" element={<GovernmentSchemes />} />
+        {/* 
+           HOME LAYOUT (Public Shell) 
+           Everything here gets Navbar + Footer 
+        */}
+        <Route path="/home" element={<Home />}>
+
+          {/* Public Pages inside Home Layout */}
+          <Route index element={<Companies_listing />} /> {/* Or a Landing Page */}
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route path="about-us" element={<About />} />
+          <Route path="contact-us" element={<ContactUs />} />
+
+          <Route path="companies" element={
+            <Companies_listing />
+          } />
+
+          <Route path="news" element={
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <NewsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="premium-service" element={
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <PremiumService />
+            </ProtectedRoute>
+          } />
+          <Route path="government-schemes" element={
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <GovernmentSchemes />
+            </ProtectedRoute>
+          } />
+
+          {/* Your Feature: My Account */}
+          <Route path="my-account" element={
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <MyAccount />
+            </ProtectedRoute>
+          } />
+
+          {/* Company Details */}
+          <Route path="companies/:id" element={
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <CompanyDetails />
+            </ProtectedRoute>
+          } />
+
+
+          {/* COMPANY REGISTRATION (Wizard) */}
+          <Route
+            path="company-registration/*"
+            element={
+              <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+                <div className="root">
+                  <div id="main-wrapper" className="container">
+                    <ProgressIndicator />
+                    {pages[step]}
+                  </div>
+                </div>
+              </ProtectedRoute>
+            }
+          />
         </Route>
-        <Route
-          path="company-registration/*"
-          element={
-            <div className="root">
-              <div id="main-wrapper" className="container">
-                <ProgressIndicator />
-                {pages[step]}
-              </div>
-            </div>
-          }
-        />
+
+        {/* ADMIN ROUTES (Protected - Main) */}
         <Route
           path="/admin"
           element={

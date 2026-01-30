@@ -49,7 +49,7 @@ export function Register() {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
-        navigate("/login");
+        navigate("/home/login");
       } else {
         toast.error(
           response && response["error"]
@@ -198,7 +198,7 @@ export function Register() {
 
             <p className="text-muted text-center mt-3 mt-2">
               Already Have an Account?{" "}
-              <Link to="/login" className="text-primary ml-1">
+              <Link to="/home/login" className="text-primary ml-1">
                 Login Here
               </Link>
             </p>
