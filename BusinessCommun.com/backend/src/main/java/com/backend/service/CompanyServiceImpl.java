@@ -11,6 +11,7 @@ import com.backend.custom_exception.ResourceNotFoundException;
 import com.backend.dtos.AdminActivityDto;
 import com.backend.dtos.ApiResponse;
 import com.backend.dtos.ApiResponseWrapper;
+import com.backend.dtos.ApprovedCompanyTableDto;
 import com.backend.dtos.CompanyRequestDto;
 import com.backend.dtos.CompanyResponseDto;
 import com.backend.dtos.ShortCompanyResponseDto;
@@ -109,7 +110,7 @@ public class CompanyServiceImpl implements CompanyService{
 
         //Pitch creation
         PitchEntity pitch = new PitchEntity();
-        pitch.setTitle(dto.getName()); // Use company name as pitch title
+        pitch.setTitle(dto.getName());
         pitch.setDescription(dto.getDescription());
         pitch.setProductImage(dto.getProductImage());
         pitch.setWebsite(dto.getWebsite());
@@ -150,6 +151,21 @@ public class CompanyServiceImpl implements CompanyService{
         dto.setPitch(entity.getPitch().getTitle());
         return dto;
     }
+    
+    //Approved companies card
+    @Override
+    public ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompaniesCards() {
+
+        List<ShortCompanyResponseDto> list =
+                companyRepo.findApprovedCompaniesCards(CompanyStatus.APPROVED);
+
+        return new ApiResponseWrapper<>(
+                "success",
+                "Approved companies for cards fetched successfully",
+                list
+        );
+    }
+
 
     //Pending Companies
     @Override
@@ -160,12 +176,18 @@ public class CompanyServiceImpl implements CompanyService{
         return new ApiResponseWrapper<>("success", "Pending requests fetched", list);
     }
 
-    //Approved Companies list
+    //Approved Companies list in Admin
     @Override
-    public ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompanies() {
-        List<ShortCompanyResponseDto> list =
-                companyRepo.findApprovedCompanies(CompanyStatus.APPROVED);
-        return new ApiResponseWrapper<>("success", "Approved companies fetched", list);
+    public ApiResponseWrapper<List<ApprovedCompanyTableDto>> getApprovedCompaniesTable() {
+
+        List<ApprovedCompanyTableDto> list =
+                companyRepo.findCompaniesTableByStatus(CompanyStatus.APPROVED);
+
+        return new ApiResponseWrapper<>(
+                "success",
+                "Approved companies table fetched successfully",
+                list
+        );
     }
 
     //All Companies list
@@ -206,6 +228,7 @@ public class CompanyServiceImpl implements CompanyService{
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
         c.setStatus(CompanyStatus.APPROVED);
+        companyRepo.save(c);
 
         logActivity("Admin approved " + c.getName(), CompanyStatus.APPROVED);
 
@@ -235,6 +258,7 @@ public class CompanyServiceImpl implements CompanyService{
 
        
         company.setStatus(CompanyStatus.DELETED);
+        companyRepo.save(company);
 
         logActivity("Admin soft deleted company " + company.getName(),
                 CompanyStatus.DELETED);
@@ -346,7 +370,19 @@ public class CompanyServiceImpl implements CompanyService{
     return new ApiResponseWrapper<>("success", "Company fetched successfully", dto);
 }
 
-    
+ @Override
+ public ApiResponseWrapper<List<ApprovedCompanyTableDto>> getRejectedCompaniesTable() {
+
+     List<ApprovedCompanyTableDto> list =
+             companyRepo.findCompaniesTableByStatus(CompanyStatus.REJECTED);
+
+     return new ApiResponseWrapper<>(
+             "success",
+             "Rejected companies fetched successfully",
+             list
+     );
+ }
+
     
     
     

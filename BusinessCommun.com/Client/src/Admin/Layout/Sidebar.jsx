@@ -9,6 +9,8 @@ export default function Sidebar() {
       <Link to="/admin/companies">Companies</Link>
       <Link to="/admin/pending">Pending Requests</Link>
       <Link to="/admin/approved">Approved Companies</Link>
+      <Link to="/admin/rejected">Rejected Companies</Link>
+
       <Link to="/admin/admins">Admin Management</Link>
     </div>
   );

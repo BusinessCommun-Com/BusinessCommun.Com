@@ -12,6 +12,24 @@ export default function Companies() {
     fetchAllCompanies().then(setCompanies);
   }, []);
 
+  //delete handler
+  const handleDelete = async (id) => {
+    try {
+      
+      await deleteCompany(id);
+
+      alert("Company Deleted Successfully");
+
+     
+      setCompanies((prevCompanies) =>
+        prevCompanies.filter((company) => company.id !== id)
+      );
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Delete Failed ");
+    }
+  };
+  
   return (
     <>
       <h2>All Companies</h2>
@@ -21,7 +39,9 @@ export default function Companies() {
         actions={(row) => (
           <>
             <Button text="View" onClick={() => navigate(`/admin/company/${row.id}`)} />
-            <Button text="Delete" variant="danger" onClick={() => deleteCompany(row.id)} />
+            <Button text="Delete"
+              variant="danger"
+              onClick={() => handleDelete(row.id)} />
           </>
         )}
       />
