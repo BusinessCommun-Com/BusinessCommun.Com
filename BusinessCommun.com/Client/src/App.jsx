@@ -79,31 +79,31 @@ function App() {
           } />
 
           <Route path="news" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
               <NewsPage />
             </ProtectedRoute>
           } />
           <Route path="premium-service" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
               <PremiumService />
             </ProtectedRoute>
           } />
           <Route path="government-schemes" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
               <GovernmentSchemes />
             </ProtectedRoute>
           } />
 
           {/* Your Feature: My Account */}
           <Route path="my-account" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
               <MyAccount />
             </ProtectedRoute>
           } />
 
           {/* Company Details */}
           <Route path="companies/:id" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
               <CompanyDetails />
             </ProtectedRoute>
           } />
@@ -113,7 +113,7 @@ function App() {
           <Route
             path="company-registration/*"
             element={
-              <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
                 <div className="root">
                   <div id="main-wrapper" className="container">
                     <ProgressIndicator />
