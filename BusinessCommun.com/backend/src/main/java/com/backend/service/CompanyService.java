@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.backend.dtos.AdminActivityDto;
 import com.backend.dtos.ApiResponse;
 import com.backend.dtos.ApiResponseWrapper;
+import com.backend.dtos.ApprovedCompanyTableDto;
 import com.backend.dtos.CompanyRequestDto;
 import com.backend.dtos.CompanyResponseDto;
 import com.backend.dtos.ShortCompanyResponseDto;
@@ -19,7 +20,7 @@ public interface CompanyService {
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getPendingCompanies();
 
-    ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompanies();
+   
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getAllCompanies();
 
@@ -38,12 +39,19 @@ public interface CompanyService {
     ApiResponseWrapper<List<AdminActivityDto>> recentActivities();
 
     ApiResponseWrapper<CompanyResponseDto> getApprovedCompanyById(Long id);
+    ApiResponseWrapper<List<ApprovedCompanyTableDto>> getApprovedCompaniesTable();
+
+    ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompaniesCards();
+
 
     ApiResponseWrapper<String> registerCompany(CompanyRequestDto dto) throws IOException;
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getRejectedCompanies();
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getDeletedCompanies();
+    
+    ApiResponseWrapper<List<ApprovedCompanyTableDto>> getRejectedCompaniesTable();
+
 
 
     ApiResponseWrapper<List<CompanyResponseDto>> getCompaniesByUserId(Long userId);

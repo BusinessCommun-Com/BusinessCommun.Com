@@ -27,11 +27,14 @@ import Companies from "./Admin/Pages/Companies";
 import AdminCompanyProfile from "./Admin/Pages/CompanyProfile";
 import PendingRequests from "./Admin/Pages/PendingRequests";
 import ApprovedCompanies from "./Admin/Pages/ApprovedCompanies";
+import RejectedCompanies from "./Admin/Pages/RejectedCompanies";
 import AdminManagement from "./Admin/Pages/AdminManagement";
 import { ProtectedRoute } from "./Component/ProtectedRoute/ProtectedRoute.jsx";
 import Companies_listing from "./Pages/Companies_listing/Compnies_listing.jsx";
 import SlideShow from "./Component/SlideShow/SlideShow.jsx";
 import Unauthorized from "./Component/Unauthorized_Page/Unauthorized.jsx";
+
+
 
 function App() {
   const { step } = useMultiStepForm();
@@ -101,6 +104,8 @@ function App() {
           <Route path="company/:id" element={<AdminCompanyProfile />} />
           <Route path="pending" element={<PendingRequests />} />
           <Route path="approved" element={<ApprovedCompanies />} />
+          <Route path="rejected" element={<RejectedCompanies />} />
+
           <Route path="admins" element={<AdminManagement />} />
         </Route>
       </Routes>
