@@ -34,7 +34,7 @@ export default function SlideShow() {
   }, []);
 
   const handleGetStarted = () => {
-    navigate("/company-registration");
+    navigate("/home/company-registration");
   };
 
   return (

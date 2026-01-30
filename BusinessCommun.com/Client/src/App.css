@@ -1,12 +1,21 @@
 .root {
     background: linear-gradient(135deg, #001f3f, #3a7bd5);
     font-family: "Poppins", sans-serif;
-    height: 100vh;
+    min-height: 100vh;
     overflow-x: hidden;
+    padding-bottom: 40px;
+}
+
+.company-registration-container {
+    background: linear-gradient(135deg, #001f3f, #3a7bd5);
+    font-family: "Poppins", sans-serif;
+    min-height: calc(100vh - 70px);
+    padding: 20px;
+    animation: fadeIn 1.2s ease-in-out;
 }
 
 /* Centering Container */
 .container {
-    margin-top: 80px;
+    padding-top: 20px;
     animation: fadeIn 1.2s ease-in-out;
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CompanyResponseDto {
     
+    private Long id;
     private String ownerName;
     private String mobileNumber;
 
@@ -31,7 +32,12 @@ public class CompanyResponseDto {
     private String productImage;
     private String website;
 
-    
-
+    // Connect Info
+    private String connectType; // "PARTNER" or "INVESTOR"
+    private String requirement;
+    private String skills;
+    private String equityPercentage;
+    private String investmentRange; // Only for Investor
+    private String minimumQualification;
 
 }

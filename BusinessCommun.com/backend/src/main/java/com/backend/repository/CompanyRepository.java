@@ -37,6 +37,7 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Long>  {
             @Param("status") CompanyStatus status);
 
     
+
     List<CompanyEntity> findByStatusNot(CompanyStatus status);
     
 
@@ -56,5 +57,8 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Long>  {
     	List<ApprovedCompanyTableDto> findCompaniesTableByStatus(
     	        @Param("status") CompanyStatus status
     	);
+
+    List<CompanyEntity> findByUserId(Long userId);
+
 
 }

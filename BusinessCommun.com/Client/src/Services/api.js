@@ -34,12 +34,12 @@ api.interceptors.response.use(
       // Remove token
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-        localStorage.setItem("sessionExpired", "true");
+      localStorage.setItem("sessionExpired", "true");
 
 
       // Redirect after 2 seconds
       setTimeout(() => {
-        window.location.href = "/login";
+        window.location.href = "/home/login";
       }, 2000);
     }
 

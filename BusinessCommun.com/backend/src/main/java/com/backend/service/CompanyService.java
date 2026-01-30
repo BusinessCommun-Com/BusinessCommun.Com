@@ -44,7 +44,7 @@ public interface CompanyService {
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getApprovedCompaniesCards();
 
 
-    ApiResponse registerCompany(CompanyRequestDto dto) throws IOException;
+    ApiResponseWrapper<String> registerCompany(CompanyRequestDto dto) throws IOException;
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getRejectedCompanies();
 
@@ -54,4 +54,5 @@ public interface CompanyService {
 
 
 
+    ApiResponseWrapper<List<CompanyResponseDto>> getCompaniesByUserId(Long userId);
 }

@@ -24,6 +24,7 @@ import com.backend.entities.DomainEntity;
 import com.backend.entities.OrganizationTypeEntity;
 import com.backend.entities.PitchEntity;
 import com.backend.entities.UserEntity;
+import com.backend.entities.UserRole;
 import com.backend.repository.ActivityLogRepository;
 import com.backend.repository.CompanyOwnerRepository;
 import com.backend.repository.CompanyRepository;
@@ -35,6 +36,9 @@ import com.backend.entities.InvestorConnectEntity;
 import com.backend.entities.PartnerConnectEntity;
 import com.backend.repository.InvestorConnectRepository;
 import com.backend.repository.PartnerConnectRepository;
+import com.backend.security.JWTUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,6 +60,7 @@ public class CompanyServiceImpl implements CompanyService{
     private final PartnerConnectRepository partnerRepo;
 
     private final ModelMapper mapper;
+    private final JWTUtils jwtUtils;
     
     
     
@@ -80,10 +85,14 @@ public class CompanyServiceImpl implements CompanyService{
 
     //Register Company
     @Override
-    public ApiResponse registerCompany(CompanyRequestDto dto) throws IOException {
+    public ApiResponseWrapper<String> registerCompany(CompanyRequestDto dto) throws IOException {
 
         UserEntity user = userRepo.findById(dto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        //Upgrade user role to OWNER
+        user.setRole(UserRole.ROLE_OWNER);
+        userRepo.save(user);
 
         DomainEntity domain = domainRepo.findById(dto.getDomainId())
                 .orElseThrow(() -> new ResourceNotFoundException("Domain not found"));
@@ -110,7 +119,11 @@ public class CompanyServiceImpl implements CompanyService{
 
         //Pitch creation
         PitchEntity pitch = new PitchEntity();
-        pitch.setTitle(dto.getName());
+
+//        pitch.setTitle(dto.getName());
+
+        pitch.setTitle(dto.getTitle());
+
         pitch.setDescription(dto.getDescription());
         pitch.setProductImage(dto.getProductImage());
         pitch.setWebsite(dto.getWebsite());
@@ -143,7 +156,11 @@ public class CompanyServiceImpl implements CompanyService{
         logActivity("Startup " + company.getName() + " submitted a request",
                 CompanyStatus.PENDING);
 
-        return new ApiResponse("Company Registered & sent for approval", "success");
+        // Generate new Token with ROLE_OWNER
+        String newToken = jwtUtils.generateToken(new UsernamePasswordAuthenticationToken(
+                user, null, List.of(new SimpleGrantedAuthority(user.getRole().name()))));
+
+        return new ApiResponseWrapper<>("success", "Company Registered & sent for approval", newToken);
     }
 
     ShortCompanyResponseDto toDTO(CompanyEntity entity) {
@@ -370,6 +387,7 @@ public class CompanyServiceImpl implements CompanyService{
     return new ApiResponseWrapper<>("success", "Company fetched successfully", dto);
 }
 
+
  @Override
  public ApiResponseWrapper<List<ApprovedCompanyTableDto>> getRejectedCompaniesTable() {
 
@@ -382,6 +400,69 @@ public class CompanyServiceImpl implements CompanyService{
              list
      );
  }
+
+
+    @Override
+    public ApiResponseWrapper<List<CompanyResponseDto>> getCompaniesByUserId(Long userId) {
+        List<CompanyEntity> companies = companyRepo.findByUserId(userId);
+        
+        if (companies.isEmpty()) {
+            throw new ResourceNotFoundException("No companies found for this user");
+        }
+
+        List<CompanyResponseDto> dtoList = new java.util.ArrayList<>();
+        
+        for (CompanyEntity company : companies) {
+            CompanyResponseDto dto = new CompanyResponseDto();
+            dto.setId(company.getId());
+            dto.setName(company.getName());
+            dto.setEstablishmentYear(company.getEstablishmentYear());
+            dto.setGstNo(company.getGstNo());
+            dto.setRevenue(company.getRevenue());
+            dto.setAddress(company.getAddress());
+            dto.setCity(company.getCity());
+            dto.setState(company.getState());
+            dto.setLogoUrl(company.getLogoUrl());
+            dto.setDomain(company.getDomain().getName());
+            dto.setOrgType(company.getOrganizationType().getName());
+
+            if (company.getCompanyOwner() != null) {
+                dto.setOwnerName(company.getCompanyOwner().getOwnerName());
+                dto.setMobileNumber(company.getCompanyOwner().getMobileNumber());
+            }
+
+            if (company.getPitch() != null) {
+                dto.setTitle(company.getPitch().getTitle());
+                dto.setDescription(company.getPitch().getDescription());
+                dto.setProductImage(company.getPitch().getProductImage());
+                dto.setWebsite(company.getPitch().getWebsite());
+            }
+
+            // Connect Info - Check for Investor or Partner
+            investorRepo.findFirstByCompanyId(company.getId()).ifPresent(investor -> {
+                dto.setConnectType("INVESTOR");
+                dto.setRequirement(investor.getRequirement());
+                dto.setSkills(investor.getSkills());
+                dto.setEquityPercentage(investor.getEquityPercentage());
+                dto.setInvestmentRange(investor.getInvestmentRange());
+                dto.setMinimumQualification(investor.getMinimumQualification());
+            });
+
+            partnerRepo.findFirstByCompanyId(company.getId()).ifPresent(partner -> {
+                dto.setConnectType("PARTNER");
+                dto.setRequirement(partner.getRequirement());
+                dto.setSkills(partner.getSkills());
+                dto.setEquityPercentage(partner.getEquityPercentage());
+                dto.setMinimumQualification(partner.getMinimumQualification());
+            });
+            
+            dtoList.add(dto);
+        }
+
+        return new ApiResponseWrapper<>("success", "Companies fetched successfully", dtoList);
+    }
+
+    
 
     
     

@@ -212,7 +212,7 @@ function Login() {
 
             <p className="text-muted text-center mt-3 mt-2">
               Don't have an account?{" "}
-              <Link to="/register" className="text-primary ml-1">
+              <Link to="/home/register" className="text-primary ml-1">
                 Register Here
               </Link>
             </p>

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.dtos.CompanyRequestDto;
+import com.backend.dtos.JWTDTO;
 import com.backend.service.CompanyService;
+import org.springframework.security.core.Authentication;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +43,12 @@ public class CompanyController {
 		@GetMapping("/approved/{id}")
 		public ResponseEntity<?> approvedCompanyById(@PathVariable Long id) {
 			return ResponseEntity.ok(companyService.getApprovedCompanyById(id));
+		}
+
+		@GetMapping("/my-company")
+		public ResponseEntity<?> getMyCompanies(Authentication authentication) {
+			JWTDTO user = (JWTDTO) authentication.getPrincipal();
+			return ResponseEntity.ok(companyService.getCompaniesByUserId(user.getUserId()));
 		}
 
 		

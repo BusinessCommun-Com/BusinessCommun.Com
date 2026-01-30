@@ -53,11 +53,16 @@ public class SecurityConfiguration {
 				.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml",
 						"/users/login", "/users/register")
 				.permitAll()
+
 				 .requestMatchers("/admin/**").hasRole("ADMIN")
 			        
 				.requestMatchers(HttpMethod.GET, "/companies/approved").hasRole("USER")
+
+				.requestMatchers(HttpMethod.GET, "/companies/approved").permitAll()
+
 				.requestMatchers(HttpMethod.POST, "/companies/register").permitAll()
 				.requestMatchers(HttpMethod.GET, "/companies/approved/{id}").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/companies/my-company").hasRole("OWNER")
 				.requestMatchers(HttpMethod.GET, "/utils/**").permitAll()
 				.requestMatchers(HttpMethod.OPTIONS).permitAll()
 				.anyRequest()
