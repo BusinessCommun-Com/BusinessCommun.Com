@@ -73,6 +73,15 @@ function PartnerConnect() {
 
       if (response.status === "success") {
         toast.success("Company registered successfully!");
+
+        // If backend sent a new token (due to role upgrade), update it
+        if (response.data) {
+          localStorage.setItem("token", response.data);
+          // Force reload to apply new token/permissions
+          window.location.href = "/home";
+          return;
+        }
+
         resetForm(); // Clear stored form data
         navigate('/home');
       } else {

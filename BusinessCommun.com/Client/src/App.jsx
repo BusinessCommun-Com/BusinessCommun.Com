@@ -18,6 +18,7 @@ import InvestorConnect from './Component/Forms/Partner_Investor_Forms/Investor_F
 import About from './Pages/About/About.jsx'
 import NewsPage from "./Pages/News_page/NewsPage.jsx";
 import GovernmentSchemes from "./Pages/GovernmentSchemes/GovernmentSchemes.jsx";
+import MyAccount from "./Pages/MyAccount/MyAccount.jsx";
 
 
 import AdminLayout from "./Admin/Layout/AdminLayout";
@@ -56,39 +57,58 @@ function App() {
         pauseOnHover
       />
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        >
+        {/* PUBLIC ROUTES - Home as layout (Navbar + Footer) */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/home" element={<Home />}>
           <Route index element={<Companies_listing />} />
-          <Route path="companies/" element={<Companies_listing />} />
-          <Route path="about-us/" element={<About />} />
-          <Route path="companies/:id" element={<CompanyDetails />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="about-us" element={<About />} />
+          <Route path="contact-us" element={<ContactUs />} />
 
-          <Route path="news/" element={<NewsPage />} />
-          <Route path="contact-us/" element={<ContactUs />} />
-          <Route path="premium-service/" element={<PremiumService />} />
-          <Route path="government-schemes/" element={<GovernmentSchemes />} />
-        <Route
-          path="company-registration/*"
-          element={
-            <div className="root">
-              <div id="main-wrapper" className="container">
+          {/* PROTECTED ROUTES - Inside Home layout but require login */}
+          <Route path="companies/:id" element={
+            <ProtectedRoute>
+              <CompanyDetails />
+            </ProtectedRoute>
+          } />
+          <Route path="premium-service" element={
+            <ProtectedRoute>
+              <PremiumService />
+            </ProtectedRoute>
+          } />
+          <Route path="news" element={
+            <ProtectedRoute>
+              <NewsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="government-schemes" element={
+            <ProtectedRoute>
+              <GovernmentSchemes />
+            </ProtectedRoute>
+          } />
+          <Route path="my-account" element={
+            <ProtectedRoute>
+              <MyAccount />
+            </ProtectedRoute>
+          } />
+          <Route path="company-registration/*" element={
+            <ProtectedRoute>
+              <div id="main-wrapper" className="company-registration-container">
                 <ProgressIndicator />
                 {pages[step]}
               </div>
-            </div>
-          }
-        />
+            </ProtectedRoute>
+          } />
         </Route>
-        <Route path="/admin" element={<AdminLayout />}>
+
+
+        {/* ADMIN ROUTES - Protected */}
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
           <Route index element={<Dashboard />} />
           <Route path="companies" element={<Companies />} />
           <Route path="company/:id" element={<AdminCompanyProfile />} />

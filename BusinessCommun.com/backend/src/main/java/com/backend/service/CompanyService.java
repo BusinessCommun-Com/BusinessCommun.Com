@@ -39,11 +39,12 @@ public interface CompanyService {
 
     ApiResponseWrapper<CompanyResponseDto> getApprovedCompanyById(Long id);
 
-    ApiResponse registerCompany(CompanyRequestDto dto) throws IOException;
+    ApiResponseWrapper<String> registerCompany(CompanyRequestDto dto) throws IOException;
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getRejectedCompanies();
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getDeletedCompanies();
 
 
+    ApiResponseWrapper<List<CompanyResponseDto>> getCompaniesByUserId(Long userId);
 }

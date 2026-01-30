@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PartnerConnectRepository extends JpaRepository<PartnerConnectEntity, Long> {
+    java.util.Optional<PartnerConnectEntity> findFirstByCompanyId(Long companyId);
 }

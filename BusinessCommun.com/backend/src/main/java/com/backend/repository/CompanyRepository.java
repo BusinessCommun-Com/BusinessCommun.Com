@@ -32,4 +32,6 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Long>  {
     List<ShortCompanyResponseDto> findByStatusNot(CompanyStatus deleted);
 
     
+    List<CompanyEntity> findByUserId(Long userId);
+
 }

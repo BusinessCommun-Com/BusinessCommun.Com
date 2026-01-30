@@ -15,7 +15,7 @@ public class PitchEntity extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description", length = 5000)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "product_image_url")

@@ -6,7 +6,7 @@ export const ProtectedRoute = ({ children }) => {
     console.log("ProtectedRoute - user:", user);
     if (!user) {
         console.log("User not authenticated, redirecting to login.");
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/home/login" replace />;
     }
     return children;
 };
