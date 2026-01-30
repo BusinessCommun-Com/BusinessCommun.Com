@@ -14,11 +14,11 @@ function AuthProvider({ children }) {
   });
 
   // restore token header if present
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-//     if (token)
-//       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-//   }, []);
+  //   useEffect(() => {
+  //     const token = localStorage.getItem("token");
+  //     if (token)
+  //       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  //   }, []);
 
   // persist user to localStorage when changed
   useEffect(() => {

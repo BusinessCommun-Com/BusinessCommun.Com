@@ -27,12 +27,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status === 401 || error.response.status === 403) {
       // Show message
       toast.error("Session expired. Please login again.");
 
       // Remove token
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       localStorage.setItem("sessionExpired", "true");
 
 

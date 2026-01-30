@@ -1,11 +1,10 @@
-import axios from "axios";
-import config from "./config";
+import api from "./api";
 
-const BASE_URL = `${config.server}/utils/domains`;
+const BASE_URL = "/utils/domains";
 
 export const getOrganisationDomains = async () => {
     try {
-        const response = await axios.get(BASE_URL);
+        const response = await api.get(BASE_URL);
         if (response.data && response.data.status === "success") {
             return response.data.data;
         }

@@ -3,8 +3,9 @@ package com.backend.repository;
 import com.backend.entities.PartnerConnectEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 @Repository
 public interface PartnerConnectRepository extends JpaRepository<PartnerConnectEntity, Long> {
-    java.util.Optional<PartnerConnectEntity> findFirstByCompanyId(Long companyId);
+    Optional<PartnerConnectEntity> findFirstByCompanyId(Long companyId);
 }

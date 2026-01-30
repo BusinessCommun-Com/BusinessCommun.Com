@@ -1,10 +1,9 @@
-import config from './config'
-import axios from 'axios'
+import api from './api'
 
 export async function getDomains() {
     try {
-        const url = `${config.server}/utils/domains`
-        const response = await axios.get(url)
+        const url = "/utils/domains"
+        const response = await api.get(url)
         if (response.data && response.data.status === 'success') {
             return response.data.data
         }
@@ -17,8 +16,8 @@ export async function getDomains() {
 
 export async function getOrgTypes() {
     try {
-        const url = `${config.server}/utils/org-types`
-        const response = await axios.get(url)
+        const url = "/utils/org-types"
+        const response = await api.get(url)
         if (response.data && response.data.status === 'success') {
             return response.data.data
         }
