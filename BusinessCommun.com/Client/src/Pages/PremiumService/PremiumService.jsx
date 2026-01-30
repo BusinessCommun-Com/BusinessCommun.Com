@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PremiumService.css";
-import { fetchInvestors, purchasePremium } from '../../Services/premiumService';
+import { fetchInvestors } from '../../Services/premiumService';
+import emailjs from '@emailjs/browser';
 
 const PremiumService = () => {
+    const [userId, setUserId] = useState('');
+    const [billing, setBilling] = useState("monthly");
+    const [selectedPlan, setSelectedPlan] = useState(null);
+    const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+    const [message, setMessage] = useState('');
+    const [loadingInvestors, setLoadingInvestors] = useState(false);
+
+    const navigate = useNavigate();
 
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
@@ -13,15 +23,6 @@ const PremiumService = () => {
             document.body.appendChild(script);
         });
     };
-
-    const [userId, setUserId] = useState('');
-    const [investors, setInvestors] = useState([]);
-    const [previewMode, setPreviewMode] = useState(false);
-    const [showPurchaseModal, setShowPurchaseModal] = useState(false);
-    const [selectedPlan, setSelectedPlan] = useState(null);
-    const [loadingInvestors, setLoadingInvestors] = useState(false);
-    const [message, setMessage] = useState('');
-    const [billing, setBilling] = useState("monthly");
 
     const getPrice = (plan) => {
         return plan[billing];
@@ -34,12 +35,7 @@ const PremiumService = () => {
             monthly: 499,
             quarterly: 1299,
             yearly: 4499,
-            features: [
-                "Access to core features",
-                "Email support",
-                "15 Calls per month",
-                "Conference for 5 participants",
-            ],
+            features: ["Access to core features", "Email support", "15 Calls per month", "Conference for 5 participants"],
             buttonText: "Get Started",
             popular: false,
         },
@@ -49,12 +45,7 @@ const PremiumService = () => {
             monthly: 999,
             quarterly: 2699,
             yearly: 8999,
-            features: [
-                "Everything in Basic",
-                "Priority support",
-                "30 Calls per month",
-                "Conference for 5 participants"
-            ],
+            features: ["Everything in Basic", "Priority support", "30 Calls per month", "Conference for 5 participants"],
             buttonText: "Choose Standard",
             popular: true,
         },
@@ -64,12 +55,7 @@ const PremiumService = () => {
             monthly: 1999,
             quarterly: 5399,
             yearly: 17999,
-            features: [
-                "Everything in Standard",
-                "Dedicated HR manager",
-                "Unlimited Calls",
-                "Full Investment Support",
-            ],
+            features: ["Everything in Standard", "Dedicated HR manager", "Unlimited Calls", "Full Investment Support"],
             buttonText: "Go Premium",
             popular: false,
         },
@@ -89,8 +75,6 @@ const PremiumService = () => {
 
         try {
             const amount = getPrice(selectedPlan);
-
-            // Call Backend to create order
             const orderRes = await fetch('http://localhost:5000/api/premium/create-razorpay-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -99,7 +83,7 @@ const PremiumService = () => {
             const orderData = await orderRes.json();
 
             const options = {
-                key: "rzp_test_S8YJ78ThpDYRq5", // Move to .env for production
+                key: "rzp_test_S8YJ78ThpDYRq5",
                 amount: orderData.amount,
                 currency: "INR",
                 name: "BusinessCommun",
@@ -116,10 +100,44 @@ const PremiumService = () => {
                             amount
                         })
                     });
+
                     const result = await verifyRes.json();
+
                     if (result.status === 'success') {
-                        alert("Payment Successful! Premium features unlocked.");
-                        window.location.reload();
+
+                        localStorage.setItem("premiumUserId", userId);
+
+                        // 2. Wrap EmailJS in a separate async block so it doesn't block redirection
+                        const sendEmail = async () => {
+                            if (result.userEmail) {
+                                try {
+                                    await emailjs.send(
+                                        'service_ssvxcfq',
+                                        'template_zqt30vo',
+                                        {
+                                            to_name: result.userName || userId,
+                                            to_email: result.userEmail,
+                                            plan_name: selectedPlan.name,
+                                            amount: amount,
+                                            transaction_id: response.razorpay_payment_id
+                                        },
+                                        'etkRBCKb7cUmXoHDU'
+                                    );
+                                    console.log("Email sent!");
+                                } catch (err) {
+                                    console.error("EmailJS Error:", err);
+                                }
+                            }
+                        };
+
+                        // Fire the email function but DON'T 'await' it here
+                        sendEmail();
+
+                        console.log("Redirecting to Premium Investors Page...");
+                        navigate("/premium-investors", { state: { userId: userId } });
+                        
+                    } else {
+                        setMessage("Payment verification failed. Please contact support.");
                     }
                 },
                 theme: { color: "#2563eb" }
@@ -140,6 +158,16 @@ const PremiumService = () => {
                         <h2>Premium Services</h2>
                         <p>Choose a plan that fits you. Upgrade or cancel anytime.</p>
 
+                        <div className="mb-4" style={{ maxWidth: '300px', margin: '20px auto' }}>
+                            <label className="form-label">Enter User ID to Start:</label>
+                            <input
+                                className="form-control"
+                                value={userId}
+                                onChange={e => setUserId(e.target.value)}
+                                placeholder="User ID"
+                            />
+                        </div>
+
                         <div className="billing-toggle">
                             {["monthly", "quarterly", "yearly"].map((type) => (
                                 <button
@@ -151,13 +179,12 @@ const PremiumService = () => {
                                 </button>
                             ))}
                         </div>
+                        {message && <div className="alert alert-info mt-3">{message}</div>}
                     </div>
                 </section>
 
-                {/* Pricing Cards */}
                 <section className="pricing-section">
                     <div className="container pricing-grid">
-
                         {plans.map((plan, index) => (
                             <div
                                 key={index}
@@ -167,127 +194,65 @@ const PremiumService = () => {
                                 {plan.popular && <div className="badge">Most Popular</div>}
                                 <h3>{plan.name}</h3>
                                 <p className="tagline">{plan.tagline}</p>
-
-                                <p className="price" style={{ animationDelay: `${index * 90}ms` }}>
+                                <p className="price">
                                     <span className="currency">₹</span>
                                     <span className="amount">{getPrice(plan)}</span>
                                     <span className="duration">
-                                        {billing === "monthly"
-                                            ? "/month"
-                                            : billing === "quarterly"
-                                                ? "/quarter"
-                                                : "/year"}
+                                        {billing === "monthly" ? "/month" : billing === "quarterly" ? "/quarter" : "/year"}
                                     </span>
                                 </p>
-
                                 <ul className="features">
                                     {plan.features.map((f, i) => (
                                         <li key={i}>✔ {f}</li>
                                     ))}
                                 </ul>
-
                                 <button
                                     className="cta-btn"
+                                    disabled={loadingInvestors}
                                     onClick={async () => {
+                                        if (!userId) {
+                                            setMessage("Please enter a User ID first.");
+                                            return;
+                                        }
                                         setSelectedPlan(plan);
-                                        // attempt to fetch investors (preview if not purchased)
                                         try {
                                             setLoadingInvestors(true);
                                             const data = await fetchInvestors(userId);
-                                            setInvestors(data.investors || []);
-                                            setPreviewMode(!!data.preview);
-                                            setMessage('');
                                             if (data.preview) {
                                                 setShowPurchaseModal(true);
+                                            } else {
+                                                setMessage("You already have Premium access!");
+                                                navigate("/premium-investors", { state: { userId: userId } });
                                             }
                                         } catch (err) {
-                                            if (err && err.status === 402) {
-                                                setInvestors(err.investors || []);
-                                                setPreviewMode(true);
-                                                setShowPurchaseModal(true);
-                                                setMessage('Please purchase to view full details');
-                                            } else {
-                                                setMessage((err && err.error) || 'Unable to fetch investors');
-                                            }
+                                            setMessage('Unable to verify premium status.');
                                         } finally {
                                             setLoadingInvestors(false);
                                         }
                                     }}
                                 >
-                                    {plan.buttonText}
+                                    {loadingInvestors && selectedPlan?.name === plan.name ? "Processing..." : plan.buttonText}
                                 </button>
                             </div>
                         ))}
-
                     </div>
                 </section>
 
-                {/* Investors listing */}
-                <section className="pricing-section">
-                    <div className="container">
-                        <h3 style={{ marginBottom: '12px' }}>Premium Investors</h3>
-
-                        <div className="mb-3">
-                            <label className="form-label">Your User ID (simulate login):</label>
-                            <input className="form-control" value={userId} onChange={e => setUserId(e.target.value)} placeholder="Enter your user id" />
-                        </div>
-
-                        {message && <div className="alert alert-info">{message}</div>}
-
-                        <div className="investors-list">
-                            {loadingInvestors && <div>Loading investors...</div>}
-                            {!loadingInvestors && investors.length === 0 && <div className="text-muted">No investors to show. Click a plan's action to preview or purchase.</div>}
-                            <div className="row">
-                                {investors.map((inv, idx) => (
-                                    <div key={inv.id} className="col-md-4">
-                                        <div className="investor-card" style={{ animationDelay: `${idx * 60}ms` }}>
-                                            <div className="investor-top">
-                                                <div className="avatar">{(inv.name || '').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}</div>
-                                                <div className="investor-meta">
-                                                    <h5>{inv.name}</h5>
-                                                    <div className="company">{inv.company}</div>
-                                                </div>
-                                            </div>
-                                            {previewMode ? (
-                                                <p className="text-muted small mt-2">Contact details visible after purchase</p>
-                                            ) : (
-                                                <div className="investor-body mt-2">
-                                                    <p className="mb-1"><strong>Email:</strong> {inv.email}</p>
-                                                    <p className="mb-1"><strong>Phone:</strong> {inv.phone}</p>
-                                                    <p className="mb-1"><strong>Notes:</strong> {inv.details}</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Purchase Modal */}
                 {showPurchaseModal && selectedPlan && (
                     <div className="pc-modal-backdrop" onClick={() => setShowPurchaseModal(false)}>
-                        <div className="pc-modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+                        <div className="pc-modal" onClick={e => e.stopPropagation()}>
                             <div className="pc-modal-header">
                                 <div>
                                     <div className="plan-chip">{selectedPlan.name}</div>
                                     <h4 className="modal-title">Unlock {selectedPlan.name} Access</h4>
                                 </div>
-                                <button className="pc-modal-close" onClick={() => setShowPurchaseModal(false)} aria-label="Close">×</button>
+                                <button className="pc-modal-close" onClick={() => setShowPurchaseModal(false)}>×</button>
                             </div>
-
                             <div className="pc-modal-body">
                                 <div className="price-block">
                                     <div className="price-amount">₹{getPrice(selectedPlan)}</div>
                                     <div className="price-duration">{billing === 'monthly' ? '/month' : billing === 'quarterly' ? '/quarter' : '/year'}</div>
                                 </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label">User ID</label>
-                                    <input className="form-control" value={userId} onChange={e => setUserId(e.target.value)} placeholder="Enter your user id" />
-                                </div>
-
                                 <div className="plan-features">
                                     <strong>Includes:</strong>
                                     <ul>
@@ -295,7 +260,6 @@ const PremiumService = () => {
                                     </ul>
                                 </div>
                             </div>
-
                             <div className="pc-modal-footer">
                                 <button className="btn btn-outline-secondary" onClick={() => setShowPurchaseModal(false)}>Cancel</button>
                                 <button className="btn btn-purchase" onClick={handleRazorpayPayment}>Purchase & Unlock</button>
@@ -305,12 +269,9 @@ const PremiumService = () => {
                 )}
             </main>
 
-            {/* Footer */}
             <footer className="footer">
                 <div className="container">
-                    <p>
-                        © {new Date().getFullYear()} BusinessCommun. All rights reserved.
-                    </p>
+                    <p>© {new Date().getFullYear()} BusinessCommun. All rights reserved.</p>
                 </div>
             </footer>
         </div>

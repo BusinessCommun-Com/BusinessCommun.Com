@@ -4,6 +4,7 @@ import CompanyPitch from "./Component/Forms/Partner_Investor_Forms/Pitch_Details
 import useMultiStepForm from "./store/useMultiStepForm.js";
 import ProgressIndicator from "./Component/Multipage_Form__Stepper/Form_Progress_Indicator.jsx";
 import PremiumService from "./Pages/PremiumService/PremiumService.jsx";
+import PremiumInvestorPage from "./Pages/PremiumInvestorPage/PremiumInvestorPage.jsx";
 import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -59,6 +60,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="premium-service/" element={<PremiumService />} />
+        <Route path="/premium-investors" element={<PremiumInvestorPage />} />
         <Route
           path="/home"
           element={
@@ -74,7 +77,6 @@ function App() {
 
           <Route path="news/" element={<NewsPage />} />
           <Route path="contact-us/" element={<ContactUs />} />
-          <Route path="premium-service/" element={<PremiumService />} />
           <Route path="government-schemes/" element={<GovernmentSchemes />} />
         </Route>
         <Route
