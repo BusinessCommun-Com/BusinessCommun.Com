@@ -38,3 +38,13 @@
 .btn-danger:hover {
   background-color: #bb2d3b;
 }
+
+.btn-logout {
+  border: none;
+  color: white;
+}
+
+.btn-logout:hover {
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+}

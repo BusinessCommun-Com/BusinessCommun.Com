@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Companies_listing.css";
 import img from "../../assets/Company_images/compImag.jpg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getApprovedCompDetails } from "../../Services/companyDetails";
 import SlideShow from "../../Component/SlideShow/SlideShow";
 import LoadingSpinner from "../../Component/Loading/LoadingSpinner";
@@ -10,6 +10,7 @@ function Companies_listing() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -28,6 +29,18 @@ function Companies_listing() {
 
     fetchCompanies();
   }, []);
+
+  // Handle hash scroll after component mounts
+  useEffect(() => {
+    if (location.hash === "#companies") {
+      setTimeout(() => {
+        const el = document.getElementById("companies");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  }, [location]);
 
   return (
     <>
@@ -54,33 +67,33 @@ function Companies_listing() {
           <div className="row g-4">
             {!loading && companies && companies.length > 0
               ? companies.map((company) => (
-                  <div className="col-12 col-sm-6 col-lg-3" key={company.id}>
-                    <Link
-                      to={`/home/companies/${company.id}`}
-                      state={{ company }}
-                      className="company-card-link"
-                    >
-                      <div className="card company-card">
-                        <img
-                          src={img}
-                          className="card-img-top company-card-img"
-                          alt={company.name}
-                        />
-                        <div className="card-body">
-                          <h5 className="card-title company-card-title">
-                            {company.name}
-                          </h5>
-                          <p className="card-text company-card-text">
-                            {company.pitch}
-                          </p>
-                          <span className="company-card-cta">
-                            View company details →
-                          </span>
-                        </div>
+                <div className="col-12 col-sm-6 col-lg-3" key={company.id}>
+                  <Link
+                    to={`/home/companies/${company.id}`}
+                    state={{ company }}
+                    className="company-card-link"
+                  >
+                    <div className="card company-card">
+                      <img
+                        src={img}
+                        className="card-img-top company-card-img"
+                        alt={company.name}
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title company-card-title">
+                          {company.name}
+                        </h5>
+                        <p className="card-text company-card-text">
+                          {company.pitch}
+                        </p>
+                        <span className="company-card-cta">
+                          View company details →
+                        </span>
                       </div>
-                    </Link>
-                  </div>
-                ))
+                    </div>
+                  </Link>
+                </div>
+              ))
               : !loading && !error && <div>No companies found.</div>}
           </div>
         </div>

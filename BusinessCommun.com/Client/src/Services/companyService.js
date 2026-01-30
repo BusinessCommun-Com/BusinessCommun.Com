@@ -1,8 +1,16 @@
 import api from "./api";
 
-export const registerCompany = async (formData) => {
+export const registerCompany = async (formData, authUserId = null) => {
     try {
-        const userId = localStorage.getItem("userId");
+        let userId = authUserId;
+        if (!userId) {
+            const userStr = localStorage.getItem("user");
+            if (userStr) {
+                const userObj = JSON.parse(userStr);
+                userId = userObj.id;
+            }
+        }
+
         if (!userId) {
             throw new Error("User not logged in or cookie issue");
         }
@@ -52,6 +60,17 @@ export const registerCompany = async (formData) => {
         return response.data;
     } catch (error) {
         console.error("Error registering company:", error);
+        throw error;
+    }
+}
+
+
+export const getMyCompanyDetails = async () => {
+    try {
+        const response = await api.get("companies/my-company");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching my company:", error);
         throw error;
     }
 }

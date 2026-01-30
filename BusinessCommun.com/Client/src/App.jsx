@@ -1,3 +1,4 @@
+/* ... imports remain the same ... */
 import ContactUs from "./Pages/ContactUs/ContactUs.jsx";
 import CompanyDetails from "./Pages/Company/CompanyDetails.jsx";
 import CompanyPitch from "./Component/Forms/Partner_Investor_Forms/Pitch_Details_Form/Pitch_Detail_Form.jsx";
@@ -18,6 +19,7 @@ import InvestorConnect from "./Component/Forms/Partner_Investor_Forms/Investor_F
 import About from "./Pages/About/About.jsx";
 import NewsPage from "./Pages/News_page/NewsPage.jsx";
 import GovernmentSchemes from "./Pages/GovernmentSchemes/GovernmentSchemes.jsx";
+import MyAccount from "./Pages/MyAccount/MyAccount.jsx";
 
 import AdminLayout from "./Admin/Layout/AdminLayout";
 import Dashboard from "./Admin/Pages/Dashboard";
@@ -68,28 +70,24 @@ function App() {
             <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
               <Home />
             </ProtectedRoute>
-          }
-        >
-          <Route index element={<Companies_listing />} />
-          <Route path="companies/" element={<Companies_listing />} />
-          <Route path="about-us/" element={<About />} />
-          <Route path="companies/:id" element={<CompanyDetails />} />
+          } />
+          <Route path="premium-service" element={
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
+              <PremiumService />
+            </ProtectedRoute>
+          } />
+          <Route path="government-schemes" element={
+            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
+              <GovernmentSchemes />
+            </ProtectedRoute>
+          } />
 
           <Route path="news/" element={<NewsPage />} />
           <Route path="contact-us/" element={<ContactUs />} />
           <Route path="government-schemes/" element={<GovernmentSchemes />} />
         </Route>
-        <Route
-          path="company-registration/*"
-          element={
-            <div className="root">
-              <div id="main-wrapper" className="container">
-                <ProgressIndicator />
-                {pages[step]}
-              </div>
-            </div>
-          }
-        />
+
+        {/* ADMIN ROUTES (Protected - Main) */}
         <Route
           path="/admin"
           element={

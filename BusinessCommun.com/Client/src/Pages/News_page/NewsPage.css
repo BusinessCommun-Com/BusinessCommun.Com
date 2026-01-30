@@ -14,7 +14,8 @@
   /* allow main container to grow and push footer down */
   flex: 1 1 auto;
   padding-top: 8px;
-  padding-bottom: 8rem; /* keep some space between content and footer */
+  padding-bottom: 8rem;
+  /* keep some space between content and footer */
 }
 
 /* Header */
@@ -168,7 +169,7 @@ body {
   border-radius: 50%;
 }
 
-.card-title {
+.news-card .card-title {
   font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -179,6 +180,7 @@ body {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  height: 6rem;
 }
 
 .card-description {
@@ -210,6 +212,7 @@ body {
   color: white;
   border-color: #1756c5;
 }
+
 .hero-wrapper {
   position: relative;
 }
