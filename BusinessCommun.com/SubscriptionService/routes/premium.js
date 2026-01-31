@@ -28,9 +28,11 @@ router.post('/create-razorpay-order', async (req, res) => {
 });
 
 // 2. Verify and Update Database
+
 router.post('/verify-payment', async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId, plan, amount } = req.body;
 
+  // Verify signature
   const generated_signature = crypto
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
     .update(razorpay_order_id + "|" + razorpay_payment_id)
@@ -40,18 +42,37 @@ router.post('/verify-payment', async (req, res) => {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
-      
-      // Update User Premium Status
-      await connection.query('UPDATE users SET is_premium = 1, subscription_id = ? WHERE id = ?', [razorpay_payment_id, userId]);
-      
-      // Log the Purchase
+
+      // 1. Update User Premium Status
+      // Set is_premium to 1 and store the payment ID as the subscription reference
       await connection.query(
-        'INSERT INTO purchases (userId, plan, amount, razorpay_order_id, razorpay_payment_id) VALUES (?, ?, ?, ?, ?)',
-        [userId, plan, amount, razorpay_order_id, razorpay_payment_id]
+        'UPDATE users SET is_premium = 1, subscription_id = ? WHERE id = ?',
+        [razorpay_payment_id, userId]
+      );
+
+      // 2. Log the Purchase in purchases table
+      await connection.query(
+        'INSERT INTO purchases (userId, plan, amount, razorpay_order_id) VALUES (?, ?, ?, ?)',
+        [userId, plan, amount, razorpay_order_id]
       );
 
       await connection.commit();
-      res.json({ status: 'success', message: 'Premium unlocked!' });
+
+      const [userRows] = await connection.query(
+        'SELECT email, username FROM users WHERE id = ?',
+        [userId]
+      );
+
+      const userEmail = userRows.length > 0 ? userRows[0].email : null;
+      const userName = userRows.length > 0 ? userRows[0].name : userId;
+
+      res.json({
+        status: 'success',
+        message: 'Premium unlocked!',
+        userEmail: userEmail, // Critical for EmailJS
+        userName: userName   // Send name back to frontend
+      });
+
     } catch (dbErr) {
       await connection.rollback();
       res.status(500).json({ status: 'error', error: dbErr.message });

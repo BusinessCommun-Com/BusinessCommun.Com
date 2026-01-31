@@ -5,6 +5,7 @@ import CompanyPitch from "./Component/Forms/Partner_Investor_Forms/Pitch_Details
 import useMultiStepForm from "./store/useMultiStepForm.js";
 import ProgressIndicator from "./Component/Multipage_Form__Stepper/Form_Progress_Indicator.jsx";
 import PremiumService from "./Pages/PremiumService/PremiumService.jsx";
+import PremiumInvestorPage from "./Pages/PremiumInvestorPage/PremiumInvestorPage.jsx";
 import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -34,8 +35,6 @@ import Companies_listing from "./Pages/Companies_listing/Compnies_listing.jsx";
 import SlideShow from "./Component/SlideShow/SlideShow.jsx";
 import Unauthorized from "./Component/Unauthorized_Page/Unauthorized.jsx";
 
-
-
 function App() {
   const { step } = useMultiStepForm();
 
@@ -61,70 +60,77 @@ function App() {
         pauseOnHover
       />
       <Routes>
-        {/* Redirect root to /home/login (or just /home if you prefer landing page) */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
-
-        {/* 
-           HOME LAYOUT (Public Shell) 
-           Everything here gets Navbar + Footer 
-        */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="premium-service/" element={<PremiumService />} />
+        <Route path="/premium-investors" element={<PremiumInvestorPage />} />
+        <Route path="/" element={<Navigate to="home" replace />} />
         <Route path="/home" element={<Home />}>
+          <Route index element={<Companies_listing />} />
+          <Route
+            path="premium-service"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <PremiumService />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="government-schemes"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <GovernmentSchemes />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Public Pages inside Home Layout */}
-          <Route index element={<Companies_listing />} /> {/* Or a Landing Page */}
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="unauthorized" element={<Unauthorized />} />
-          <Route path="about-us" element={<About />} />
-          <Route path="contact-us" element={<ContactUs />} />
-
-          <Route path="companies" element={
-            <Companies_listing />
-          } />
-
-          <Route path="news" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-              <NewsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="premium-service" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-              <PremiumService />
-            </ProtectedRoute>
-          } />
-          <Route path="government-schemes" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-              <GovernmentSchemes />
-            </ProtectedRoute>
-          } />
-
-          {/* Your Feature: My Account */}
-          <Route path="my-account" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-              <MyAccount />
-            </ProtectedRoute>
-          } />
-
-          {/* Company Details */}
-          <Route path="companies/:id" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-              <CompanyDetails />
-            </ProtectedRoute>
-          } />
-
-
-          {/* COMPANY REGISTRATION (Wizard) */}
+          <Route path="news/" element={<NewsPage />} />
+          <Route path="contact-us/" element={<ContactUs />} />
+          <Route
+            path="government-schemes/"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <GovernmentSchemes />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="about-us/" element={<About />} />
+          <Route
+            path="my-account/"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <MyAccount />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="company-details/:id"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <CompanyDetails />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="company-registration/*"
             element={
-              <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-                <div className="root">
-                  <div id="main-wrapper" className="container">
-                    <ProgressIndicator />
-                    {pages[step]}
-                  </div>
+              <div className="root">
+                <div id="main-wrapper" className="container">
+                  <ProgressIndicator />
+                  {pages[step]}
                 </div>
-              </ProtectedRoute>
+              </div>
             }
           />
         </Route>
