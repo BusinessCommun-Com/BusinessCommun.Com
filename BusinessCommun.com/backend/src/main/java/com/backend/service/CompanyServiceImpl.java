@@ -463,6 +463,73 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     
+    @Override
+    public ApiResponseWrapper<CompanyResponseDto> getCompanyDetailsForAdmin(Long id) {
+
+        CompanyEntity company = companyRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
+        CompanyResponseDto dto = new CompanyResponseDto();
+
+       
+        dto.setId(company.getId());
+        dto.setName(company.getName());
+        dto.setEstablishmentYear(company.getEstablishmentYear());
+        dto.setGstNo(company.getGstNo());
+        dto.setRevenue(company.getRevenue());
+        dto.setAddress(company.getAddress());
+        dto.setCity(company.getCity());
+        dto.setState(company.getState());
+        dto.setLogoUrl(company.getLogoUrl());
+
+      
+        if (company.getDomain() != null) {
+            dto.setDomain(company.getDomain().getName());
+        }
+
+        if (company.getOrganizationType() != null) {
+            dto.setOrgType(company.getOrganizationType().getName());
+        }
+
+      
+        if (company.getCompanyOwner() != null) {
+            dto.setOwnerName(company.getCompanyOwner().getOwnerName());
+            dto.setMobileNumber(company.getCompanyOwner().getMobileNumber());
+        }
+
+       
+        if (company.getPitch() != null) {
+            dto.setTitle(company.getPitch().getTitle());
+            dto.setDescription(company.getPitch().getDescription());
+            dto.setProductImage(company.getPitch().getProductImage());
+            dto.setWebsite(company.getPitch().getWebsite());
+        }
+
+        
+        investorRepo.findFirstByCompanyId(company.getId()).ifPresent(investor -> {
+            dto.setConnectType("INVESTOR");
+            dto.setRequirement(investor.getRequirement());
+            dto.setSkills(investor.getSkills());
+            dto.setEquityPercentage(investor.getEquityPercentage());
+            dto.setInvestmentRange(investor.getInvestmentRange());
+            dto.setMinimumQualification(investor.getMinimumQualification());
+        });
+
+        
+        partnerRepo.findFirstByCompanyId(company.getId()).ifPresent(partner -> {
+            dto.setConnectType("PARTNER");
+            dto.setRequirement(partner.getRequirement());
+            dto.setSkills(partner.getSkills());
+            dto.setEquityPercentage(partner.getEquityPercentage());
+            dto.setMinimumQualification(partner.getMinimumQualification());
+        });
+
+        return new ApiResponseWrapper<>(
+                "success",
+                "Admin company full details fetched successfully",
+                dto
+        );
+    }
 
     
     

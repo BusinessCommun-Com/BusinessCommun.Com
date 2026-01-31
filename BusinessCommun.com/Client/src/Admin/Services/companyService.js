@@ -97,3 +97,10 @@ export const fetchAdminRejectedCompanies = async () => {
   return response.data.data;
 };
 
+//Admin Company Profile View
+export const fetchAdminCompanyById = async (id) => {
+  const res = await api.get(`/admin/companies/${id}`);
+  return res.data.data;
+};
+
+
