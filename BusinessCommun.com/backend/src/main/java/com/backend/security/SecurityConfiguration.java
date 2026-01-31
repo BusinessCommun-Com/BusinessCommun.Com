@@ -55,13 +55,10 @@ public class SecurityConfiguration {
 				.permitAll()
 
 				 .requestMatchers("/admin/**").hasRole("ADMIN")
-			        
-				.requestMatchers(HttpMethod.GET, "/companies/approved").hasRole("USER")
-
 				.requestMatchers(HttpMethod.GET, "/companies/approved").permitAll()
 
-				.requestMatchers(HttpMethod.POST, "/companies/register").permitAll()
-				.requestMatchers(HttpMethod.GET, "/companies/approved/{id}").hasRole("USER")
+				.requestMatchers(HttpMethod.POST, "/companies/register").hasRole("USER")
+				.requestMatchers(HttpMethod.GET, "/companies/approved/{id}").hasAnyRole("USER", "OWNER", "ADMIN")
 				.requestMatchers(HttpMethod.GET, "/companies/my-company").hasRole("OWNER")
 				.requestMatchers(HttpMethod.GET, "/utils/**").permitAll()
 				.requestMatchers(HttpMethod.OPTIONS).permitAll()

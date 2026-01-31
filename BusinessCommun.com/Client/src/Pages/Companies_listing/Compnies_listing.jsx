@@ -48,7 +48,7 @@ function Companies_listing() {
 
       <div id="companies" className="companies-section">
         <div className="container">
-          <h2 className="companies-title">
+          <h2 className="companies-title mt-5">
             Featured Companies on <span>BusinessCommun.com</span>
           </h2>
           <p className="companies-subtitle">
@@ -69,7 +69,7 @@ function Companies_listing() {
               ? companies.map((company) => (
                 <div className="col-12 col-sm-6 col-lg-3" key={company.id}>
                   <Link
-                    to={`/home/companies/${company.id}`}
+                    to={`/home/company-details/${company.id}`}
                     state={{ company }}
                     className="company-card-link"
                   >

@@ -34,8 +34,6 @@ import Companies_listing from "./Pages/Companies_listing/Compnies_listing.jsx";
 import SlideShow from "./Component/SlideShow/SlideShow.jsx";
 import Unauthorized from "./Component/Unauthorized_Page/Unauthorized.jsx";
 
-
-
 function App() {
   const { step } = useMultiStepForm();
 
@@ -61,33 +59,79 @@ function App() {
         pauseOnHover
       />
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="premium-service/" element={<PremiumService />} />
         <Route path="/premium-investors" element={<PremiumInvestorPage />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
-              <Home />
-            </ProtectedRoute>
-          } />
-          <Route path="premium-service" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-              <PremiumService />
-            </ProtectedRoute>
-          } />
-          <Route path="government-schemes" element={
-            <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}>
-              <GovernmentSchemes />
-            </ProtectedRoute>
-          } />
+        <Route path="/" element={<Navigate to="home" replace />} />
+        <Route path="/home" element={<Home />}>
+          <Route index element={<Companies_listing />} />
+          <Route
+            path="premium-service"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <PremiumService />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="government-schemes"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <GovernmentSchemes />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="news/" element={<NewsPage />} />
           <Route path="contact-us/" element={<ContactUs />} />
-          <Route path="government-schemes/" element={<GovernmentSchemes />} />
+          <Route
+            path="government-schemes/"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <GovernmentSchemes />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="about-us/" element={<About />} />
+          <Route
+            path="my-account/"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <MyAccount />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="company-details/:id"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ROLE_USER", "ROLE_OWNER", "ROLE_ADMIN"]}
+              >
+                <CompanyDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="company-registration/*"
+            element={
+              <div className="root">
+                <div id="main-wrapper" className="container">
+                  <ProgressIndicator />
+                  {pages[step]}
+                </div>
+              </div>
+            }
+          />
         </Route>
 
         {/* ADMIN ROUTES (Protected - Main) */}

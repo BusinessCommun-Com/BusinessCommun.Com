@@ -29,7 +29,7 @@ export default function Navbar() {
     localStorage.removeItem("lastName");
     localStorage.removeItem("userId");
     delete axios.defaults.headers.common["Authorization"];
-    navigate("/home/login");
+    navigate("/login");
   };
 
   return (
@@ -110,7 +110,7 @@ export default function Navbar() {
                     LogOut
                   </a>
                 ) : (
-                  <Link className="nav-link navText" to="/home/login">
+                  <Link className="nav-link navText" to="/login">
                     Login
                   </Link>
                 )}
