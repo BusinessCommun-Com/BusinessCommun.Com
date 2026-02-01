@@ -32,10 +32,11 @@ public class AdminCompanyController {
     }
 
     //Approved Companies
-    @GetMapping("/approved")
-    public ResponseEntity<?> approvedCompanies() {
-        return ResponseEntity.ok(companyService.getApprovedCompanies());
+    @GetMapping("/approved-table")
+    public ResponseEntity<?> approvedCompaniesTable() {
+        return ResponseEntity.ok(companyService.getApprovedCompaniesTable());
     }
+
 
     //Rejected Companies
     @GetMapping("/rejected")
@@ -66,6 +67,13 @@ public class AdminCompanyController {
     public ResponseEntity<?> reject(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.rejectCompany(id));
     }
+    
+    //Rejected company list in Admin
+    @GetMapping("/rejected-table")
+    public ResponseEntity<?> rejectedCompaniesTable() {
+        return ResponseEntity.ok(companyService.getRejectedCompaniesTable());
+    }
+
 
     //Soft Delete
     @DeleteMapping("/{id}")

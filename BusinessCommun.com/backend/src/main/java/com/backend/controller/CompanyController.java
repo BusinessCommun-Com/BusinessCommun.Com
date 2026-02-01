@@ -39,7 +39,7 @@ public class CompanyController {
 	    //Homepage API
 	    @GetMapping("/approved")
 		public ResponseEntity<?> approvedCompanies() {
-			return ResponseEntity.ok(companyService.getApprovedCompanies());
+			return ResponseEntity.ok(companyService.getApprovedCompaniesCards());
 		}
 
 		@GetMapping("/approved/{id}")

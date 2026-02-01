@@ -27,7 +27,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401 || error.response.status === 403) {
+    if (error.response && error.response.status === 401) {
       // Show message
       toast.error("Session expired. Please login again.");
 
@@ -39,7 +39,7 @@ api.interceptors.response.use(
 
       // Redirect after 2 seconds
       setTimeout(() => {
-        window.location.href = "/home/login";
+        window.location.href = "/login";
       }, 2000);
     }
 

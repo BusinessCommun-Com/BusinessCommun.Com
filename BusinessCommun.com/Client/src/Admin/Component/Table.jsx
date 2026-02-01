@@ -2,12 +2,12 @@ import "./Table.css";
 
 export default function Table({ columns, data, actions }) {
 
-  // ✅ Column mapping (Frontend solution)
+  
   const keyMap = {
     ID: "id",
     Name: "name",
-    Industry: "domainName",     
-    Location: "city",          
+    Industry: "industry",      
+    Location: "location",          
     Status: "status",
     Email: "email"
   };

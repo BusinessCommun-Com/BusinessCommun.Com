@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import Table from "../Component/Table";
-import { fetchAdminApprovedCompanies } from "../Services/companyService";
+import { fetchAdminRejectedCompanies } from "../Services/companyService";
 
-export default function ApprovedCompanies() {
+export default function RejectedCompanies() {
   const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
-    fetchAdminApprovedCompanies().then(setCompanies);
+    fetchAdminRejectedCompanies().then(setCompanies);
   }, []);
 
   return (
     <>
-      <h2>Approved Companies</h2>
+      <h2>Rejected Companies</h2>
       <Table columns={["ID", "Name", "Industry", "Location"]} data={companies} />
     </>
   );

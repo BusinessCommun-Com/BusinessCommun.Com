@@ -39,7 +39,7 @@ export default function UserSidebar({ user, email }) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         toast.success("Logged out successfully");
-        navigate("/home/login"); // Correct route
+        navigate("/login"); // Correct route
         window.location.reload();
     };
 

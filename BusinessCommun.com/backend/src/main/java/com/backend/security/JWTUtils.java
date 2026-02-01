@@ -37,7 +37,8 @@ public class JWTUtils {
 
     public String generateToken(Authentication authentication){
     	UserEntity user = (UserEntity) authentication.getPrincipal();
-    	String userId = String.valueOf(user.getId());
+    	String userId = String.valueOf
+    			(user.getId());
         return Jwts.builder()
                 .subject(userId)
                 .issuedAt(new Date())

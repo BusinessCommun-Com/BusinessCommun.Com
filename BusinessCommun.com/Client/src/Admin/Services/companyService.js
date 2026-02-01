@@ -31,11 +31,13 @@ export const fetchPendingCompanies = async () => {
   return response.data.data;
 };
 
-//Approved Companies
+
+//Approved Companies list
 export const fetchAdminApprovedCompanies = async () => {
-  const response = await api.get("/admin/companies/approved");
+  const response = await api.get("/admin/companies/approved-table");
   return response.data.data;
 };
+
 
 // Rejected Companies
 export const fetchRejectedCompanies = async () => {
@@ -88,3 +90,10 @@ export const fetchCompanyById = async (id) => {
   const res = await api.get(`/admin/companies/${id}`);
   return res.data.data;
 };
+
+//Rejected Companies Table (Admin)
+export const fetchAdminRejectedCompanies = async () => {
+  const response = await api.get("/admin/companies/rejected-table");
+  return response.data.data;
+};
+

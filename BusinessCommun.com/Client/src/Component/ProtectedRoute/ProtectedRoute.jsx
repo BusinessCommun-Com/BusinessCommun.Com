@@ -6,13 +6,13 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
   console.log("ProtectedRoute - user:", user);
   if (!user) {
     console.log("User not authenticated, redirecting to login.");
-    return <Navigate to="/home/login" replace />;
+    return <Navigate to="/login" replace />;
   }
   if (allowedRoles) {
     const hasRole = user.roles?.some(role => allowedRoles.includes(role));
     if (!hasRole) {
       console.log("User does not have required role, redirecting to unauthorized.");
-      return <Navigate to="/home/unauthorized" replace />;
+      return <Navigate to="/unauthorized" replace />;
     }
   }
   return children;
