@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../Providers/AuthProvider';
 import { getMyCompanyDetails } from '../../Services/companyService';
+import { getDomains, getOrgTypes } from '../../Services/utilService';
 import CompanyCard from './CompanyCard';
 import UserSidebar from './UserSidebar';
 import './MyAccount.css';
@@ -10,6 +11,8 @@ export default function MyAccount() {
     const [tokenDetails, setTokenDetails] = useState(null);
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [domains, setDomains] = useState([]);
+    const [orgTypes, setOrgTypes] = useState([]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -29,20 +32,27 @@ export default function MyAccount() {
 
     useEffect(() => {
         if (tokenDetails?.role === 'ROLE_OWNER') {
-            const fetchCompanies = async () => {
+            const fetchData = async () => {
                 try {
-                    const res = await getMyCompanyDetails();
+                    const [res, domainRes, orgRes] = await Promise.all([
+                        getMyCompanyDetails(),
+                        getDomains(),
+                        getOrgTypes()
+                    ]);
+
                     if (res.status === 'success') {
-                        console.log("Companies API Response:", res.data);
-                        setCompanies(res.data); // res.data is now an array
+                        setCompanies(res.data);
                     }
+                    if (domainRes) setDomains(domainRes);
+                    if (orgRes) setOrgTypes(orgRes);
+
                 } catch (err) {
-                    console.error("Failed to fetch companies", err);
+                    console.error("Failed to fetch data", err);
                 } finally {
                     setLoading(false);
                 }
             };
-            fetchCompanies();
+            fetchData();
         } else {
             setLoading(false);
         }
@@ -71,7 +81,12 @@ export default function MyAccount() {
 
                     {/* Map through all companies */}
                     {companies.map((company) => (
-                        <CompanyCard key={company.id} company={company} />
+                        <CompanyCard
+                            key={company.id}
+                            company={company}
+                            domains={domains}
+                            orgTypes={orgTypes}
+                        />
                     ))}
                 </div>
 

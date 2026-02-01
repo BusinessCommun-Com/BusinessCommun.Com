@@ -83,4 +83,19 @@ public class UserServiceImpl implements UserService {
 
 
 
+	@Override
+	public ApiResponseWrapper<AuthResponse> updateUser(Long id, UserRegistration dto) {
+		UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		user.setFirstName(dto.getFirstName());
+		user.setLastName(dto.getLastName());
+		// Only update name fields as per requirements
+		UserEntity updatedUser = userRepository.save(user);
+
+		// Re-authenticate programmatically to generate new token with updated claims
+		Authentication authentication = new UsernamePasswordAuthenticationToken(updatedUser, null, updatedUser.getAuthorities());
+		String newToken = jwtUtils.generateToken(authentication);
+		AuthResponse resp = new AuthResponse("User updated successfully", newToken);
+		
+		return new ApiResponseWrapper<>("success", "User updated successfully", resp);
+	}
 }

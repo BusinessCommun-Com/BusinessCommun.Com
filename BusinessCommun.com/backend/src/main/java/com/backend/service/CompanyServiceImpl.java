@@ -65,7 +65,10 @@ public class CompanyServiceImpl implements CompanyService{
     
     //Log Activity
     private void logActivity(String msg, CompanyStatus action) {
-        activityRepo.save(new AdminActivityLog(msg, action));
+        AdminActivityLog log = new AdminActivityLog();
+        log.setMessage(msg);
+        log.setAction(action);
+        activityRepo.save(log);
     }
 
     // Entity to DTO 
@@ -156,6 +159,64 @@ public class CompanyServiceImpl implements CompanyService{
                 user, null, List.of(new SimpleGrantedAuthority(user.getRole().name()))));
 
         return new ApiResponseWrapper<>("success", "Company Registered & sent for approval", newToken);
+    }
+
+    @Override
+    public ApiResponseWrapper<String> updateCompany(Long id, CompanyRequestDto dto) throws IOException {
+        CompanyEntity company = companyRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+
+        // Update Basic Info
+        company.setAddress(dto.getAddress());
+        company.setCity(dto.getCity());
+        company.setState(dto.getState());
+        company.setRevenue(dto.getRevenue());
+        company.setEstablishmentYear(dto.getEstablishmentYear());
+
+        // Update Domain/OrgType if provided
+        if(dto.getDomainId() != null) {
+             company.setDomain(domainRepo.findById(dto.getDomainId())
+                .orElseThrow(() -> new ResourceNotFoundException("Domain not found")));
+        }
+        if(dto.getOrgTypeId() != null) {
+            company.setOrganizationType(orgRepo.findById(dto.getOrgTypeId())
+                .orElseThrow(() -> new ResourceNotFoundException("OrgType not found")));
+        }
+
+        // Update Pitch
+        if (company.getPitch() != null) {
+            PitchEntity pitch = company.getPitch();
+            pitch.setTitle(dto.getTitle());
+            pitch.setDescription(dto.getDescription());
+            pitch.setProductImage(dto.getProductImage());
+            pitch.setWebsite(dto.getWebsite());
+        }
+
+        // Update Connect Info
+        // Try to find existing PartnerConnect
+        partnerRepo.findFirstByCompanyId(id).ifPresentOrElse(partner -> {
+            // It's a Partner connect
+            partner.setRequirement(dto.getRequirement());
+            partner.setMinimumQualification(dto.getMinimumQualification());
+            partner.setSkills(dto.getSkills());
+            partner.setEquityPercentage(dto.getEquityPercentage());
+            partnerRepo.save(partner);
+        }, () -> {
+            // Try Investor
+            investorRepo.findFirstByCompanyId(id).ifPresent(investor -> {
+                investor.setRequirement(dto.getRequirement());
+                investor.setMinimumQualification(dto.getMinimumQualification());
+                investor.setSkills(dto.getSkills());
+                investor.setInvestmentRange(dto.getInvestmentRange());
+                investor.setEquityPercentage(dto.getEquityPercentage());
+                investorRepo.save(investor);
+            });
+        });
+        
+        companyRepo.save(company);
+        logActivity("Company " + company.getName() + " updated their details", CompanyStatus.APPROVED);
+
+        return new ApiResponseWrapper<>("success", "Company Details Updated Successfully", null);
     }
 
     ShortCompanyResponseDto toDTO(CompanyEntity entity) {
@@ -281,6 +342,11 @@ public class CompanyServiceImpl implements CompanyService{
         CompanyEntity company = companyRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
+        // Manual Cascade Delete for Connect Entities (Inverse side missing in CompanyEntity)
+        investorRepo.findFirstByCompanyId(id).ifPresent(investorRepo::delete);
+        partnerRepo.findFirstByCompanyId(id).ifPresent(partnerRepo::delete);
+
+        // Pitch is Cascade.ALL so it deletes automatically
         companyRepo.delete(company);
 
         logActivity("Admin permanently deleted company " + company.getName(),

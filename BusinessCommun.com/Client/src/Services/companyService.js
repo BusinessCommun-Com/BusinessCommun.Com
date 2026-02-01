@@ -65,12 +65,43 @@ export const registerCompany = async (formData, authUserId = null) => {
 }
 
 
+
 export const getMyCompanyDetails = async () => {
     try {
         const response = await api.get("companies/my-company");
         return response.data;
     } catch (error) {
         console.error("Error fetching my company:", error);
+        throw error;
+    }
+}
+
+export const updateCompany = async (id, formData) => {
+    try {
+        // Need to parse IDs back to integers if they became strings in form
+        const payload = {
+            ...formData,
+            userId: formData.userId ? parseInt(formData.userId) : null,
+            domainId: formData.domainId ? parseInt(formData.domainId) : null,
+            orgTypeId: formData.orgTypeId ? parseInt(formData.orgTypeId) : null,
+            revenue: typeof formData.revenue === 'string' ? parseFloat(formData.revenue.replace(/,/g, '')) : formData.revenue,
+            establishmentYear: formData.establishmentYear, // Assuming simple string or number. If date object, handle it.
+        };
+
+        const response = await api.put(`companies/update/${id}`, payload);
+        return response.data;
+    } catch (error) {
+        console.error("Error updating company:", error);
+        throw error;
+    }
+}
+
+export const deleteCompany = async (id) => {
+    try {
+        const response = await api.delete(`companies/delete/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting company:", error);
         throw error;
     }
 }

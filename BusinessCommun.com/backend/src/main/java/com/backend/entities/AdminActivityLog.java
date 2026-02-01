@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,12 +14,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class AdminActivityLog extends BaseEntity{
-
-	@Column(nullable = false)
+public class AdminActivityLog extends BaseEntity {
+	
+	@Column(nullable = false, length = 500)
     private String message;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private CompanyStatus action;
+
+    public AdminActivityLog(String message, CompanyStatus action) {
+        this.message = message;
+        this.action = action;
+    }
 }
