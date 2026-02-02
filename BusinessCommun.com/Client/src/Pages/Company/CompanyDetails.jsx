@@ -184,7 +184,37 @@ I found it on BusinessCommun platform.`;
         )}
 
         {/* ================= PRODUCT ================= */}
-        {companyDetails?.productImage && (
+        {companyDetails?.productImageUrls &&
+        companyDetails.productImageUrls.length > 0 ? (
+          <div className="section-block">
+            <h3>Product</h3>
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                flexWrap: "wrap",
+                marginTop: 8,
+              }}
+            >
+              {companyDetails.productImageUrls.map((url, idx) => (
+                <img
+                  key={idx}
+                  src={url}
+                  alt={`Product ${idx + 1}`}
+                  style={{
+                    width: "140px",
+                    height: "100px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    border: "1px solid #e6e6e6",
+                  }}
+                  onClick={() => window.open(url, "_blank")}
+                />
+              ))}
+            </div>
+          </div>
+        ) : companyDetails?.productImage ? (
           <div className="section-block">
             <h3>Product</h3>
             <img
@@ -197,7 +227,7 @@ I found it on BusinessCommun platform.`;
               }}
             />
           </div>
-        )}
+        ) : null}
 
         {/* ================= REQUIREMENTS & SKILLS ================= */}
         {(companyDetails?.requirement ||

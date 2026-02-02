@@ -218,3 +218,26 @@ h3.h4 {
     display: none;
   }
 }
+
+/* ===== Password Validation Errors ===== */
+.password-errors {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 5px;
+  padding: 10px 12px;
+  margin-top: 8px;
+}
+
+.error-message {
+  margin: 5px 0;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.error-message:first-child {
+  margin-top: 0;
+}
+
+.error-message:last-child {
+  margin-bottom: 0;
+}

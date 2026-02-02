@@ -127,7 +127,7 @@ function App() {
             element={
               <div className="root">
                 <div id="main-wrapper" className="container">
-                  <ProtectedRoute allowedRoles={["ROLE_OWNER", "ROLE_ADMIN"]}>
+                  <ProtectedRoute allowedRoles={["ROLE_USER", "ROLE_ADMIN"]}>
                     <ProgressIndicator />
                   </ProtectedRoute>
                   {pages[step]}
