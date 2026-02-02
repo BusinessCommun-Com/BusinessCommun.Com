@@ -46,8 +46,8 @@ public class SecurityConfiguration {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable());
 
-		http.cors(Customizer.withDefaults())
-				.sessionManagement(
+		//http.cors(Customizer.withDefaults());
+				http.sessionManagement(
 						sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.authorizeHttpRequests(request -> request
 				.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml",
@@ -60,6 +60,7 @@ public class SecurityConfiguration {
 				.requestMatchers(HttpMethod.POST, "/companies/register").hasRole("USER")
 				.requestMatchers(HttpMethod.GET, "/companies/approved/{id}").hasAnyRole("USER", "OWNER", "ADMIN")
 				.requestMatchers(HttpMethod.GET, "/companies/my-company").hasRole("OWNER")
+				.requestMatchers(HttpMethod.GET, "/users/getIdAndEmail").hasAnyRole("USER", "OWNER", "ADMIN")
 				.requestMatchers(HttpMethod.GET, "/utils/**").permitAll()
 				.requestMatchers(HttpMethod.OPTIONS).permitAll()
 				.anyRequest()

@@ -4,13 +4,13 @@ import companies from "../../data/companies";
 import { getCompanyDetailsById } from "../../Services/companyDetails";
 import "../Companies_listing/Companies_listing.css";
 import "./CompanyDetails.css";
-import  compImage  from "../../assets/Company_images/compImag.jpg";
+import compImage from "../../assets/Company_images/compImag.jpg";
 
 export default function CompanyProfile() {
   const { id } = useParams();
   const location = useLocation();
   const companyFromState = location.state && location.state.company;
-  const companyId = Number(id); 
+  const companyId = Number(id);
   const navigate = useNavigate();
   const company = companyFromState || companies.find((c) => c.id === companyId);
 
@@ -84,6 +84,33 @@ I found it on BusinessCommun platform.`;
     );
   }
 
+  const renderField = (label, value, isLink) => {
+    if (value === null || value === undefined || value === "") return null;
+    return (
+      <div className="detail-item">
+        <span className="detail-key">{label}</span>
+        <div>
+          {isLink ? (
+            <a href={value} target="_blank" rel="noopener noreferrer">
+              {value}
+            </a>
+          ) : (
+            value
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const formatRevenue = (val) => {
+    if (!val && val !== 0) return null;
+    try {
+      return `₹${Number(val).toLocaleString()}`;
+    } catch {
+      return val;
+    }
+  };
+
   return (
     <div className="company-profile">
       <div className="company-card-panel">
@@ -91,7 +118,7 @@ I found it on BusinessCommun platform.`;
         <div className="profile-header">
           <img
             className="profile-logo"
-            src={compImage}
+            src={companyDetails.logoUrl || compImage}
             alt={companyDetails.name}
           />
 
@@ -99,91 +126,67 @@ I found it on BusinessCommun platform.`;
             <h2 className="profile-title">{companyDetails.name}</h2>
 
             {/* ✅ Owner Name at Top */}
-            <p style={{ fontSize: "16px", color: "#555", marginBottom: "6px" }}>
-              Owned by <strong>{companyDetails?.ownerName || "—"}</strong>
-            </p>
+            {companyDetails?.ownerName && (
+              <p
+                style={{ fontSize: "16px", color: "#555", marginBottom: "6px" }}
+              >
+                Owned by <strong>{companyDetails?.ownerName}</strong>
+              </p>
+            )}
 
             <p className="profile-pitch">
-              {companyDetails.title || companyDetails.description || "—"}
+              {companyDetails.title ||
+                companyDetails.description ||
+                "Company profile and key details — fields omitted when not provided."}
             </p>
-
           </div>
         </div>
 
         {/* ================= DETAILS GRID ================= */}
         <div className="profile-grid">
-          <div className="detail-item">
-            <span className="detail-key">Founded in</span>
-            <div>{companyDetails?.establishmentYear ?? "—"}</div>
-          </div>
-
-          <div className="detail-item">
-            <span className="detail-key">Domain</span>
-            <div>{companyDetails?.domain || "—"}</div>
-          </div>
-
-          <div className="detail-item">
-            <span className="detail-key">Organization Type</span>
-            <div>{companyDetails?.orgType || "—"}</div>
-          </div>
-
-          <div className="detail-item">
-            <span className="detail-key">Website</span>
-            <div>
-              {companyDetails?.website ? (
-                <a
-                  href={companyDetails.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {companyDetails.website}
-                </a>
-              ) : (
-                "—"
-              )}
-            </div>
-          </div>
-
-          <div className="detail-item">
-            <span className="detail-key">City</span>
-            <div>{companyDetails?.city || "—"}</div>
-          </div>
-
-          <div className="detail-item">
-            <span className="detail-key">State</span>
-            <div>{companyDetails?.state || "—"}</div>
-          </div>
-
-          <div className="detail-item">
-            <span className="detail-key">Annual Revenue</span>
-            <div>
-              {companyDetails?.revenue
-                ? `₹${(companyDetails.revenue / 100000).toFixed(2)} L`
-                : "—"}
-            </div>
-          </div>
+          {renderField("Founded in", companyDetails?.establishmentYear)}
+          {renderField("Domain", companyDetails?.domain)}
+          {renderField("Organization Type", companyDetails?.orgType)}
+          {renderField("Website", companyDetails?.website, true)}
+          {renderField("City", companyDetails?.city)}
+          {renderField("State", companyDetails?.state)}
+          {companyDetails?.revenue !== null &&
+            companyDetails?.revenue !== undefined && (
+              <div className="detail-item">
+                <span className="detail-key">Annual Revenue</span>
+                <div>{formatRevenue(companyDetails.revenue)}</div>
+              </div>
+            )}
+          {renderField("Equity %", companyDetails?.equityPercentage)}
+          {renderField("Connect Type", companyDetails?.connectType)}
         </div>
 
         {/* ================= DESCRIPTION ================= */}
-        <div className="section-block">
-          <h3>Description</h3>
-          <p>{companyDetails?.description || "No description available."}</p>
-        </div>
+        {companyDetails?.description && (
+          <div className="section-block">
+            <h3>Description</h3>
+            <p>{companyDetails.description}</p>
+          </div>
+        )}
 
         {/* ================= ADDRESS ================= */}
-        <div className="section-block">
-          <h3>Address</h3>
-          <p>
-            {companyDetails?.address || "—"}
-            {companyDetails?.city && `, ${companyDetails.city}`}
-            {companyDetails?.state && `, ${companyDetails.state}`}
-          </p>
-        </div>
+        {(companyDetails?.address ||
+          companyDetails?.city ||
+          companyDetails?.state) && (
+          <div className="section-block">
+            <h3>Address</h3>
+            <p>
+              {companyDetails?.address}
+              {companyDetails?.city && `, ${companyDetails.city}`}
+              {companyDetails?.state && `, ${companyDetails.state}`}
+            </p>
+          </div>
+        )}
 
         {/* ================= PRODUCT ================= */}
-        <div className="section-block">
-          <h3>Product</h3>
-          {companyDetails?.productImage && (
+        {companyDetails?.productImage && (
+          <div className="section-block">
+            <h3>Product</h3>
             <img
               src={companyDetails.productImage}
               alt="Product"
@@ -193,9 +196,46 @@ I found it on BusinessCommun platform.`;
                 borderRadius: "8px",
               }}
             />
-          )}
-          <p>Product Image URL: {companyDetails?.productImage || "—"}</p>
-        </div>
+          </div>
+        )}
+
+        {/* ================= REQUIREMENTS & SKILLS ================= */}
+        {(companyDetails?.requirement ||
+          companyDetails?.skills ||
+          companyDetails?.minimumQualification) && (
+          <div className="section-block">
+            <h3>Requirements & Skills</h3>
+            <ul>
+              {companyDetails?.requirement && (
+                <li>Requirement: {companyDetails.requirement}</li>
+              )}
+              {companyDetails?.skills && (
+                <li>Skills: {companyDetails.skills}</li>
+              )}
+              {companyDetails?.minimumQualification && (
+                <li>
+                  Minimum Qualification: {companyDetails.minimumQualification}
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+
+        {/* ================= INVESTMENT / FINANCIAL ================= */}
+        {(companyDetails?.investmentRange ||
+          companyDetails?.equityPercentage) && (
+          <div className="section-block">
+            <h3>Investment / Financial</h3>
+            <ul>
+              {companyDetails?.investmentRange && (
+                <li>Investment Range: {companyDetails.investmentRange}</li>
+              )}
+              {companyDetails?.equityPercentage && (
+                <li>Equity Percentage: {companyDetails.equityPercentage}%</li>
+              )}
+            </ul>
+          </div>
+        )}
 
         {/* ================= CONNECT BUTTON ================= */}
         <div className="connect-row">

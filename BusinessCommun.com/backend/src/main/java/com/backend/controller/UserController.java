@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.dtos.ApiResponseWrapper;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResponse;
+import com.backend.dtos.JWTDTO;
+import com.backend.dtos.SubscriptionServiceResponseDto;
 import com.backend.dtos.UserRegistration;
 import com.backend.entities.UserEntity;
 import com.backend.security.JWTUtils;
@@ -54,6 +57,16 @@ public class UserController {
 	public ResponseEntity<?> registerUser(@RequestBody @Valid UserRegistration dto) {
 		System.out.println("in register" + dto);
 		return ResponseEntity.ok(userService.registerUser(dto));
+	}
+
+	@GetMapping("/getIdAndEmail")
+	public ResponseEntity<ApiResponseWrapper<SubscriptionServiceResponseDto>> getIdAndEmail(
+			Authentication authentication) {
+
+		System.out.println("in getIdAndEmail " + authentication.getPrincipal());
+		return ResponseEntity.ok()
+				.body(new ApiResponseWrapper<>("success", "Retrieved user details", 
+						userService.getIdAndEmail(((JWTDTO) authentication.getPrincipal()))));
 	}
 
 }

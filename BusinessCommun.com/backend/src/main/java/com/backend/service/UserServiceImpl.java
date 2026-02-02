@@ -12,6 +12,8 @@ import com.backend.dtos.ApiResponse;
 import com.backend.dtos.ApiResponseWrapper;
 import com.backend.dtos.AuthRequest;
 import com.backend.dtos.AuthResponse;
+import com.backend.dtos.JWTDTO;
+import com.backend.dtos.SubscriptionServiceResponseDto;
 import com.backend.dtos.UserRegistration;
 import com.backend.entities.UserEntity;
 import com.backend.entities.UserRole;
@@ -78,6 +80,21 @@ public class UserServiceImpl implements UserService {
 	    AuthResponse resp = new AuthResponse("Login Successful", token);
 
 	    return new ApiResponseWrapper<>("success", "Login Successful", resp);
+	}
+
+	@Override
+	public SubscriptionServiceResponseDto getIdAndEmail(JWTDTO jwtDto) {
+		SubscriptionServiceResponseDto dto = userRepository.findById(jwtDto.getUserId())
+				.map(user -> {
+					SubscriptionServiceResponseDto responseDto = new SubscriptionServiceResponseDto();
+					responseDto.setId(user.getId());
+					responseDto.setEmail(user.getEmail());
+					responseDto.setName(user.getFirstName() + " " + user.getLastName());
+					return responseDto;
+				})
+				.orElseThrow(() -> new RuntimeException("User not found with id: " + jwtDto.getUserId()));
+
+		return dto;
 	}
 
 

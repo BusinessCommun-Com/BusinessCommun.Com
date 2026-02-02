@@ -1,16 +1,41 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
 const app = express();
-require('dotenv').config();
+const eurekaClient = require("./eureka/eureka-client");
 
-const premiumRoutes = require('./routes/premium');
+require("dotenv").config();
 
-app.use(cors());
+const premiumRoutes = require("./routes/premium");
+const userRoutes = require("./routes/user");
+
 app.use(express.json());
 
-app.get('/', (req, res) => res.send({ status: 'ok', message: 'BusinessCommun API' }));
+app.get("/", (req, res) =>
+  res.send({ status: "ok", message: "BusinessCommun API" }),
+);
 
-app.use('/api/premium', premiumRoutes);
+app.use("/api/premium", premiumRoutes);
+app.use("/api/user", userRoutes);
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+
+  // ✅ REGISTER WITH EUREKA AFTER SERVER STARTS
+  eurekaClient.start((error) => {
+    if (error) {
+      console.error("❌ Eureka registration failed:", error);
+    } else {
+      console.log("✅ Registered with Eureka");
+    }
+  });
+});
+
+// ✅ GRACEFUL SHUTDOWN (VERY IMPORTANT)
+process.on("SIGINT", () => {
+  console.log("Shutting down...");
+  eurekaClient.stop(() => {
+    console.log("🛑 Deregistered from Eureka");
+    process.exit();
+  });
+});
