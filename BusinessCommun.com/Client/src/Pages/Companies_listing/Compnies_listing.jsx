@@ -90,10 +90,9 @@ function Companies_listing() {
                           View company details →
                         </span>
                       </div>
-                    </div>
-                  </Link>
-                </div>
-              ))
+                    </Link>
+                  </div>
+                ))
               : !loading && !error && <div>No companies found.</div>}
           </div>
         </div>

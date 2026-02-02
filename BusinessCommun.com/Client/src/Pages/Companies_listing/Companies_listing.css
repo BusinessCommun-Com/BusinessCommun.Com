@@ -24,7 +24,7 @@ h2 {
 
   /* padding-top: 5rem; */
   /* padding: 2rem 0; */
-  padding-bottom:15rem ;
+  padding-bottom: 15rem;
   /* background: #f5f7fb; */
 }
 
@@ -105,7 +105,7 @@ h2 {
 }
 
 .company-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -205,4 +205,37 @@ h2 {
 .company-card:hover .company-card-cta {
   gap: 10px;
   color: #1349a0;
+}
+
+.company-card-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid rgba(23, 86, 197, 0.08);
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 300ms ease;
+}
+
+.company-card:hover .company-card-location {
+  color: #1756c5;
+}
+
+.location-icon {
+  flex-shrink: 0;
+  color: #6b7280;
+  transition: color 300ms ease;
+}
+
+.company-card:hover .location-icon {
+  color: #1756c5;
+}
+
+.location-text {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

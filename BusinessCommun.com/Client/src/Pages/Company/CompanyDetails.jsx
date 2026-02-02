@@ -102,6 +102,33 @@ I found it on BusinessCommun platform.`;
     );
   }
 
+  const renderField = (label, value, isLink) => {
+    if (value === null || value === undefined || value === "") return null;
+    return (
+      <div className="detail-item">
+        <span className="detail-key">{label}</span>
+        <div>
+          {isLink ? (
+            <a href={value} target="_blank" rel="noopener noreferrer">
+              {value}
+            </a>
+          ) : (
+            value
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const formatRevenue = (val) => {
+    if (!val && val !== 0) return null;
+    try {
+      return `₹${Number(val).toLocaleString()}`;
+    } catch {
+      return val;
+    }
+  };
+
   return (
     <div className="company-profile">
       <div className="company-card-panel">

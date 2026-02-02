@@ -23,33 +23,36 @@ import lombok.RequiredArgsConstructor;
 public class CustomJwtFilter extends OncePerRequestFilter {
 
 	private final JWTUtils jwtUtils;
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
+
 		// check if jwt exists in request auth header
-		String headerValue = request.getHeader("Authorization");
-		if (headerValue!= null && headerValue.startsWith("Bearer ")) {
-			String jwt = headerValue.substring(7).trim();
-			System.out.println("jwt found : " + jwt);
-			try {
+		try {
+			String headerValue = request.getHeader("Authorization");
+			if (headerValue != null && headerValue.startsWith("Bearer ")) {
+				String jwt = headerValue.substring(7).trim();
+				System.out.println("jwt found : " + jwt);
 				Claims claims = jwtUtils.validateToken(jwt);
-				//store the claims in dto
+				// store the claims in dto
 				String role = claims.get("role", String.class);
 				JWTDTO dto = new JWTDTO(Long.valueOf(claims.getSubject()), claims.get("email", String.class), role);
 				// add it in Authenticaion object
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(dto, null, List.of(new SimpleGrantedAuthority(role)));
+				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(dto, null,
+						List.of(new SimpleGrantedAuthority(role)));
 				// add it under sec ctx holder
 				SecurityContextHolder.getContext().setAuthentication(auth);
 				System.out.println("add sec ctx");
-			} catch (Exception e) {
-				System.out.println("JWT validation failed: " + e.getMessage());
-				SecurityContextHolder.clearContext();
 			}
+		} catch (Exception e) {
+			System.out.println("JWT validation failed: " + e.getMessage());
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			SecurityContextHolder.clearContext();
+
 		}
 		filterChain.doFilter(request, response);
-		
-		
+
 	}
 
 }
