@@ -3,6 +3,7 @@ import { FaEdit, FaTrash, FaSave, FaTimes } from 'react-icons/fa';
 import { updateCompany, deleteCompany } from '../../Services/companyService';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import ImageModal from '../../Component/Common/ImageModal';
 
 // Validation Schema
 const validationSchema = yup.object().shape({
@@ -32,6 +33,25 @@ export default function CompanyCard({ company, domains, orgTypes }) {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
+
+    // Modal State
+    const [modalConfig, setModalConfig] = useState({
+        isOpen: false,
+        images: [],
+        index: 0
+    });
+
+    const openModal = (images, index = 0) => {
+        setModalConfig({
+            isOpen: true,
+            images: Array.isArray(images) ? images : [images],
+            index
+        });
+    };
+
+    const closeModal = () => {
+        setModalConfig({ ...modalConfig, isOpen: false });
+    };
 
     const cardRef = useRef(null);
 
@@ -71,11 +91,24 @@ export default function CompanyCard({ company, domains, orgTypes }) {
             'productImage', 'requirement', 'skills', 'equityPercentage',
             'minimumQualification', 'investmentRange'
         ];
-        return editableFields.some(field => {
+        const changed = editableFields.some(field => {
             const v1 = formData[field] ?? '';
             const v2 = initial[field] ?? '';
             return v1 != v2;
         });
+
+        if (changed) return true;
+
+        // Check for new files or removed images
+        if (formData.newLogoFile) return true;
+        if (formData.newProductImages && formData.newProductImages.length > 0) return true;
+
+        // Check if existing images were removed
+        const initialGallery = initial.productImageUrls || [];
+        const currentGallery = formData.productImageUrls || [];
+        if (initialGallery.length !== currentGallery.length) return true;
+
+        return false;
     };
 
     if (!company) return null;
@@ -88,6 +121,39 @@ export default function CompanyCard({ company, domains, orgTypes }) {
         // Clear error on change
         if (errors[name]) {
             setErrors({ ...errors, [name]: null });
+        }
+    };
+
+    const handleLogoFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({
+                ...formData,
+                newLogoFile: file,
+                logoUrl: URL.createObjectURL(file) // Temporary preview
+            });
+        }
+    };
+
+    const handleRemoveExistingImage = (index) => {
+        const updatedUrls = [...(formData.productImageUrls || [])];
+        updatedUrls.splice(index, 1);
+        setFormData({ ...formData, productImageUrls: updatedUrls });
+    };
+
+    const handleRemoveNewImage = (index) => {
+        const updatedFiles = [...(formData.newProductImages || [])];
+        updatedFiles.splice(index, 1);
+        setFormData({ ...formData, newProductImages: updatedFiles });
+    };
+
+    const handleAddNewImages = (e) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length > 0) {
+            setFormData({
+                ...formData,
+                newProductImages: [...(formData.newProductImages || []), ...files]
+            });
         }
     };
 
@@ -158,15 +224,31 @@ export default function CompanyCard({ company, domains, orgTypes }) {
             </div>
 
             <div className="company-body">
-                {isEditing ? (
-                    <div className="form-group mb-4">
-                        <label className="text-muted small mb-1 fw-bold text-uppercase">Company Name</label>
-                        <input type="text" className={`form-control ${errors.name ? 'is-invalid' : ''}`} name="name" value={formData.name || ''} onChange={handleChange} />
-                        {errors.name && <div className="text-danger small mt-1">{errors.name}</div>}
+                <div className="d-flex align-items-center gap-3 mb-4">
+                    <div className="position-relative">
+                        <img
+                            src={formData.logoUrl || 'https://placehold.co/60'}
+                            alt="Logo"
+                            style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #dee2e6', cursor: 'pointer' }}
+                            onClick={() => openModal(formData.logoUrl || 'https://placehold.co/60')}
+                        />
+                        {isEditing && (
+                            <label className="btn btn-sm btn-light position-absolute" style={{ bottom: '-10px', right: '-10px', padding: '2px 5px', fontSize: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                                <FaEdit />
+                                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleLogoFileChange} />
+                            </label>
+                        )}
                     </div>
-                ) : (
-                    <h4 className="card-title">{company.name}</h4>
-                )}
+                    {isEditing ? (
+                        <div className="flex-grow-1">
+                            <label className="text-muted small mb-1 fw-bold text-uppercase">Company Name</label>
+                            <input type="text" className={`form-control ${errors.name ? 'is-invalid' : ''}`} name="name" value={formData.name || ''} onChange={handleChange} />
+                            {errors.name && <div className="text-danger small mt-1">{errors.name}</div>}
+                        </div>
+                    ) : (
+                        <h4 className="card-title m-0">{company.name}</h4>
+                    )}
+                </div>
 
                 <div className="info-grid">
                     {/* Row 1: Domain & Org Type */}
@@ -319,12 +401,89 @@ export default function CompanyCard({ company, domains, orgTypes }) {
                                         )}
                                     </span>
                                 </div>
-                                <div className="info-item">
-                                    <span className="info-label">Product Image URL</span>
+                                <div className="info-item full-width">
+                                    <span className="info-label">Product Gallery</span>
                                     {isEditing ? (
-                                        <input type="text" className="form-control form-control-sm" name="productImage" value={formData.productImage || ''} onChange={handleChange} />
+                                        <div className="gallery-edit-section mt-2">
+                                            <div className="d-flex flex-wrap gap-2 mb-3">
+                                                {/* Existing Images */}
+                                                {(formData.productImageUrls || []).map((url, index) => (
+                                                    <div key={`existing-${index}`} className="position-relative">
+                                                        <img
+                                                            src={url}
+                                                            alt={`Product ${index + 1}`}
+                                                            style={{ width: '100px', height: '80px', objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                                                            onClick={() => openModal(formData.productImageUrls, index)}
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-danger btn-sm position-absolute"
+                                                            style={{ top: '-5px', right: '-5px', padding: '0 5px', borderRadius: '50%' }}
+                                                            onClick={() => handleRemoveExistingImage(index)}
+                                                        >
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                ))}
+
+                                                {/* New Images Previews */}
+                                                {(formData.newProductImages || []).map((file, index) => (
+                                                    <div key={`new-${index}`} className="position-relative">
+                                                        <img
+                                                            src={URL.createObjectURL(file)}
+                                                            alt={`New Product ${index + 1}`}
+                                                            style={{ width: '100px', height: '80px', objectFit: 'cover', borderRadius: '4px', border: '2px dashed #28a745', cursor: 'pointer' }}
+                                                            onClick={() => openModal(formData.newProductImages.map(f => URL.createObjectURL(f)), index)}
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-danger btn-sm position-absolute"
+                                                            style={{ top: '-5px', right: '-5px', padding: '0 5px', borderRadius: '50%' }}
+                                                            onClick={() => handleRemoveNewImage(index)}
+                                                        >
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="upload-controls">
+                                                <label className="btn btn-outline-success btn-sm">
+                                                    + Add New Images
+                                                    <input
+                                                        type="file"
+                                                        multiple
+                                                        accept="image/*"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleAddNewImages}
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div className="text-muted x-small mt-1">Changes will be saved on clicking 'Save' above.</div>
+                                        </div>
                                     ) : (
-                                        <span className="info-value">{company.productImage || 'N/A'}</span>
+                                        <div className="d-flex flex-wrap gap-2 mt-2">
+                                            {company.productImageUrls && company.productImageUrls.length > 0 ? (
+                                                company.productImageUrls.map((url, index) => (
+                                                    <img
+                                                        key={index}
+                                                        src={url}
+                                                        alt={`Product ${index + 1}`}
+                                                        style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                                                        onClick={() => openModal(company.productImageUrls, index)}
+                                                    />
+                                                ))
+                                            ) : (
+                                                company.productImage ? (
+                                                    <img
+                                                        src={company.productImage}
+                                                        alt="Product"
+                                                        style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '4px', cursor: 'pointer' }}
+                                                        onClick={() => openModal([company.productImage], 0)}
+                                                    />
+                                                ) : 'N/A'
+                                            )}
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -397,6 +556,14 @@ export default function CompanyCard({ company, domains, orgTypes }) {
                     </div>
                 )}
             </div>
+
+            {/* Render Image Viewer Modal */}
+            <ImageModal
+                isOpen={modalConfig.isOpen}
+                images={modalConfig.images}
+                initialIndex={modalConfig.index}
+                onClose={closeModal}
+            />
         </div>
     );
 }

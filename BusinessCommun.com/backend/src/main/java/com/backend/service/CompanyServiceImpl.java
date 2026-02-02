@@ -103,14 +103,14 @@ public class CompanyServiceImpl implements CompanyService{
         OrganizationTypeEntity orgType = orgRepo.findById(dto.getOrgTypeId())
                 .orElseThrow(() -> new ResourceNotFoundException("OrgType not found"));
 
-        // CompanyOwner creation
+        // CompanyOwner creation or update (ensure it syncs with form data)
         CompanyOwner owner = ownerRepo.findByUserId(user.getId())
-                .orElseGet(() -> {
-                    CompanyOwner newOwner = mapper.map(dto, CompanyOwner.class);
-                    newOwner.setUser(user);
-                    newOwner = ownerRepo.save(newOwner);
-                    return newOwner;
-                });
+                .orElse(new CompanyOwner());
+        
+        owner.setOwnerName(dto.getOwnerName());
+        owner.setMobileNumber(dto.getMobileNumber());
+        owner.setUser(user);
+        owner = ownerRepo.save(owner);
 
         // DTO to Company Entity
         CompanyEntity company = mapper.map(dto, CompanyEntity.class);
@@ -132,6 +132,24 @@ public class CompanyServiceImpl implements CompanyService{
         pitch.setWebsite(dto.getWebsite());
 
         pitch.setCompany(company);
+        
+        // Handle Multiple Product Images
+        if (dto.getProductImageUrls() != null && !dto.getProductImageUrls().isEmpty()) {
+            java.util.List<com.backend.entities.ProductImageEntity> images = new java.util.ArrayList<>();
+            for (String url : dto.getProductImageUrls()) {
+                com.backend.entities.ProductImageEntity img = new com.backend.entities.ProductImageEntity();
+                img.setImageUrl(url);
+                img.setPitch(pitch);
+                images.add(img);
+            }
+            pitch.setProductImages(images);
+            
+            // Fallback: Set the first image as the main product image for backward compatibility
+            if(pitch.getProductImage() == null || pitch.getProductImage().isEmpty()){
+                 pitch.setProductImage(dto.getProductImageUrls().get(0));
+            }
+        }
+
         company.setPitch(pitch);
 
         company = companyRepo.save(company);
@@ -188,13 +206,44 @@ public class CompanyServiceImpl implements CompanyService{
                 .orElseThrow(() -> new ResourceNotFoundException("OrgType not found")));
         }
 
+        // Update Logo if provided
+        if (dto.getLogoUrl() != null) {
+            company.setLogoUrl(dto.getLogoUrl());
+        }
+
         // Update Pitch
         if (company.getPitch() != null) {
             PitchEntity pitch = company.getPitch();
             pitch.setTitle(dto.getTitle());
             pitch.setDescription(dto.getDescription());
-            pitch.setProductImage(dto.getProductImage());
             pitch.setWebsite(dto.getWebsite());
+
+            // Handle Product Image Gallery Updates
+            if (dto.getProductImageUrls() != null) {
+                // 1. Remove images that are no longer in the request list
+                pitch.getProductImages().removeIf(img -> !dto.getProductImageUrls().contains(img.getImageUrl()));
+
+                // 2. Add new images that aren't already in the entity list
+                java.util.List<String> existingUrls = pitch.getProductImages().stream()
+                        .map(com.backend.entities.ProductImageEntity::getImageUrl)
+                        .toList();
+
+                for (String url : dto.getProductImageUrls()) {
+                    if (!existingUrls.contains(url)) {
+                        com.backend.entities.ProductImageEntity img = new com.backend.entities.ProductImageEntity();
+                        img.setImageUrl(url);
+                        img.setPitch(pitch);
+                        pitch.getProductImages().add(img);
+                    }
+                }
+                
+                // Update fallback main image if needed
+                if (!pitch.getProductImages().isEmpty()) {
+                    pitch.setProductImage(pitch.getProductImages().get(0).getImageUrl());
+                } else {
+                    pitch.setProductImage(null);
+                }
+            }
         }
 
         // Update Connect Info
@@ -218,8 +267,9 @@ public class CompanyServiceImpl implements CompanyService{
             });
         });
         
+        company.setStatus(CompanyStatus.PENDING);
         companyRepo.save(company);
-        logActivity("Company " + company.getName() + " updated their details", CompanyStatus.APPROVED);
+        logActivity("Company " + company.getName() + " updated details and moved to PENDING", CompanyStatus.PENDING);
 
         return new ApiResponseWrapper<>("success", "Company Details Updated Successfully", null);
     }
@@ -448,6 +498,12 @@ public class CompanyServiceImpl implements CompanyService{
         dto.setDescription(company.getPitch().getDescription());
         dto.setProductImage(company.getPitch().getProductImage());
         dto.setWebsite(company.getPitch().getWebsite());
+        
+        if (company.getPitch().getProductImages() != null) {
+            dto.setProductImageUrls(company.getPitch().getProductImages().stream()
+                    .map(com.backend.entities.ProductImageEntity::getImageUrl)
+                    .toList());
+        }
     }
 
     return new ApiResponseWrapper<>("success", "Company fetched successfully", dto);
@@ -502,6 +558,12 @@ public class CompanyServiceImpl implements CompanyService{
                 dto.setDescription(company.getPitch().getDescription());
                 dto.setProductImage(company.getPitch().getProductImage());
                 dto.setWebsite(company.getPitch().getWebsite());
+                
+                if (company.getPitch().getProductImages() != null) {
+                    dto.setProductImageUrls(company.getPitch().getProductImages().stream()
+                            .map(com.backend.entities.ProductImageEntity::getImageUrl)
+                            .toList());
+                }
             }
 
             // Connect Info - Check for Investor or Partner

@@ -64,18 +64,41 @@ function CompanyPitch() {
             reset(formData);
             if (formData.pitch) setPitchLength(formData.pitch.length);
             if (formData.description) setDescriptionLength(formData.description.length);
+
+            // Restore Images
+            if (formData.images && formData.images.length > 0) {
+                const files = Array.from(formData.images);
+
+                // Priority: Use saved previews if available (matches Company Form logic)
+                if (formData.pitch_image_previews && formData.pitch_image_previews.length > 0) {
+                    setImagePreviews(formData.pitch_image_previews);
+                } else {
+                    const previews = files.map(file => ({
+                        file,
+                        preview: URL.createObjectURL(file), // Fallback regeneration
+                        name: file.name
+                    }));
+                    setImagePreviews(previews);
+                }
+
+                // Restore File Input (using setTimeout to ensure DOM is ready)
+                setTimeout(() => {
+                    const dt = new DataTransfer();
+                    files.forEach(file => dt.items.add(file));
+                    const input = document.getElementById("imageInput");
+                    if (input) {
+                        input.files = dt.files;
+                        // Force RHF to recognize the files
+                        setValue("images", dt.files, { shouldValidate: true, shouldDirty: true });
+                        console.log("Restored files in DOM and RHF:", dt.files);
+                    }
+                }, 100);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Cleanup image previews to prevent memory leaks
-    useEffect(() => {
-        return () => {
-            imagePreviews.forEach(({ preview }) => {
-                if (preview) URL.revokeObjectURL(preview);
-            });
-        };
-    }, [imagePreviews]);
+
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files || []);
@@ -121,30 +144,24 @@ function CompanyPitch() {
         }
     };
 
-    const handleRoleSelect = async (role) => {
-        // Validate form before proceeding
-        const isValid = await trigger();
-        if (!isValid) {
-            // Scroll to first error for better UX
-            const firstErrorField = Object.keys(errors)[0];
-            if (firstErrorField) {
-                const element = document.querySelector(`[name="${firstErrorField}"]`);
-                if (element) {
-                    element.scrollIntoView({ behavior: "smooth", block: "center" });
-                    element.focus();
-                }
-            }
-            return; // Don't proceed if validation fails
-        }
+    const handleRoleSelect = (role) => {
+        return handleSubmit((data) => {
+            console.log("Pitch Form Data Submitted:", data);
 
-        const data = getValues();
-        // Store image metadata (not File objects, as they can't be serialized)
-        // The actual File objects are already stored in the form's images field
-        updateForm({
-            ...data,
-            imageCount: imagePreviews.length // Store count for reference
+            // Decouple from RHF input value. Use imagePreviews as the Source of Truth.
+            // This ensures exactly what the user SEES is what gets SAVED.
+            const imagesArray = imagePreviews.map(p => p.file);
+            console.log("Saving images from Previews State:", imagesArray);
+
+            // Store image metadata, data, AND PREVIEWS explicitly
+            updateForm({
+                ...data,
+                images: imagesArray,
+                imageCount: imagePreviews.length,
+                pitch_image_previews: imagePreviews
+            });
+            choosePath(role);
         });
-        choosePath(role);
     };
 
 
@@ -237,11 +254,14 @@ function CompanyPitch() {
                         <input
                             id="imageInput"
                             {...register("images")}
+                            onChange={(e) => {
+                                register("images").onChange(e);
+                                handleImageChange(e);
+                            }}
                             type="file"
                             multiple
                             accept="image/*"
                             className={`pc-input ${errors.images ? "pc-error-field" : ""}`}
-                            onChange={handleImageChange}
                             style={{ paddingLeft: "35px" }}
                         />
                     </div>
@@ -338,7 +358,7 @@ function CompanyPitch() {
                             <button
                                 type="button"
                                 className="pc-btn"
-                                onClick={() => handleRoleSelect("partner")}
+                                onClick={handleRoleSelect("partner")}
                             >
                                 Partner
                             </button>
@@ -346,7 +366,7 @@ function CompanyPitch() {
                             <button
                                 type="button"
                                 className="pc-btn"
-                                onClick={() => handleRoleSelect("investor")}
+                                onClick={handleRoleSelect("investor")}
                             >
                                 Investor
                             </button>
