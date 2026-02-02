@@ -383,6 +383,22 @@ public class CompanyServiceImpl implements CompanyService{
         dto.setProductImage(company.getPitch().getProductImage());
         dto.setWebsite(company.getPitch().getWebsite());
     }
+    investorRepo.findFirstByCompanyId(company.getId()).ifPresent(investor -> {
+        dto.setConnectType("INVESTOR");
+        dto.setRequirement(investor.getRequirement());
+        dto.setSkills(investor.getSkills());
+        dto.setEquityPercentage(investor.getEquityPercentage());
+        dto.setInvestmentRange(investor.getInvestmentRange());
+        dto.setMinimumQualification(investor.getMinimumQualification());
+    });
+
+    partnerRepo.findFirstByCompanyId(company.getId()).ifPresent(partner -> {
+        dto.setConnectType("PARTNER");
+        dto.setRequirement(partner.getRequirement());
+        dto.setSkills(partner.getSkills());
+        dto.setEquityPercentage(partner.getEquityPercentage());
+        dto.setMinimumQualification(partner.getMinimumQualification());
+    });
 
     return new ApiResponseWrapper<>("success", "Company fetched successfully", dto);
 }

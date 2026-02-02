@@ -22,3 +22,12 @@ export async function register(firstName, lastName, email, password) {
         console.log('Error', ex)
     }
 }
+
+export async function saveUserDetailsForPremierInvestor() {
+    try {
+        const response = await api.post("/api/user/get-user-details");
+        return response.data;
+    } catch (ex) {
+        console.log('Error', ex);
+    }
+}

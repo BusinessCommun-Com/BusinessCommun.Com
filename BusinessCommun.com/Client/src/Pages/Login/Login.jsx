@@ -5,7 +5,7 @@ import img1 from "../../assets/UI_Images/_0013.png";
 import { useNavigate, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaFacebook } from "react-icons/fa";
-import { login } from "../../Services/users";
+import { login, saveUserDetailsForPremierInvestor } from "../../Services/users";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Providers/AuthProvider";
 import { decodeUserFromToken } from "../../Services/auth";
@@ -57,6 +57,8 @@ function Login() {
           const userData = decodeUserFromToken(token);
           setUser(userData);
           
+          const userDetails = await saveUserDetailsForPremierInvestor();
+          console.log("User details saved:", userDetails);
           //role based navigation
           if (userData.roles.includes("ROLE_ADMIN")) {
             navigate("/admin/");
@@ -212,7 +214,7 @@ function Login() {
 
             <p className="text-muted text-center mt-3 mt-2">
               Don't have an account?{" "}
-              <Link to="/home/register" className="text-primary ml-1">
+              <Link to="/register" className="text-primary ml-1">
                 Register Here
               </Link>
             </p>

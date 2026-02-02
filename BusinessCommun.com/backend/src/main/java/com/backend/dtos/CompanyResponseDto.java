@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CompanyResponseDto {
     
-    private Long id;
+   private Long id;
     private String ownerName;
     private String mobileNumber;
 

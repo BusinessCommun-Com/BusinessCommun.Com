@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./PremiumService.css";
 import { fetchInvestors } from '../../Services/premiumService';
 import emailjs from '@emailjs/browser';
+import api from "../../Services/api";
 
 const PremiumService = () => {
     const [userId, setUserId] = useState('');
@@ -75,10 +76,9 @@ const PremiumService = () => {
 
         try {
             const amount = getPrice(selectedPlan);
-            const orderRes = await fetch('http://localhost:5000/api/premium/create-razorpay-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount })
+            const orderRes = await api.post('/api/premium/create-razorpay-order', {
+                amount: amount, userId: userId,
+                plan: selectedPlan.name 
             });
             const orderData = await orderRes.json();
 
