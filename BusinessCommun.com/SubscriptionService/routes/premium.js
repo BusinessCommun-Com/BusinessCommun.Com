@@ -32,6 +32,8 @@ router.post('/create-razorpay-order', async (req, res) => {
 router.post('/verify-payment', async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId, plan, amount } = req.body;
 
+  console.log(razorpay_order_id);
+
   // Verify signature
   const generated_signature = crypto
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
@@ -46,7 +48,7 @@ router.post('/verify-payment', async (req, res) => {
       // 1. Update User Premium Status
       // Set is_premium to 1 and store the payment ID as the subscription reference
       await connection.query(
-        'UPDATE users SET is_premium = 1, subscription_id = ? WHERE id = ?',
+        'UPDATE users SET is_premium = 1, subscription_id = ? WHERE userId = ?',
         [razorpay_payment_id, userId]
       );
 
@@ -59,12 +61,12 @@ router.post('/verify-payment', async (req, res) => {
       await connection.commit();
 
       const [userRows] = await connection.query(
-        'SELECT email, username FROM users WHERE id = ?',
+        'SELECT email, username FROM users WHERE userId = ?',
         [userId]
       );
 
       const userEmail = userRows.length > 0 ? userRows[0].email : null;
-      const userName = userRows.length > 0 ? userRows[0].name : userId;
+      const userName = userRows.length > 0 ? userRows[0].username : userId;
 
       res.json({
         status: 'success',
@@ -94,7 +96,7 @@ router.get("/investors", async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      "SELECT is_premium FROM users WHERE id = ?",
+      "SELECT is_premium FROM users WHERE userId = ?",
       [userId],
     );
 

@@ -22,7 +22,7 @@ async function getIdAndEmail(token) {
             Authorization: `Bearer ${token}`
         }
     });
-    return response.data;
+    return response.data.data;
 }
 
 module.exports = {
