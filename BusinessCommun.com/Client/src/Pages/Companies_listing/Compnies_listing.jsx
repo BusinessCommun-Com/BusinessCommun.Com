@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Companies_listing.css";
 import img from "../../assets/Company_images/compImag.jpg";
 import { Link, useLocation } from "react-router-dom";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { getApprovedCompDetails } from "../../Services/companyDetails";
 import SlideShow from "../../Component/SlideShow/SlideShow";
 import LoadingSpinner from "../../Component/Loading/LoadingSpinner";
@@ -67,28 +68,36 @@ function Companies_listing() {
           <div className="row g-4">
             {!loading && companies && companies.length > 0
               ? companies.map((company) => (
-                <div className="col-12 col-sm-6 col-lg-3" key={company.id}>
-                  <Link
-                    to={`/home/company-details/${company.id}`}
-                    state={{ company }}
-                    className="company-card-link"
-                  >
-                    <div className="card company-card">
-                      <img
-                        src={company.logoUrl || img}
-                        className="card-img-top company-card-img"
-                        alt={company.name}
-                      />
-                      <div className="card-body">
-                        <h5 className="card-title company-card-title">
-                          {company.name}
-                        </h5>
-                        <p className="card-text company-card-text">
-                          {company.pitch}
-                        </p>
-                        <span className="company-card-cta">
-                          View company details →
-                        </span>
+                  <div className="col-12 col-sm-6 col-lg-3" key={company.id}>
+                    <Link
+                      to={`/home/company-details/${company.id}`}
+                      state={{ company }}
+                      className="company-card-link"
+                    >
+                      <div className="card company-card">
+                        <img
+                          src={company.logoUrl || img}
+                          className="card-img-top company-card-img"
+                          alt={company.name}
+                        />
+                        <div className="card-body">
+                          <h5 className="card-title company-card-title">
+                            {company.name}
+                          </h5>
+                          <p className="card-text company-card-text">
+                            {company.pitch}
+                          </p>
+                        </div>
+                        <div className="company-card-location">
+                          <span className="location-icon">
+                            <FaMapMarkerAlt />
+                          </span>
+                          <span className="location-text">
+                            {company.city && company.state
+                              ? `${company.city}, ${company.state}`
+                              : company.city || company.state || "—"}
+                          </span>
+                        </div>
                       </div>
                     </Link>
                   </div>
