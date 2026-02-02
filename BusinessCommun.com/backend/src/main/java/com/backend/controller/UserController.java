@@ -71,7 +71,7 @@ public class UserController {
 		System.out.println("in getIdAndEmail " + authentication.getPrincipal());
 		return ResponseEntity.ok()
 				.body(new ApiResponseWrapper<>("success", "Retrieved user details", 
-						userService.getIdAndEmail(((JWTDTO) authentication.getPrincipal()))));
+		
+				userService.getIdAndEmail(((JWTDTO) authentication.getPrincipal()))));
 	}
-
 }
