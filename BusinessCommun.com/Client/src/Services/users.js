@@ -31,3 +31,24 @@ export async function saveUserDetailsForPremierInvestor() {
         console.log('Error', ex);
     }
 }
+
+export async function syncAndFetchUser() {
+    try {
+        
+        const token = localStorage.getItem("token");
+
+        await api.post("/api/user/get-user-details", {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const response = await api.get("/api/user/me", {
+            headers: { Authorization: `Bearer ${token}` }
+        });;
+
+        // Return the data object: { userId: 1 }
+        return response.data;
+    } catch (ex) {
+        console.error('User sync/fetch failed:', ex);
+        throw ex;
+    }
+}

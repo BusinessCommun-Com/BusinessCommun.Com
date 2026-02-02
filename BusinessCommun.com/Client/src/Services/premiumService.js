@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api/premium';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8765/api/premium';
 
 export async function fetchInvestors(userId) {
   const url = userId ? `${API_BASE}/investors?userId=${encodeURIComponent(userId)}` : `${API_BASE}/investors`;
