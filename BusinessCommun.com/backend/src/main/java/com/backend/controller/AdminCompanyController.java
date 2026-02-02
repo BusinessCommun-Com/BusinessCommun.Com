@@ -92,4 +92,11 @@ public class AdminCompanyController {
     public ResponseEntity<?> permanent(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.permanentDelete(id));
     }
+    
+ //Admin Company Profile View
+    @GetMapping("/{id}")
+    public ResponseEntity<?> viewCompanyById(@PathVariable Long id) {
+        return ResponseEntity.ok(companyService.getCompanyDetailsForAdmin(id));
+    }
+
 }

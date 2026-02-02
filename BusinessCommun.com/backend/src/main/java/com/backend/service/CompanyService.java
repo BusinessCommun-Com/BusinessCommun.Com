@@ -53,6 +53,7 @@ public interface CompanyService {
     ApiResponseWrapper<List<ApprovedCompanyTableDto>> getRejectedCompaniesTable();
 
 
+    ApiResponseWrapper<CompanyResponseDto> getCompanyDetailsForAdmin(Long id);
 
     ApiResponseWrapper<List<CompanyResponseDto>> getCompaniesByUserId(Long userId);
 }

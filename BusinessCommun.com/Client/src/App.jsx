@@ -29,6 +29,7 @@ import PendingRequests from "./Admin/Pages/PendingRequests";
 import ApprovedCompanies from "./Admin/Pages/ApprovedCompanies";
 import RejectedCompanies from "./Admin/Pages/RejectedCompanies";
 import AdminManagement from "./Admin/Pages/AdminManagement";
+import AdminCompanyDetails from "./Admin/Pages/AdminCompanyDetails";
 import { ProtectedRoute } from "./Component/ProtectedRoute/ProtectedRoute.jsx";
 import Companies_listing from "./Pages/Companies_listing/Compnies_listing.jsx";
 import SlideShow from "./Component/SlideShow/SlideShow.jsx";
@@ -147,10 +148,11 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="companies" element={<Companies />} />
-          <Route path="company/:id" element={<AdminCompanyProfile />} />
+          
           <Route path="pending" element={<PendingRequests />} />
           <Route path="approved" element={<ApprovedCompanies />} />
           <Route path="rejected" element={<RejectedCompanies />} />
+          <Route path="company/:id" element={<AdminCompanyDetails />} />
 
           <Route path="admins" element={<AdminManagement />} />
         </Route>
