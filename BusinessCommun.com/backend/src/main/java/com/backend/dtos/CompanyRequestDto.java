@@ -1,10 +1,13 @@
 package com.backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CompanyRequestDto {
 
 	private String name;
@@ -29,6 +32,7 @@ public class CompanyRequestDto {
     private String title;
     private String description;
     private String productImage;
+    private java.util.List<String> productImageUrls;
     private String website;
 
     // Connect Type

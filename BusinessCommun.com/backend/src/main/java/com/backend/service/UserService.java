@@ -12,6 +12,7 @@ public interface UserService {
 
 	 ApiResponseWrapper<AuthResponse> authenticateUser(AuthRequest dto);
 	ApiResponse registerUser(UserRegistration dto);
+	ApiResponseWrapper<AuthResponse> updateUser(Long id, UserRegistration dto);
     SubscriptionServiceResponseDto getIdAndEmail(JWTDTO jwtDto);
 
 }

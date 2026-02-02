@@ -57,9 +57,12 @@ public class SecurityConfiguration {
 				 .requestMatchers("/admin/**").hasRole("ADMIN")
 				.requestMatchers(HttpMethod.GET, "/companies/approved").permitAll()
 
-				.requestMatchers(HttpMethod.POST, "/companies/register").hasRole("USER")
+				.requestMatchers(HttpMethod.POST, "/companies/register").hasAnyRole("USER", "OWNER")
 				.requestMatchers(HttpMethod.GET, "/companies/approved/{id}").hasAnyRole("USER", "OWNER", "ADMIN")
 				.requestMatchers(HttpMethod.GET, "/companies/my-company").hasRole("OWNER")
+				.requestMatchers(HttpMethod.PUT, "/companies/update/**").authenticated()
+				.requestMatchers(HttpMethod.DELETE, "/companies/delete/**").authenticated()
+				.requestMatchers(HttpMethod.PUT, "/users/update/**").authenticated()
 				.requestMatchers(HttpMethod.GET, "/users/getIdAndEmail").hasAnyRole("USER", "OWNER", "ADMIN")
 				.requestMatchers(HttpMethod.GET, "/utils/**").permitAll()
 				.requestMatchers(HttpMethod.OPTIONS).permitAll()

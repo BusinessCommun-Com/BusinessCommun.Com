@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.dtos.ApiResponseWrapper;
@@ -59,6 +60,10 @@ public class UserController {
 		return ResponseEntity.ok(userService.registerUser(dto));
 	}
 
+	@PutMapping("/update/{id}")
+	public ResponseEntity<ApiResponseWrapper<AuthResponse>> updateUser(@org.springframework.web.bind.annotation.PathVariable Long id, @RequestBody UserRegistration dto) {
+		return ResponseEntity.ok(userService.updateUser(id, dto));
+  }
 	@GetMapping("/getIdAndEmail")
 	public ResponseEntity<ApiResponseWrapper<SubscriptionServiceResponseDto>> getIdAndEmail(
 			Authentication authentication) {

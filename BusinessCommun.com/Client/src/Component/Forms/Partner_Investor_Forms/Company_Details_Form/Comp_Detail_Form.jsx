@@ -4,7 +4,7 @@ import { FaBuilding, FaReceipt } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { FaMobileAlt } from "react-icons/fa";
 import { FaIndustry } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { FaRegBuilding } from "react-icons/fa";
 import { FaDollarSign } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
@@ -86,7 +86,13 @@ function CompanyDetail() {
       .max(100),
     comp_logo_url: yup
       .mixed()
-      .required("Logo is required"),
+      .test("is-selected", "Logo is required", (value) => {
+        if (!value) return false;
+        // If it's a FileList (from input), check length
+        if (value instanceof FileList) return value.length > 0;
+        // If it's already a File object or string (URL)
+        return true;
+      }),
     establishment_year: yup
       .date()
       .typeError("Invalid date")
@@ -96,11 +102,12 @@ function CompanyDetail() {
 
   const {
     register, // connects input fields to form
-    handleSubmit, // handles submit event
-    reset, // resets form fields
-    formState: { errors }, // tracks validation errors
-    setValue, // used for non-native input fields which come from custom library
+    handleSubmit,
+    reset,
+    formState: { errors },
+    setValue,
     getValues,
+    control, // Needed for Controller
   } = useForm({
     resolver: yupResolver(schema), // connect yup validation
   });
@@ -144,7 +151,21 @@ function CompanyDetail() {
     fetchData();
 
     if (formData && Object.keys(formData).length > 0) {
-      reset(formData); // restore saved values
+      // Handle Date Format for Input
+      const formattedData = { ...formData };
+      if (formData.establishment_year) {
+        try {
+          // Check if it's a Date object or string
+          const d = new Date(formData.establishment_year);
+          if (!isNaN(d.getTime())) {
+            formattedData.establishment_year = d.toISOString().split('T')[0];
+          }
+        } catch (e) {
+          console.error("Date parsing error", e);
+        }
+      }
+
+      reset(formattedData); // restore saved values
       if (formData.comp_logo_url_preview) {
         setPreview(formData.comp_logo_url_preview); // restore image preview
       }
@@ -160,6 +181,9 @@ function CompanyDetail() {
       <form onSubmit={handleSubmit(onSubmit)} className="pc-form" noValidate>
         {/* Orginization logo */}
         <div className="pc-label">
+          <span style={{ textAlign: "center", marginBottom: "5px" }}>
+            Company Logo
+          </span>
           <div style={{ justifyItems: "center" }}>
             {/* Circle Container */}
             <div
@@ -198,11 +222,17 @@ function CompanyDetail() {
               id="orgLogoInput"
               type="file"
               accept="image/*"
-              {...register("comp_logo_url")}
-              onChange={(e) => {
-                handleFileChange(e);
-                setValue("comp_logo_url", e.target.files);
-              }}
+              {...(() => {
+                const { onChange, ...rest } = register("comp_logo_url");
+                return {
+                  ...rest,
+                  onChange: (e) => {
+                    onChange(e); // Call RHF's onChange
+                    handleFileChange(e);
+                    // setValue("comp_logo_url", e.target.files); // Not needed if onChange(e) is called!
+                  }
+                };
+              })()}
               style={{ display: "none" }}
             />
 
@@ -279,33 +309,38 @@ function CompanyDetail() {
         <label className="pc-label">
           Mobile Number
           <div style={{ position: "relative" }}>
-            <PhoneInput
-              country={"in"} // default country (🇮🇳)
-              className="phone-input-wrapper"
-              inputStyle={{
-                height: "45px",
-                background: "#ffffff",
-                border: "1px solid rgba(130, 170, 255, 0.3)",
-                borderRadius: "10px",
-                padding: "10px 35px !important",
-                fontSize: "15px",
-                color: "#001f3f",
-                marginTop: "6px",
-                transition: "border 0.2s, background 0.2s",
-                width: "100%",
-                boxSizing: "border-box",
-              }}
-              buttonStyle={{
-                border: "none",
-                background: "transparent",
-                color: "#001f3f",
-              }}
-              containerStyle={{
-                width: "100%",
-              }}
-              // {...register("mob_no")}
-              placeholder="Enter mobile number"
-              onChange={(value) => setValue("mob_no", value)} // to sync with react-hook-form
+            <Controller
+              name="mob_no"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <PhoneInput
+                  country={"in"}
+                  value={value}
+                  onChange={onChange}
+                  className="phone-input-wrapper"
+                  inputStyle={{
+                    height: "45px",
+                    background: "#ffffff",
+                    border: "1px solid rgba(130, 170, 255, 0.3)",
+                    borderRadius: "10px",
+                    padding: "10px 35px !important",
+                    fontSize: "15px",
+                    color: "#001f3f",
+                    marginTop: "6px",
+                    transition: "border 0.2s, background 0.2s",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                  buttonStyle={{
+                    border: "none",
+                    background: "transparent",
+                    color: "#001f3f",
+                  }}
+                  containerStyle={{ width: "100%" }}
+                  placeholder="Enter mobile number"
+                />
+              )}
             />
           </div>
           {errors.mob_no && <p className="pc-error">{errors.mob_no.message}</p>}
@@ -422,9 +457,16 @@ function CompanyDetail() {
             {/* Date Input */}
             <input
               {...register("establishment_year")}
-              ref={dateInputRef}
+              ref={(e) => {
+                register("establishment_year").ref(e);
+                dateInputRef.current = e;
+              }}
               type="date"
-              onChange={handleDateChange}
+              onChange={(e) => {
+                // Standard RHF onChange update
+                register("establishment_year").onChange(e);
+                handleDateChange(e);
+              }}
               className={`pc-input ${errors.establishment_year ? "pc-error-field" : ""
                 }`}
               style={{

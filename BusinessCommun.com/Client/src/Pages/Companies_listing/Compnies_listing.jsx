@@ -67,44 +67,28 @@ function Companies_listing() {
           <div className="row g-4">
             {!loading && companies && companies.length > 0
               ? companies.map((company) => (
-                  <div className="col-12 col-sm-6 col-lg-3" key={company.id}>
-                    <Link
-                      to={`/home/company-details/${company.id}`}
-                      state={{ company }}
-                      className="company-card-link"
-                    >
-                      <div className="card company-card">
-                        <img
-                          src={img}
-                          className="card-img-top company-card-img"
-                          alt={company.name}
-                        />
-                        <div className="card-body">
-                          <h5 className="card-title company-card-title">
-                            {company.name}
-                          </h5>
-                          <p className="card-text company-card-text">
-                            {company.pitch}
-                          </p>
-                        </div>
-                        {(company.city || company.state) && (
-                          <div className="company-card-location">
-                            <svg
-                              className="location-icon"
-                              viewBox="0 0 24 24"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                            >
-                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5z" />
-                            </svg>
-                            <span className="location-text">
-                              {company.city && company.state
-                                ? `${company.city}, ${company.state}`
-                                : company.city || company.state}
-                            </span>
-                          </div>
-                        )}
+                <div className="col-12 col-sm-6 col-lg-3" key={company.id}>
+                  <Link
+                    to={`/home/company-details/${company.id}`}
+                    state={{ company }}
+                    className="company-card-link"
+                  >
+                    <div className="card company-card">
+                      <img
+                        src={company.logoUrl || img}
+                        className="card-img-top company-card-img"
+                        alt={company.name}
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title company-card-title">
+                          {company.name}
+                        </h5>
+                        <p className="card-text company-card-text">
+                          {company.pitch}
+                        </p>
+                        <span className="company-card-cta">
+                          View company details →
+                        </span>
                       </div>
                     </Link>
                   </div>

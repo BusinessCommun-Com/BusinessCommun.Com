@@ -46,6 +46,8 @@ public interface CompanyService {
 
     ApiResponseWrapper<String> registerCompany(CompanyRequestDto dto) throws IOException;
 
+    ApiResponseWrapper<String> updateCompany(Long id, CompanyRequestDto dto) throws IOException;
+
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getRejectedCompanies();
 
     ApiResponseWrapper<List<ShortCompanyResponseDto>> getDeletedCompanies();

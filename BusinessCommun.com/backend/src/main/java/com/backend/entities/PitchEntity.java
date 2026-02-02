@@ -27,4 +27,6 @@ public class PitchEntity extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id")
     private CompanyEntity company;
+    @OneToMany(mappedBy = "pitch", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<ProductImageEntity> productImages = new java.util.ArrayList<>();
 }

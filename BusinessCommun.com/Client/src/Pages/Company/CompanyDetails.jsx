@@ -1,22 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams, Link, useNavigate } from "react-router-dom";
-import companies from "../../data/companies";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getCompanyDetailsById } from "../../Services/companyDetails";
-import "../Companies_listing/Companies_listing.css";
-import "./CompanyDetails.css";
+import { FaMapMarkerAlt, FaGlobe, FaBuilding, FaDollarSign, FaEnvelope, FaWhatsapp, FaArrowLeft, FaBriefcase, FaUser, FaRegCalendarAlt } from "react-icons/fa";
 import compImage from "../../assets/Company_images/compImag.jpg";
+import ImageModal from "../../Component/Common/ImageModal";
+import "./CompanyDetails.css";
 
-export default function CompanyProfile() {
+function CompanyDetails() {
   const { id } = useParams();
-  const location = useLocation();
-  const companyFromState = location.state && location.state.company;
-  const companyId = Number(id);
   const navigate = useNavigate();
-  const company = companyFromState || companies.find((c) => c.id === companyId);
+  const companyId = Number(id);
 
   const [companyDetails, setCompanyDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Modal State
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    images: [],
+    index: 0
+  });
+
+  const openModal = (images, index = 0) => {
+    setModalConfig({
+      isOpen: true,
+      images: Array.isArray(images) ? images : [images],
+      index
+    });
+  };
+
+  const closeModal = () => {
+    setModalConfig({ ...modalConfig, isOpen: false });
+  };
 
   useEffect(() => {
     async function fetchCompanyDetails() {
@@ -24,7 +40,6 @@ export default function CompanyProfile() {
         setLoading(true);
         const response = await getCompanyDetailsById(companyId);
         setCompanyDetails(response.data);
-        console.log("Fetched company details:", response);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -35,17 +50,15 @@ export default function CompanyProfile() {
   }, [companyId]);
 
   const handleConnect = () => {
-    const mobile = "8999224867"; //companyDetails?.ownerMobileNumber;
+    const mobile = companyDetails?.mobileNumber || "8999224867";
 
     if (!mobile) {
       alert("Owner mobile number not available!");
       return;
     }
 
-    // Convert to international format (India)
-    let phone = mobile.replace(/\D/g, ""); // remove non-numbers
-
-    if (!phone.startsWith("91")) {
+    let phone = mobile.replace(/\D/g, "");
+    if (!phone.startsWith("91") && phone.length === 10) {
       phone = "91" + phone;
     }
 
@@ -54,32 +67,37 @@ I am interested in your company "${companyDetails?.name}".
 I found it on BusinessCommun platform.`;
 
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
     window.open(url, "_blank");
   };
 
   if (loading) {
     return (
-      <div style={{ padding: 40 }}>
-        <h2>Loading company details...</h2>
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ padding: 40 }}>
-        <h2>Error loading company details: {error}</h2>
+      <div className="container mt-5 text-center">
+        <div className="alert alert-danger" role="alert">
+          <h2>Error loading company details</h2>
+          <p>{error}</p>
+          <button className="btn btn-primary mt-3" onClick={() => navigate(-1)}>Go Back</button>
+        </div>
       </div>
     );
   }
 
   if (!companyDetails) {
     return (
-      <div style={{ padding: 40 }}>
+      <div className="container mt-5 text-center">
         <h2>Company not found</h2>
         <p>The requested company does not exist.</p>
-        <Link to="/home">Return home</Link>
+        <Link to="/home" className="btn btn-primary">Return Home</Link>
       </div>
     );
   }
@@ -114,136 +132,123 @@ I found it on BusinessCommun platform.`;
   return (
     <div className="company-profile">
       <div className="company-card-panel">
-        {/* ================= HEADER ================= */}
         <div className="profile-header">
           <img
             className="profile-logo"
             src={companyDetails.logoUrl || compImage}
             alt={companyDetails.name}
+            style={{ cursor: 'pointer' }}
+            onClick={() => openModal(companyDetails.logoUrl || compImage)}
           />
-
           <div style={{ flex: 1 }}>
             <h2 className="profile-title">{companyDetails.name}</h2>
-
-            {/* ✅ Owner Name at Top */}
-            {companyDetails?.ownerName && (
-              <p
-                style={{ fontSize: "16px", color: "#555", marginBottom: "6px" }}
-              >
-                Owned by <strong>{companyDetails?.ownerName}</strong>
-              </p>
-            )}
-
+            <p style={{ fontSize: "16px", color: "#666", marginBottom: "6px" }}>
+              Owned by <strong>{companyDetails?.ownerName || "—"}</strong>
+            </p>
             <p className="profile-pitch">
-              {companyDetails.title ||
-                companyDetails.description ||
-                "Company profile and key details — fields omitted when not provided."}
+              {companyDetails.title || "No pitch title available"}
             </p>
           </div>
         </div>
 
-        {/* ================= DETAILS GRID ================= */}
         <div className="profile-grid">
-          {renderField("Founded in", companyDetails?.establishmentYear)}
-          {renderField("Domain", companyDetails?.domain)}
-          {renderField("Organization Type", companyDetails?.orgType)}
-          {renderField("Website", companyDetails?.website, true)}
-          {renderField("City", companyDetails?.city)}
-          {renderField("State", companyDetails?.state)}
-          {companyDetails?.revenue !== null &&
-            companyDetails?.revenue !== undefined && (
-              <div className="detail-item">
-                <span className="detail-key">Annual Revenue</span>
-                <div>{formatRevenue(companyDetails.revenue)}</div>
-              </div>
-            )}
-          {renderField("Equity %", companyDetails?.equityPercentage)}
-          {renderField("Connect Type", companyDetails?.connectType)}
+          <div className="detail-item">
+            <span className="detail-key"><FaRegCalendarAlt /> Founded in</span>
+            <div className="detail-value">{companyDetails?.establishmentYear ?? "—"}</div>
+          </div>
+          <div className="detail-item">
+            <span className="detail-key"><FaBriefcase /> Domain</span>
+            <div className="detail-value">{companyDetails?.domain || "—"}</div>
+          </div>
+          <div className="detail-item">
+            <span className="detail-key"><FaBuilding /> Org Type</span>
+            <div className="detail-value">{companyDetails?.orgType || "—"}</div>
+          </div>
+          <div className="detail-item">
+            <span className="detail-key"><FaGlobe /> Website</span>
+            <div className="detail-value">
+              {companyDetails?.website ? (
+                <a href={companyDetails.website} target="_blank" rel="noopener noreferrer">
+                  {companyDetails.website}
+                </a>
+              ) : "—"}
+            </div>
+          </div>
+          <div className="detail-item">
+            <span className="detail-key"><FaMapMarkerAlt /> City</span>
+            <div className="detail-value">{companyDetails?.city || "—"}</div>
+          </div>
+          <div className="detail-item">
+            <span className="detail-key"><FaMapMarkerAlt /> State</span>
+            <div className="detail-value">{companyDetails?.state || "—"}</div>
+          </div>
+          <div className="detail-item">
+            <span className="detail-key"><FaDollarSign /> Revenue</span>
+            <div className="detail-value">
+              {companyDetails?.revenue
+                ? `₹${companyDetails.revenue.toLocaleString()}`
+                : "—"}
+            </div>
+          </div>
         </div>
 
-        {/* ================= DESCRIPTION ================= */}
-        {companyDetails?.description && (
-          <div className="section-block">
-            <h3>Description</h3>
-            <p>{companyDetails.description}</p>
-          </div>
-        )}
+        <div className="section-block">
+          <h3>Description</h3>
+          <p className="text-justify">{companyDetails?.description || "No description available."}</p>
+        </div>
 
-        {/* ================= ADDRESS ================= */}
-        {(companyDetails?.address ||
-          companyDetails?.city ||
-          companyDetails?.state) && (
-          <div className="section-block">
-            <h3>Address</h3>
-            <p>
-              {companyDetails?.address}
-              {companyDetails?.city && `, ${companyDetails.city}`}
-              {companyDetails?.state && `, ${companyDetails.state}`}
-            </p>
-          </div>
-        )}
+        <div className="section-block">
+          <h3>Address</h3>
+          <p>
+            {companyDetails?.address || "—"}
+            {companyDetails?.city && `, ${companyDetails.city}`}
+            {companyDetails?.state && `, ${companyDetails.state}`}
+          </p>
+        </div>
 
-        {/* ================= PRODUCT ================= */}
-        {companyDetails?.productImage && (
-          <div className="section-block">
-            <h3>Product</h3>
-            <img
-              src={companyDetails.productImage}
-              alt="Product"
-              style={{
-                maxWidth: "200px",
-                marginBottom: "10px",
-                borderRadius: "8px",
-              }}
-            />
+        <div className="section-block">
+          <h3>Product Gallery</h3>
+          <div className="d-flex flex-wrap gap-3 mt-3">
+            {companyDetails?.productImageUrls && companyDetails.productImageUrls.length > 0 ? (
+              companyDetails.productImageUrls.map((url, index) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`Product ${index + 1}`}
+                  className="gallery-img-preview"
+                  onClick={() => openModal(companyDetails.productImageUrls, index)}
+                  style={{ cursor: 'pointer', width: '200px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
+                />
+              ))
+            ) : (
+              companyDetails?.productImage ? (
+                <img
+                  src={companyDetails.productImage}
+                  alt="Product"
+                  className="gallery-img-preview"
+                  onClick={() => openModal([companyDetails.productImage], 0)}
+                  style={{ cursor: 'pointer', width: '200px', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
+                />
+              ) : <p className="text-muted">No product images available</p>
+            )}
           </div>
-        )}
+        </div>
 
-        {/* ================= REQUIREMENTS & SKILLS ================= */}
-        {(companyDetails?.requirement ||
-          companyDetails?.skills ||
-          companyDetails?.minimumQualification) && (
-          <div className="section-block">
-            <h3>Requirements & Skills</h3>
-            <ul>
-              {companyDetails?.requirement && (
-                <li>Requirement: {companyDetails.requirement}</li>
-              )}
-              {companyDetails?.skills && (
-                <li>Skills: {companyDetails.skills}</li>
-              )}
-              {companyDetails?.minimumQualification && (
-                <li>
-                  Minimum Qualification: {companyDetails.minimumQualification}
-                </li>
-              )}
-            </ul>
-          </div>
-        )}
-
-        {/* ================= INVESTMENT / FINANCIAL ================= */}
-        {(companyDetails?.investmentRange ||
-          companyDetails?.equityPercentage) && (
-          <div className="section-block">
-            <h3>Investment / Financial</h3>
-            <ul>
-              {companyDetails?.investmentRange && (
-                <li>Investment Range: {companyDetails.investmentRange}</li>
-              )}
-              {companyDetails?.equityPercentage && (
-                <li>Equity Percentage: {companyDetails.equityPercentage}%</li>
-              )}
-            </ul>
-          </div>
-        )}
-
-        {/* ================= CONNECT BUTTON ================= */}
         <div className="connect-row">
           <button className="connect-btn" onClick={handleConnect}>
-            Connect
+            <FaWhatsapp /> Connect on WhatsApp
           </button>
         </div>
       </div>
+
+      <ImageModal
+        isOpen={modalConfig.isOpen}
+        images={modalConfig.images}
+        initialIndex={modalConfig.index}
+        onClose={closeModal}
+      />
     </div>
   );
 }
+
+export default CompanyDetails;

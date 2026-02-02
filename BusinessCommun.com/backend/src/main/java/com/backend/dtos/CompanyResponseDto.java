@@ -30,6 +30,7 @@ public class CompanyResponseDto {
     private String title;
     private String description;
     private String productImage;
+    private java.util.List<String> productImageUrls;
     private String website;
 
     // Connect Info
