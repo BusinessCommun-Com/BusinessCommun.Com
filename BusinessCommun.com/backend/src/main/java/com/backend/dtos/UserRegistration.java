@@ -2,6 +2,7 @@ package com.backend.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class UserRegistration {
 	@NotBlank(message = "Email is required!")
 	@Email(message = "Invalid Email format !")
 	private String email;
-	//@Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[#@$*]).{5,20})", message = "Invalid password format")
+	@Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[#@$*]).{5,20})", message = "Invalid password format")
 	private String password;
 	@NotBlank(message = "role is required")
 	private String role;

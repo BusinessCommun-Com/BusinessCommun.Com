@@ -13,9 +13,35 @@ export function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState([]);
 
   // create an instance of useNavigate
   const navigate = useNavigate();
+
+  // Password validation regex and requirements
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[#@$*]).{5,20}$/;
+
+  const validatePassword = (pwd) => {
+    const errors = [];
+    if (pwd.length === 0) {
+      errors.push("Password is required");
+      setPasswordErrors(errors);
+      return false;
+    }
+    if (pwd.length < 5) errors.push("Password must be at least 5 characters");
+    if (pwd.length > 20) errors.push("Password must not exceed 20 characters");
+    if (!/\d/.test(pwd))
+      errors.push("Password must contain at least one digit (0-9)");
+    if (!/[a-z]/.test(pwd))
+      errors.push("Password must contain at least one lowercase letter (a-z)");
+    if (!/[#@$*]/.test(pwd))
+      errors.push(
+        "Password must contain at least one special character (#, @, $, *)",
+      );
+
+    setPasswordErrors(errors);
+    return errors.length === 0;
+  };
 
   const onRegister = async (e) => {
     e.preventDefault();
@@ -30,8 +56,8 @@ export function Register() {
       } else if (email.trim().length == 0) {
         toast.warning("Please enter email");
         return;
-      } else if (password.length == 0) {
-        toast.warning("Please enter password");
+      } else if (!validatePassword(password)) {
+        toast.error("Password does not meet requirements");
         return;
       } else if (confirmPassword != password) {
         toast.warning("Passwords do not match");
@@ -49,7 +75,7 @@ export function Register() {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
-        navigate("/home/login");
+        navigate("/login");
       } else {
         toast.error(
           response && response["error"]
@@ -139,6 +165,7 @@ export function Register() {
                           <input
                             onChange={(e) => {
                               setPassword(e.target.value);
+                              validatePassword(e.target.value);
                             }}
                             value={password}
                             type="password"
@@ -146,7 +173,20 @@ export function Register() {
                             id="exampleInputPassword1"
                             required
                           />
-                          <div className="form-group">
+                          {passwordErrors.length > 0 && (
+                            <div className="password-errors mt-2">
+                              {passwordErrors.map((error, index) => (
+                                <div
+                                  key={index}
+                                  className="error-message text-danger"
+                                  style={{ fontSize: "0.875rem" }}
+                                >
+                                  ✗ {error}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          <div className="form-group mt-3">
                             <label htmlFor="exampleInputConfirmPassword">
                               Confirm Password
                             </label>
@@ -160,6 +200,16 @@ export function Register() {
                               id="exampleInputConfirmPassword"
                               required
                             />
+                            {confirmPassword &&
+                              password &&
+                              confirmPassword !== password && (
+                                <div
+                                  className="error-message text-danger mt-2"
+                                  style={{ fontSize: "0.875rem" }}
+                                >
+                                  ✗ Passwords do not match
+                                </div>
+                              )}
                           </div>
                         </div>
                         <button
