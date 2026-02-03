@@ -9,7 +9,11 @@ public class KafkaLogger {
 	
 	static {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        String bootstrapServers = System.getenv("KAFKA_BOOTSTRAP_SERVERS") != null 
+                ? System.getenv("KAFKA_BOOTSTRAP_SERVERS") 
+                : "localhost:9092";
+
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put("key.serializer",
                 "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer",

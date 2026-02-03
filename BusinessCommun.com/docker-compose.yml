@@ -1,0 +1,45 @@
+services:
+  # 1. Message Broker (Replaces your local Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://:29092,EXTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+
+  # 2. Java Backend
+  backend:
+    build: ./backend  # Path to your Java folder
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      - kafka
+
+  # 3. .NET Logger Service
+  logger:
+    build: ./LogService # Path to your .NET folder
+    environment:
+      - Kafka__BootstrapServers=kafka:29092
+    depends_on:
+      - kafka
+
+  # 4. React Frontend
+  frontend:
+    build: ./Client # Path to your React folder
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
