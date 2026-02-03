@@ -6,12 +6,21 @@ namespace LogService.Service
 {
     public class KafkaConsumerService : BackgroundService
     {
+        private readonly IConfiguration _configuration;
+
+        public KafkaConsumerService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var bootstrapServers = _configuration["Kafka:BootstrapServers"];
+            var groupId = _configuration["Kafka:GroupId"];
+
             var config = new ConsumerConfig
             {
-                BootstrapServers = "localhost:9092",
-                GroupId = "log-service",
+                BootstrapServers = bootstrapServers,
+                GroupId = groupId,
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
@@ -31,8 +40,7 @@ namespace LogService.Service
         private void SavetoDatabase(string message) {
             Console.WriteLine("LOG RECEIVED: " + message);
 
-            string connectionString =
-        "Server=localhost;Port=3306;Database=BusinessCommun;User=D2_92610_Rahul;Password=manager;";
+            string connectionString = _configuration["ConnectionStrings:DefaultConnection"]; 
 
             using var connection = new MySqlConnection(connectionString);
             connection.Open();
