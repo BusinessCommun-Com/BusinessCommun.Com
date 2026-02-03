@@ -1,0 +1,38 @@
+# Maven
+target/*
+!target/*.jar
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Tests & reports
+surefire-reports/
+failsafe-reports/
+
+# Docker
+docker-compose.yml
+Dockerfile
+
+# Env / secrets
+.env
+*.pem
+*.key

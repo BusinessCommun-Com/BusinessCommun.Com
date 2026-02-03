@@ -1,0 +1,30 @@
+# Node dependencies (rebuilt inside container)
+node_modules
+
+# VCS
+.git
+.gitignore
+
+# IDE / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Env files (do not bake secrets)
+.env
+.env.*
+*.local
+
+# Logs
+npm-debug.log
+yarn-debug.log
+pnpm-debug.log
+
+# Tests / coverage
+coverage
+__tests__
+
+# Docs
+README.md
+*.md

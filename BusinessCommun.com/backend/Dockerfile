@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the JAR from your target folder to the container
 # IMPORTANT: Replace 'backend-0.0.1-SNAPSHOT.jar' with your actual filename
-COPY target/backend-0.0.1-SNAPSHOT.jar app.jar
+COPY target/*.jar app.jar
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
