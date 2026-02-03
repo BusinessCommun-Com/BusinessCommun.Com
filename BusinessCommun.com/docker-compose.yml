@@ -23,8 +23,13 @@ services:
     build: ./backend  # Path to your Java folder
     ports:
       - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/businesscommun?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=manager
     depends_on:
       - kafka
 
@@ -43,3 +48,26 @@ services:
       - "3000:80"
     depends_on:
       - backend
+
+  # 5. Service Registry (Eureka Server)
+  service-registry:
+    build: ./service-registry # Path to your Eureka server folder
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 6. API GATEWAY
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8765:8765"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_CLOUD_GATEWAY_GLOBALCORS_CORSCONFIGURATIONS_[/**]_ALLOWEDORIGINS=http://localhost:3000
+    depends_on:
+      service-registry:
+        condition: service_healthy
